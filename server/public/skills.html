@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroVision — Skills</title>
+  <link rel="preconnect" href="https:
+  <link href="https:
+  <link rel="stylesheet" href="skills.css">
+</head>
+<body>
+
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+
+  <nav class="navbar">
+    <div class="logo">
+      <span class="logo-symbol">✦</span>
+      <span class="logo-text">NeuroVision</span>
+    </div>
+    <div class="user">
+      <div class="user-info">
+        
+        <span class="user-name" id="navUserName">...</span>
+        <span class="user-role" id="navUserRole">Candidate</span>
+      </div>
+      <img src="https:
+      <button class="logout-btn" onclick="logout()" title="Logout">⏻</button>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+
+    
+    <section class="form-section glass-card">
+      <div class="section-header">
+        <div>
+          <h2>Career Role Profile</h2>
+          <p class="section-sub">Define your role and showcase your technical expertise</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Role <span class="req">*</span></label>
+          <div class="select-wrapper">
+            <select id="role"></select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>CGPA <span class="req">*</span></label>
+          <input type="number" id="cgpa" min="1" max="10" step="0.1" placeholder="e.g. 8.5">
+        </div>
+
+        <div class="form-group full-width">
+          <label>Internship Experience</label>
+          <div class="counter">
+            <button class="counter-btn" onclick="changeInternship(-1)">−</button>
+            <span id="internshipMonths" class="counter-value">0 Months</span>
+            <button class="counter-btn" onclick="changeInternship(1)">+</button>
+            <button class="reset-small" onclick="resetInternship()">↺ Reset</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Technical Skill <span class="req">*</span></label>
+          <div class="select-wrapper">
+            <select id="skillSelect"></select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Proficiency Level (1–10)</label>
+          <div class="skill-input-group">
+            <input type="number" id="skillLevel" min="1" max="10" placeholder="e.g. 7">
+            <button class="btn-add" onclick="addSkill()">＋ Add Skill</button>
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <div id="skillsList" class="skills-chips"></div>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-reset" onclick="resetForm()">↺ Reset Form</button>
+        <button class="btn-submit" onclick="saveProfile()">Save Profile →</button>
+      </div>
+    </section>
+
+    
+    <section class="display-section">
+      <div class="display-header">
+        <h2>Saved Role Profiles</h2>
+        <span id="roleCount" class="badge">0 profiles</span>
+      </div>
+      <div id="rolesDisplay" class="roles-grid"></div>
+      <div id="emptyState" class="empty-state">
+        <div class="empty-icon">◈</div>
+        <p>No profiles saved yet.<br>Fill the form above to get started.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
+

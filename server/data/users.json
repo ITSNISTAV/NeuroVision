@@ -82,5 +82,40 @@
     "email": "bhalu@gmail.com",
     "passwordHash": "$2b$10$UpC59/Uw.eVrGjOKLYpxE.L2jxk2Bvp.6.8sOPKHfFTje1gax4YWy",
     "role": "user"
+  },
+  {
+    "id": "550a8e76-a68f-4f51-be2d-c8106638b691",
+    "name": "demotest",
+    "email": "demotest@gmail.com",
+    "passwordHash": "$2b$10$YpHREC6xLsLDNtatBrlUa.W3OJibYupSrbZXdL38KUWT3xvbZQcEu",
+    "role": "user"
+  },
+  {
+    "id": "a165079a-1f1e-44b0-9d82-1041aa12f8b6",
+    "name": "againtest",
+    "email": "againtest@gmail.com",
+    "passwordHash": "$2b$10$AtUTeSchnj.XzZapl6Zr5.9G0CUlubfAWjI4e6CPetZBNBWSspo2S",
+    "role": "user"
+  },
+  {
+    "id": "d1220858-7e38-4795-8f3f-150251e0a4f4",
+    "name": "demotest1",
+    "email": "demotest1@gmail.com",
+    "passwordHash": "$2b$10$alzTX8QuINYrA0M/Kt/NR./IbbPHQVO9/Fd101V41wnV0w4EouYra",
+    "role": "user"
+  },
+  {
+    "id": "31658c57-2913-4571-b643-3ef92e6b612f",
+    "name": "demotest12",
+    "email": "demotest1h@gmail.com",
+    "passwordHash": "$2b$10$hgNMFGO/b5Dm8tVwqkj/4u4ng6uQmj/1bhantpCnSJH5lwUA3Xn4q",
+    "role": "user"
+  },
+  {
+    "id": "274c0fc0-93e1-42c0-9bde-66ac9d40fb71",
+    "name": "demotest3",
+    "email": "demotest3@gmail.com",
+    "passwordHash": "$2b$10$G8FlXZ.lzrk5DDudGQcT3usXTrh/QBL.kFdjTsLCGAXlVVT/reFtq",
+    "role": "user"
   }
 ]

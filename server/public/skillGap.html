@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroVision — Skill Gap Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-deep:       #0a0010;
+      --bg-mid:        #0f0020;
+      --purple-900:    #1a0035;
+      --purple-700:    #3d007a;
+      --purple-500:    #7c3aed;
+      --purple-400:    #a855f7;
+      --purple-300:    #c084fc;
+      --purple-200:    #e9d5ff;
+      --purple-100:    #f5f0ff;
+      --accent:        #d946ef;
+      --accent-glow:   rgba(217, 70, 239, 0.35);
+      --glass-bg:      rgba(255, 255, 255, 0.045);
+      --glass-border:  rgba(168, 85, 247, 0.25);
+      --glass-strong:  rgba(255, 255, 255, 0.07);
+      --text-primary:  #f5f0ff;
+      --text-secondary: rgba(196, 181, 253, 0.75);
+      --text-muted:    rgba(139, 92, 246, 0.55);
+      --radius:        16px;
+      --radius-sm:     10px;
+      --shadow:        0 8px 32px rgba(0,0,0,0.5);
+      --font-display:  'Cinzel', serif;
+      --font-body:     'DM Sans', sans-serif;
+      --success:       #10b981;
+      --warning:       #f59e0b;
+      --error:         #ef4444;
+    }
+
+    *, *::before, *::after { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+
+    html { 
+      scroll-behavior: smooth; 
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(124,58,237,0.18), transparent 70%);
+      top: -100px; left: -100px;
+      animation: drift1 14s ease-in-out infinite alternate;
+    }
+    .orb2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(217,70,239,0.12), transparent 70%);
+      top: 30%; right: -80px;
+      animation: drift2 18s ease-in-out infinite alternate;
+    }
+    .orb3 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(139,92,246,0.14), transparent 70%);
+      bottom: 10%; left: 25%;
+      animation: drift1 22s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes drift1 { 
+      from { transform: translate(0,0); } 
+      to { transform: translate(30px, 40px); } 
+    }
+    @keyframes drift2 { 
+      from { transform: translate(0,0); } 
+      to { transform: translate(-25px, 30px); } 
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 68px;
+      background: rgba(10, 0, 16, 0.75);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-symbol {
+      color: var(--accent);
+      font-size: 20px;
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+    .logo-text {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, var(--purple-200), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { text-shadow: 0 0 8px var(--accent-glow); }
+      50% { text-shadow: 0 0 20px var(--accent-glow); }
+    }
+
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.05);
+      padding: 36px 40px 32px;
+    }
+
+    h1, h2 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      background: linear-gradient(135deg, var(--purple-200), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 24px;
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--purple-300);
+      margin-bottom: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 24px;
+      margin-bottom: 24px;
+    }
+
+    .form-grid.full {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--purple-300);
+    }
+
+    input, select {
+      font-family: var(--font-body);
+      font-size: 14px;
+      padding: 11px 14px;
+      background: rgba(15, 0, 32, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input::placeholder { 
+      color: var(--text-muted); 
+    }
+
+    input:focus, select:focus {
+      border-color: var(--purple-400);
+      box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
+    }
+
+    .select-wrapper {
+      position: relative;
+    }
+
+    .select-wrapper select {
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    .select-arrow {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--purple-400);
+      pointer-events: none;
+      font-size: 16px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px 20px;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      background: var(--purple-500);
+      color: white;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: var(--purple-400);
+      border-color: var(--purple-300);
+      box-shadow: 0 0 20px rgba(168,85,247,0.4);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .progress-container {
+      margin: 24px 0;
+      padding: 20px;
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--glass-border);
+    }
+
+    .progress-bar-bg {
+      background: rgba(124,58,237,0.15);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      height: 16px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--success), var(--accent));
+      transition: width 0.6s ease;
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .skills-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+    }
+
+    .skills-box h3 {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skills-box ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .skills-box li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(168,85,247,0.1);
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .skills-box li:last-child {
+      border-bottom: none;
+    }
+
+    .skill-matched {
+      color: var(--success);
+      font-weight: 500;
+    }
+
+    .skill-missing {
+      color: var(--error);
+      font-weight: 500;
+    }
+
+    .tutorial-section {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(168,85,247,0.2);
+    }
+
+    .tutorial-section h4 {
+      color: var(--warning);
+      font-size: 12px;
+      margin-bottom: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .tutorial-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .tutorial-section li {
+      margin-bottom: 8px;
+      padding: 0;
+      border: none;
+    }
+
+    .tutorial-section li a {
+      color: var(--purple-300);
+      text-decoration: none;
+      font-size: 13px;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tutorial-section li a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .info-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .recommendation {
+      background: rgba(217,70,239,0.1);
+      border-left: 3px solid var(--accent);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      margin-bottom: 24px;
+    }
+
+    #result {
+      display: none;
+      animation: fade-in 0.6s ease forwards;
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media(max-width: 768px) {
+      .navbar {
+        padding: 0 20px;
+      }
+
+      .page-wrapper {
+        padding: 20px 16px 60px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1, h2 {
+        font-size: 22px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+
+  <nav class="navbar">
+    <div class="logo">
+      <span class="logo-symbol">✦</span>
+      <span class="logo-text">NeuroVision</span>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <h1>Skill Gap Analysis</h1>
+
+    <div class="glass-card">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Target Role <span style="color: var(--accent);">*</span></label>
+          <div class="select-wrapper">
+            <select id="targetRole">
+              <option value="">Select Target Role</option>
+              <option value="Backend Developer">Backend Developer</option>
+              <option value="Frontend Developer">Frontend Developer</option>
+              <option value="Full Stack Developer">Full Stack Developer</option>
+              <option value="Data Analyst">Data Analyst</option>
+              <option value="DevOps Engineer">DevOps Engineer</option>
+              <option value="Machine Learning Engineer">Machine Learning Engineer</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>CGPA <span style="color: var(--accent);">*</span></label>
+          <input type="number" id="cgpa" placeholder="e.g. 7.5" min="0" max="10" step="0.1">
+        </div>
+
+        <div class="form-group">
+          <label>Technical Skills <span style="color: var(--accent);">*</span></label>
+          <input type="text" id="skills" placeholder="e.g. Node.js, Express, Python, SQL">
+        </div>
+
+        <div class="form-group">
+          <label>Tools & Frameworks</label>
+          <input type="text" id="tools" placeholder="e.g. MongoDB, Redis, Docker">
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button onclick="resetForm()">↺ Reset</button>
+        <button onclick="analyze()">Analyze Skill Gap →</button>
+      </div>
+    </div>
+
+    <div class="glass-card" id="result">
+      <h2 id="roleTitle"></h2>
+
+      <div class="info-box">
+        <p id="cgpaInfo"></p>
+      </div>
+
+      <div class="recommendation">
+        <p id="recommendation"></p>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar-bg">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-text">
+          <span>Skill Match</span>
+          <span id="scoreText"></span>
+        </div>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skills-box">
+          <h3>✅ Skills Matched</h3>
+          <ul id="matched"></ul>
+        </div>
+
+        <div class="skills-box">
+          <h3>⚠️ Missing Skills</h3>
+          <ul id="missing"></ul>
+          <div id="tutorialLinks" class="tutorial-section">
+            <h4>📚 Learn Resources</h4>
+            <ul id="tutorialList"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-group" style="margin-top: 32px;">
+        <button onclick="downloadResults()">📥 Download Report</button>
+        <button onclick="shareResults()" style="background: var(--accent);">📤 Share Results</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+function resetForm() {
+  document.getElementById("skills").value = "";
+  document.getElementById("tools").value = "";
+  document.getElementById("cgpa").value = "";
+  document.getElementById("targetRole").value = "";
+  document.getElementById("result").style.display = "none";
+  console.log('✅ Form reset');
+}
+
+async function analyze(){
+  const technicalSkills = document.getElementById("skills").value
+    .split(",").map(s => s.trim()).filter(s => s);
+
+  const tools = document.getElementById("tools").value
+    .split(",").map(s => s.trim()).filter(s => s);
+
+  const targetRole = document.getElementById("targetRole").value;
+  const cgpa = parseFloat(document.getElementById("cgpa").value);
+
+  if (!targetRole) {
+    alert("Please select a target role!");
+    return;
+  }
+
+  if (technicalSkills.length === 0 && tools.length === 0) {
+    alert("Please enter at least one skill or tool!");
+    return;
+  }
+
+  if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) {
+    alert("Please enter a valid CGPA (0-10)!");
+    return;
+  }
+
+  try {
+    console.log('📤 Sending request...', { technicalSkills, tools, targetRole, cgpa });
+    
+    const response = await fetch("/api/skill-gap", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        technicalSkills,
+        tools,
+        targetRole,
+        cgpa
+      })
+    });
+
+    console.log('📥 Response status:', response.status);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('✅ Response data:', data);
+
+    if (data.error) {
+      alert("Error: " + data.error);
+      return;
+    }
+
+    // Display results
+    document.getElementById("result").style.display = "block";
+    document.getElementById("roleTitle").innerText = data.targetRole;
+    document.getElementById("scoreText").innerText = data.compatibilityScore + "%";
+    document.getElementById("progressBar").style.width = data.compatibilityScore + "%";
+    document.getElementById("cgpaInfo").innerText = `📊 CGPA: ${data.cgpa} — ${data.cgpaStatus}`;
+    document.getElementById("recommendation").innerText = `💡 ${data.recommendation}`;
+
+    const matched = document.getElementById("matched");
+    const missing = document.getElementById("missing");
+    const tutorialList = document.getElementById("tutorialList");
+
+    matched.innerHTML = "";
+    missing.innerHTML = "";
+    tutorialList.innerHTML = "";
+
+    data.matchedSkills.forEach(skill => {
+      matched.innerHTML += `<li class="skill-matched">✓ ${skill}</li>`;
+    });
+
+    data.missingSkills.forEach(skill => {
+      missing.innerHTML += `<li class="skill-missing">✗ ${skill}</li>`;
+    });
+
+    if (data.missingSkillsWithTutorials && data.missingSkillsWithTutorials.length > 0) {
+      data.missingSkillsWithTutorials.forEach(item => {
+        tutorialList.innerHTML += `<li><a href="${item.tutorial}" target="_blank" rel="noopener">🔗 Learn ${item.skill}</a></li>`;
+      });
+    }
+
+    console.log('✅ Results displayed successfully');
+    
+    // Store current results for download/share
+    window.currentResults = data;
+  } catch (error) {
+    console.error('❌ Error:', error);
+    alert('Error: ' + error.message + '\n\nMake sure the server is running on http://localhost:3000');
+  }
+}
+
+function downloadResults() {
+  if (!window.currentResults) {
+    alert('Please analyze your skills first!');
+    return;
+  }
+
+  const data = window.currentResults;
+  
+  const report = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                        SKILL GAP ANALYSIS REPORT
+                            NeuroVision © 2026
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 ANALYSIS RESULTS
+─────────────────────────────────────────────────────────────────────────────
+
+🎯 TARGET ROLE: ${data.targetRole}
+📈 SKILL MATCH: ${data.compatibilityScore}%
+🎓 CGPA: ${data.cgpa}/10 (${data.cgpaStatus})
+⏰ Generated: ${new Date().toLocaleString()}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 RECOMMENDATION:
+${data.recommendation}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ SKILLS MATCHED (${data.matchedSkills.length}):
+${data.matchedSkills.map(s => `   ✓ ${s}`).join('\n')}
+
+⚠️ MISSING SKILLS (${data.missingSkills.length}):
+${data.missingSkills.map(s => `   ✗ ${s}`).join('\n')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 LEARNING RESOURCES:
+${data.missingSkillsWithTutorials.map(item => `   🔗 ${item.skill}: ${item.tutorial}`).join('\n')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NEXT STEPS:
+1. Focus on learning your top 3 missing skills
+2. Build projects to demonstrate your expertise
+3. Gain practical experience through internships
+4. Re-evaluate your skills quarterly
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            For more info, visit: http://localhost:3000
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  `;
+
+  const element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(report));
+  element.setAttribute('download', `NeuroVision_SkillGap_${data.targetRole.replace(/\s+/g, '_')}_${new Date().getTime()}.txt`);
+  element.style.display = 'none';
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+  
+  console.log('✅ Report downloaded successfully');
+}
+
+function shareResults() {
+  if (!window.currentResults) {
+    alert('Please analyze your skills first!');
+    return;
+  }
+
+  const data = window.currentResults;
+  const shareText = `🎯 I analyzed my skills for ${data.targetRole}!\n\n📈 Skill Match: ${data.compatibilityScore}%\n🎓 CGPA: ${data.cgpa}/10\n\n💡 "${data.recommendation.substring(0, 100)}..."\n\n✨ Powered by NeuroVision - Career Intelligence Platform`;
+  
+  if (navigator.share) {
+    navigator.share({
+      title: 'NeuroVision Skill Gap Analysis',
+      text: shareText,
+      url: window.location.href
+    }).catch(err => console.log('Error sharing:', err));
+  } else {
+    // Fallback: Copy to clipboard
+    navigator.clipboard.writeText(shareText).then(() => {
+      alert('✅ Results copied to clipboard!');
+    }).catch(err => {
+      console.error('Failed to copy:', err);
+      alert('Share text: ' + shareText);
+    });
+  }
+}
+</script>
+
+</body>
+</html>

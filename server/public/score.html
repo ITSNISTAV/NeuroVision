@@ -4,65 +4,81 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NeuroVision – Score</title>
- <link rel="stylesheet" href="score.css">
+  <link rel="stylesheet" href="score.css">
 </head>
 <body>
 
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+
   <!-- NAV -->
-  <nav>
-    <span class="logo">✦ NeuroVision</span>
-    <div class="user-info">
-      <div>
-        <div class="name">Harshit</div>
-        <div class="role-label">CANDIDATE</div>
+  <nav class="navbar">
+    <div class="logo">
+      <span class="logo-symbol">✦</span>
+      <span class="logo-text">NeuroVision</span>
+    </div>
+    <div class="nav-right">
+      <div class="nav-user-info">
+        <span class="nav-username" id="nav-username">Guest</span>
+        <span class="nav-role-label">User</span>
       </div>
-      <div class="avatar">H</div>
+      <div class="nav-avatar" id="nav-avatar">?</div>
+      <button class="logout-btn" onclick="sessionStorage.clear(); location.href='/login.html';" title="Logout">⏻</button>
     </div>
   </nav>
 
-  <!-- PROFILE PICKER -->
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <h2>Score a Profile</h2>
-        <p>Select a saved profile to calculate your role fit</p>
+  <div class="page-wrapper">
+
+    <!-- PROFILE PICKER -->
+    <div class="main-card">
+      <h2 class="card-title">Score a Profile</h2>
+      <p class="card-subtitle">Select a saved profile to calculate your role fit score</p>
+      <hr class="card-divider">
+      <div class="section-row">
+        <span class="section-title">Saved Role Profiles</span>
+        <span class="count-badge" id="profile-count">0 profiles</span>
       </div>
-      <span class="badge-count" id="profile-count">0 profiles</span>
+      <div class="profile-grid" id="profile-grid"></div>
     </div>
-    <div class="profile-grid" id="profile-grid"></div>
-  </div>
 
-  <!-- RESULT -->
-  <div class="card" id="result-card">
-    <div class="warning-banner" id="api-warning" style="display:none"></div>
-    <div class="result-inner">
-      <div class="score-col">
-        <svg id="score-circle" width="140" height="140" viewBox="0 0 140 140">
-          <circle cx="70" cy="70" r="54" fill="none" stroke="#2d1f4e" stroke-width="10"/>
-          <circle id="score-arc" cx="70" cy="70" r="54" fill="none"
-            stroke="#a855f7" stroke-width="10"
-            stroke-dasharray="0 339.3"
-            stroke-linecap="round"
-            transform="rotate(-90 70 70)"
-            style="transition: stroke-dasharray 0.8s ease, stroke 0.4s ease"/>
-          <text id="score-text" x="70" y="65" text-anchor="middle"
-            fill="white" font-size="22" font-weight="bold">0%</text>
-          <text x="70" y="85" text-anchor="middle" fill="#a78bfa" font-size="11">FIT SCORE</text>
-        </svg>
-        <div class="fit-label" id="fit-label">–</div>
-        <div class="role-name" id="result-role-name"></div>
-      </div>
+    <!-- RESULT -->
+    <div class="result-card" id="result-card">
+      <div class="warning-banner" id="api-warning"></div>
+      <h2 class="card-title" style="margin-bottom:28px;">Score Result</h2>
+      <div class="result-inner">
 
-      <div class="breakdown-col">
-        <div class="breakdown-header">
-          <h3>Skill Breakdown</h3>
-          <span class="legend"><span class="legend-mark">│</span> = required level</span>
+        <div class="score-col">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(45,31,78,0.8)" stroke-width="10"/>
+            <circle id="score-arc" cx="70" cy="70" r="54" fill="none"
+              stroke="#a855f7" stroke-width="10"
+              stroke-dasharray="0 339.3"
+              stroke-linecap="round"
+              transform="rotate(-90 70 70)"
+              style="transition: stroke-dasharray 0.8s ease, stroke 0.4s ease"/>
+            <text id="score-text" x="70" y="65" text-anchor="middle"
+              fill="white" font-size="22" font-weight="bold" font-family="DM Sans, sans-serif">0%</text>
+            <text x="70" y="85" text-anchor="middle"
+              fill="#a78bfa" font-size="10" font-family="DM Sans, sans-serif" letter-spacing="1">FIT SCORE</text>
+          </svg>
+          <div class="fit-label" id="fit-label">–</div>
+          <div class="result-role" id="result-role-name"></div>
         </div>
-        <div id="skill-bars"></div>
+
+        <div class="breakdown-col">
+          <div class="breakdown-header">
+            <h3>Skill Breakdown</h3>
+            <span class="legend"><span class="legend-mark">│</span> = required level</span>
+          </div>
+          <div id="skill-bars"></div>
+        </div>
+
       </div>
     </div>
+
   </div>
 
- <script src="score.js"></script>
+  <script src="score.js"></script>
 </body>
 </html>

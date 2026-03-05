@@ -1,10 +1,21 @@
 const express=require("express");
-const scoreRoute=require("./routes/scoringRoute");
 const path = require("path");
+const scoreRoute=require("./routes/scoringRoute");
+const profileRoutes = require("./routes/profile.routes");
+const authRoutes  = require("./routes/authRoutes");
+const cors = require('cors');
 
 const app=express();
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.json());
+app.use(cors())
 
 app.use("/api", scoreRoute);
-module.exports=app;
+app.use("/api/auth", authRoutes);
+app.use("/api/profile", profileRoutes);
+app.get('/api/health', (req, res) => {
+  res.json({ ok: true })
+})
+
+module.exports = app;
+

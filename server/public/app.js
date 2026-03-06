@@ -184,7 +184,7 @@ async function loadRoles() {
         <div class="cardBtns">
           <button class="card-btn btn-delete" onclick="deleteRole('${role.role}')">🗑 Delete</button>
           <button class="card-btn btn-edit"   onclick="editRole('${role.role}')">✏ Edit</button>
-          <button class="card-btn btn-score"  onclick="window.location.href='score.html?role=${encodeURIComponent(role.role)}&uid=${userId}'">⚡ Score</button>
+          <button class="card-btn btn-score"  onclick="window.location.href='score.html?role=${encodeURIComponent(role.role)}&uid=${userId}'">Analyze Skill Gap</button>
         </div>
       `;
       container.appendChild(card);

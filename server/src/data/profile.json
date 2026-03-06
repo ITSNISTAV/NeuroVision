@@ -136,8 +136,8 @@
       "username": "muskan gera",
       "roles": [
         {
-          "role": "Data Analyst",
-          "cgpa": 2,
+          "role": "Backend Developer",
+          "cgpa": 4,
           "internshipMonths": 6,
           "technicalSkills": [
             {
@@ -151,8 +151,8 @@
           ]
         },
         {
-          "role": "Backend Developer",
-          "cgpa": 4,
+          "role": "Data Analyst",
+          "cgpa": 2,
           "internshipMonths": 6,
           "technicalSkills": [
             {
@@ -162,6 +162,10 @@
             {
               "skill": "Python",
               "level": 4
+            },
+            {
+              "skill": "SQL",
+              "level": 6
             }
           ]
         }

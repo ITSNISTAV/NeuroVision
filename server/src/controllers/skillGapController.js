@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
-// Read data from JSON files in server/data folder
-const roleRequirementsPath = path.join(__dirname, '../../data/roleRequirements.json');
-const tutorialLinksPath = path.join(__dirname, '../../data/tutorialLinks.json');
+// Read data from JSON files in server/src/data folder
+const roleRequirementsPath = path.join(__dirname, '../data/roleRequirements.json');
+const tutorialLinksPath = path.join(__dirname, '../data/tutorialLinks.json');
 
 let roleRequirements = {};
 let tutorialLinks = {};

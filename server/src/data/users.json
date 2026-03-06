@@ -117,5 +117,40 @@
     "email": "demotest3@gmail.com",
     "passwordHash": "$2b$10$G8FlXZ.lzrk5DDudGQcT3usXTrh/QBL.kFdjTsLCGAXlVVT/reFtq",
     "role": "user"
+  },
+  {
+    "id": "c2d4d275-4b18-4796-8555-ea611ede5522",
+    "name": "lavnish",
+    "email": "lavnish@gmail.com",
+    "passwordHash": "$2b$10$9gpzYYz7TX7EiHr5kWxVXOJ0WI21ZhX0bmnatzgmxZ.ltLak7xLwi",
+    "role": "user"
+  },
+  {
+    "id": "aa3685b3-a255-40ed-80f7-89ad024074ed",
+    "name": "lav",
+    "email": "lav@gmail.com",
+    "passwordHash": "$2b$10$dXZYpehyIxLMEMK16lmZYOe7LXnlvnV2ODZTA59VAH85Y9n5oIZbS",
+    "role": "user"
+  },
+  {
+    "id": "ca7cd9bb-9251-4d85-94e1-874e8c1a4883",
+    "name": "lavaf",
+    "email": "lavi@gmail.com",
+    "passwordHash": "$2b$10$1.DDEEu2LhZ9zN01OswSJ.aS9jZCpLwz0acTIK4b7jO4cIMe01922",
+    "role": "user"
+  },
+  {
+    "id": "cc107366-8169-4c61-bc82-4627ad396390",
+    "name": "muskan",
+    "email": "muskan@gmail.com",
+    "passwordHash": "$2b$10$DTxEYnjyqgIhJZ0/tU5Ru.YBt9L9hLnsIeVzi0oaF/7e405ehdt6G",
+    "role": "user"
+  },
+  {
+    "id": "1cbad5a5-09ec-4bb6-a21b-907c2be0e60b",
+    "name": "muskan gera",
+    "email": "muskangera@gmail.com",
+    "passwordHash": "$2b$10$H8QR9sePpNcpLMNAuDmp7ODW/sC73oHHrL94o7mXADIZenilx9N0C",
+    "role": "user"
   }
 ]

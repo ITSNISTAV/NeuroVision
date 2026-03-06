@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { v4: uuidv4 } = require('uuid')
 const bcrypt = require('bcryptjs')
-const USERS_FILE = path.join(__dirname, '..', '..', 'data', 'users.json')
+const USERS_FILE = path.join(__dirname,  '..', 'data', 'users.json')
 
 function ensureStore() {
   const dir = path.dirname(USERS_FILE)

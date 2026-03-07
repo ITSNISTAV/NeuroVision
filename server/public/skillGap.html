@@ -397,6 +397,153 @@
       color: var(--text-secondary);
     }
 
+    .profile-analyze-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .profile-analyze-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: var(--purple-300);
+      margin-bottom: 10px;
+    }
+
+    .section-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 12px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--purple-200);
+      text-transform: uppercase;
+    }
+
+    .count-badge {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--glass-border);
+      color: var(--purple-300);
+      font-weight: 600;
+      font-size: 13px;
+      background: rgba(124,58,237,0.14);
+      white-space: nowrap;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .roleCard {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .roleCard.active {
+      border-color: var(--purple-400);
+      box-shadow: 0 0 20px rgba(168,85,247,0.25);
+    }
+
+    .card-role-name {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .meta-pill {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--glass-border);
+      background: rgba(124,58,237,0.18);
+      color: var(--purple-200);
+    }
+
+    .card-skills-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .card-skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .card-skill-tag {
+      font-size: 12px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--glass-border);
+      background: rgba(168,85,247,0.12);
+      color: var(--purple-200);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tag-level {
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .cardBtns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .card-btn {
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+
+    .btn-score {
+      background: linear-gradient(90deg, var(--purple-500), var(--accent));
+      border: none;
+      width: 100%;
+    }
+
+    .profile-analyze-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .profile-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
     .recommendation {
       background: rgba(217,70,239,0.1);
       border-left: 3px solid var(--accent);
@@ -461,42 +608,21 @@
     <h1>Skill Gap Analysis</h1>
 
     <div class="glass-card">
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Target Role <span style="color: var(--accent);">*</span></label>
-          <div class="select-wrapper">
-            <select id="targetRole">
-              <option value="">Select Target Role</option>
-              <option value="Backend Developer">Backend Developer</option>
-              <option value="Frontend Developer">Frontend Developer</option>
-              <option value="Full Stack Developer">Full Stack Developer</option>
-              <option value="Data Analyst">Data Analyst</option>
-              <option value="DevOps Engineer">DevOps Engineer</option>
-              <option value="Machine Learning Engineer">Machine Learning Engineer</option>
-            </select>
-            <span class="select-arrow">▾</span>
-          </div>
+      <div class="profile-analyze-box" id="savedProfileBox" style="display:none;">
+        <div class="section-row">
+          <span class="section-title">Saved Role Profiles</span>
+          <span class="count-badge" id="profile-count">0 profiles</span>
         </div>
+        <div class="profile-grid" id="profile-grid"></div>
+        <div class="profile-note" id="savedProfileNote"></div>
+      </div>
 
-        <div class="form-group">
-          <label>CGPA <span style="color: var(--accent);">*</span></label>
-          <input type="number" id="cgpa" placeholder="e.g. 7.5" min="0" max="10" step="0.1">
-        </div>
-
-        <div class="form-group">
-          <label>Technical Skills <span style="color: var(--accent);">*</span></label>
-          <input type="text" id="skills" placeholder="e.g. Node.js, Express, Python, SQL">
-        </div>
-
-        <div class="form-group">
-          <label>Tools & Frameworks</label>
-          <input type="text" id="tools" placeholder="e.g. MongoDB, Redis, Docker">
-        </div>
+      <div class="info-box" id="profileOnlyMessage">
+        Analysis runs directly from your saved role profile data.
       </div>
 
       <div class="button-group">
-        <button onclick="resetForm()">↺ Reset</button>
-        <button onclick="analyze()">Analyze Skill Gap →</button>
+        <button onclick="resetForm()">↺ Reset View</button>
       </div>
     </div>
 
@@ -545,105 +671,209 @@
   </div>
 
 <script>
-function resetForm() {
-  document.getElementById("skills").value = "";
-  document.getElementById("tools").value = "";
-  document.getElementById("cgpa").value = "";
-  document.getElementById("targetRole").value = "";
-  document.getElementById("result").style.display = "none";
-  console.log('✅ Form reset');
-}
+const currentUser = JSON.parse(sessionStorage.getItem("nv_user") || "null");
+const userId = currentUser?.id || null;
+let savedProfileRoles = [];
+const queryParams = new URLSearchParams(window.location.search);
+const queryRole = queryParams.get("role") || "";
 
-async function analyze(){
-  const technicalSkills = document.getElementById("skills").value
-    .split(",").map(s => s.trim()).filter(s => s);
+document.addEventListener("DOMContentLoaded", () => {
+  initializeSavedProfileAnalyzer();
+});
 
-  const tools = document.getElementById("tools").value
-    .split(",").map(s => s.trim()).filter(s => s);
+async function initializeSavedProfileAnalyzer() {
+  const note = document.getElementById("savedProfileNote");
+  const box = document.getElementById("savedProfileBox");
+  const profileOnlyMessage = document.getElementById("profileOnlyMessage");
+  const countBadge = document.getElementById("profile-count");
 
-  const targetRole = document.getElementById("targetRole").value;
-  const cgpa = parseFloat(document.getElementById("cgpa").value);
-
-  if (!targetRole) {
-    alert("Please select a target role!");
-    return;
-  }
-
-  if (technicalSkills.length === 0 && tools.length === 0) {
-    alert("Please enter at least one skill or tool!");
-    return;
-  }
-
-  if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) {
-    alert("Please enter a valid CGPA (0-10)!");
+  if (!userId) {
+    box.style.display = "block";
+    countBadge.textContent = "0 profiles";
+    note.textContent = "Login required. Please login and save a role profile first.";
+    profileOnlyMessage.innerText = "This page works only with saved profiles from profile.json.";
     return;
   }
 
   try {
-    console.log('📤 Sending request...', { technicalSkills, tools, targetRole, cgpa });
-    
-    const response = await fetch("/api/skill-gap", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        technicalSkills,
-        tools,
-        targetRole,
-        cgpa
-      })
-    });
-
-    console.log('📥 Response status:', response.status);
-    
+    const response = await fetch(`/api/profile/${userId}`);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log('✅ Response data:', data);
-
-    if (data.error) {
-      alert("Error: " + data.error);
+      box.style.display = "block";
+      note.textContent = "Could not fetch saved profiles. Please try again.";
       return;
     }
 
-    // Display results
-    document.getElementById("result").style.display = "block";
-    document.getElementById("roleTitle").innerText = data.targetRole;
-    document.getElementById("scoreText").innerText = data.compatibilityScore + "%";
-    document.getElementById("progressBar").style.width = data.compatibilityScore + "%";
-    document.getElementById("cgpaInfo").innerText = `📊 CGPA: ${data.cgpa} — ${data.cgpaStatus}`;
-    document.getElementById("recommendation").innerText = `💡 ${data.recommendation}`;
+    const data = await response.json();
+    savedProfileRoles = Array.isArray(data.roles) ? data.roles : [];
+    countBadge.textContent = `${savedProfileRoles.length} profile${savedProfileRoles.length !== 1 ? "s" : ""}`;
 
-    const matched = document.getElementById("matched");
-    const missing = document.getElementById("missing");
-    const tutorialList = document.getElementById("tutorialList");
-
-    matched.innerHTML = "";
-    missing.innerHTML = "";
-    tutorialList.innerHTML = "";
-
-    data.matchedSkills.forEach(skill => {
-      matched.innerHTML += `<li class="skill-matched">✓ ${skill}</li>`;
-    });
-
-    data.missingSkills.forEach(skill => {
-      missing.innerHTML += `<li class="skill-missing">✗ ${skill}</li>`;
-    });
-
-    if (data.missingSkillsWithTutorials && data.missingSkillsWithTutorials.length > 0) {
-      data.missingSkillsWithTutorials.forEach(item => {
-        tutorialList.innerHTML += `<li><a href="${item.tutorial}" target="_blank" rel="noopener">🔗 Learn ${item.skill}</a></li>`;
-      });
+    if (!savedProfileRoles.length) {
+      box.style.display = "block";
+      note.textContent = "No saved role profiles found. Please create one from Skills page.";
+      profileOnlyMessage.innerText = "No manual input is required here. Save role data first, then come back.";
+      return;
     }
 
-    console.log('✅ Results displayed successfully');
-    
-    // Store current results for download/share
-    window.currentResults = data;
+    renderSavedProfileCards();
+
+    box.style.display = "block";
+    note.textContent = `Logged in as ${currentUser?.name || currentUser?.username || "User"}.`;
+
+    // Direct flow from URL: analyze selected role if present.
+    if (queryRole && savedProfileRoles.some((profile) => profile.role === queryRole)) {
+      const queryIndex = savedProfileRoles.findIndex((profile) => profile.role === queryRole);
+      await analyzeSavedProfile(queryRole, queryIndex);
+    }
   } catch (error) {
-    console.error('❌ Error:', error);
-    alert('Error: ' + error.message + '\n\nMake sure the server is running on http://localhost:3000');
+    console.error("Unable to load saved profiles:", error);
+    box.style.display = "block";
+    note.textContent = "Unable to load saved profiles right now.";
+  }
+}
+
+function renderSavedProfileCards() {
+  const grid = document.getElementById("profile-grid");
+
+  grid.innerHTML = "";
+  savedProfileRoles.forEach((profile, index) => {
+    const skillList = Array.isArray(profile.technicalSkills) ? profile.technicalSkills : [];
+
+    const card = document.createElement("div");
+    card.className = "roleCard";
+    card.id = `profile-${index}`;
+    card.innerHTML = `
+      <div class="card-role-name">${profile.role}</div>
+      <div class="card-meta">
+        <span class="meta-pill">CGPA ${profile.cgpa}</span>
+        <span class="meta-pill">INTERNSHIP ${profile.internshipMonths}mo</span>
+        <span class="meta-pill">SKILLS ${skillList.length}</span>
+      </div>
+      <div class="card-skills-label">Technical Skills</div>
+      <div class="card-skills-list">
+        ${skillList.map((skill) => `
+          <span class="card-skill-tag">${skill.skill}<span class="tag-level">${skill.level}</span></span>
+        `).join("")}
+      </div>
+      <div class="cardBtns">
+        <button class="card-btn btn-score" onclick="analyzeSavedProfile('${profile.role.replace(/'/g, "\\'")}', ${index})">Analyze Skill Gap</button>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+function resetForm() {
+  document.querySelectorAll(".roleCard").forEach((card) => card.classList.remove("active"));
+  document.getElementById("result").style.display = "none";
+  console.log('✅ View reset');
+}
+
+function buildResultFromScoreApi(data) {
+  const compatibilityScore = Math.round(Number(data.finalScore || 0));
+  const cgpa = Number(data?.profile?.cgpa || 0);
+  const missingSkills = Array.isArray(data.missingSkills) ? data.missingSkills : [];
+  const matchedSkills = Array.isArray(data.matchedSkills) ? data.matchedSkills : [];
+
+  let cgpaStatus = "Average Academic Performance";
+  if (cgpa >= 9) cgpaStatus = "Excellent Academic Performance";
+  else if (cgpa >= 8.5) cgpaStatus = "Very Good Academic Performance";
+  else if (cgpa >= 8) cgpaStatus = "Good Academic Performance";
+  else if (cgpa < 6) cgpaStatus = "Low Academic Performance";
+
+  const recommendation = compatibilityScore >= 80
+    ? `Great fit for ${data.role}. Focus on polishing: ${missingSkills.slice(0, 2).join(", ") || "advanced implementation"}.`
+    : compatibilityScore >= 60
+      ? `Good progress for ${data.role}. Improve these skills: ${missingSkills.slice(0, 3).join(", ") || "practice projects"}.`
+      : `You need stronger alignment for ${data.role}. Start with: ${missingSkills.slice(0, 4).join(", ") || "core role requirements"}.`;
+
+  return {
+    targetRole: data.role,
+    cgpa,
+    cgpaStatus,
+    compatibilityScore,
+    matchedSkills,
+    missingSkills,
+    missingSkillsWithTutorials: missingSkills.map((skill) => ({
+      skill,
+      tutorial: `https://www.geeksforgeeks.org/search/?q=${encodeURIComponent(skill)}`,
+    })),
+    recommendation,
+  };
+}
+
+function renderResults(data) {
+  document.getElementById("result").style.display = "block";
+  document.getElementById("roleTitle").innerText = data.targetRole;
+  document.getElementById("scoreText").innerText = data.compatibilityScore + "%";
+  document.getElementById("progressBar").style.width = data.compatibilityScore + "%";
+  document.getElementById("cgpaInfo").innerText = `CGPA: ${data.cgpa} - ${data.cgpaStatus}`;
+  document.getElementById("recommendation").innerText = `Tip: ${data.recommendation}`;
+
+  const matched = document.getElementById("matched");
+  const missing = document.getElementById("missing");
+  const tutorialList = document.getElementById("tutorialList");
+
+  matched.innerHTML = "";
+  missing.innerHTML = "";
+  tutorialList.innerHTML = "";
+
+  data.matchedSkills.forEach(skill => {
+    matched.innerHTML += `<li class="skill-matched">✓ ${skill}</li>`;
+  });
+
+  data.missingSkills.forEach(skill => {
+    missing.innerHTML += `<li class="skill-missing">✗ ${skill}</li>`;
+  });
+
+  if (data.missingSkillsWithTutorials && data.missingSkillsWithTutorials.length > 0) {
+    data.missingSkillsWithTutorials.forEach(item => {
+      tutorialList.innerHTML += `<li><a href="${item.tutorial}" target="_blank" rel="noopener">Learn ${item.skill}</a></li>`;
+    });
+  }
+
+  window.currentResults = data;
+}
+
+async function analyzeSavedProfile(selectedRole, cardIndex = -1) {
+  if (!userId) {
+    alert("Please login first.");
+    return;
+  }
+
+  const role = selectedRole;
+  if (!role) {
+    alert("Please select a saved role profile.");
+    return;
+  }
+
+  document.querySelectorAll(".roleCard").forEach((card) => card.classList.remove("active"));
+  if (cardIndex >= 0) {
+    const activeCard = document.getElementById(`profile-${cardIndex}`);
+    if (activeCard) activeCard.classList.add("active");
+  }
+
+  const note = document.getElementById("savedProfileNote");
+  note.textContent = `Analyzing saved profile for ${role}...`;
+
+  try {
+    const response = await fetch(`/api/score/${userId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ role }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Unable to analyze saved profile (${response.status})`);
+    }
+
+    const data = await response.json();
+    const transformed = buildResultFromScoreApi(data);
+    renderResults(transformed);
+    note.textContent = `Showing analysis for ${role}.`;
+  } catch (error) {
+    console.error("Saved profile analysis failed:", error);
+    alert("Could not analyze saved profile. Please try again.");
   }
 }
 

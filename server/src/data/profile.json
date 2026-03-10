@@ -141,31 +141,46 @@
           "internshipMonths": 6,
           "technicalSkills": [
             {
-              "skill": "PowerBI",
-              "level": 2
+              "skill": "Node.js",
+              "level": 5
             },
             {
-              "skill": "Python",
-              "level": 4
+              "skill": "Express",
+              "level": 5
+            },
+            {
+              "skill": "PostgreSQL",
+              "level": 7
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "b9f26ad4-d486-4366-af7f-d97134849966",
+      "username": "abc",
+      "roles": []
+    },
+    {
+      "id": "79b2bae1-7a91-4faf-85c9-cff17bcc99fe",
+      "username": "saksham",
+      "roles": [
         {
-          "role": "Data Analyst",
-          "cgpa": 2,
+          "role": "Backend Developer",
+          "cgpa": 8.4,
           "internshipMonths": 6,
           "technicalSkills": [
             {
-              "skill": "PowerBI",
-              "level": 2
+              "skill": "Node.js",
+              "level": 8
             },
             {
-              "skill": "Python",
-              "level": 4
+              "skill": "MongoDB",
+              "level": 9
             },
             {
-              "skill": "SQL",
-              "level": 6
+              "skill": "Redis",
+              "level": 9
             }
           ]
         }

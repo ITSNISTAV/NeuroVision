@@ -15,9 +15,9 @@ app.use("/api", scoreRoute);
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/skill-gap", skillGapRoutes);
-app.get('/api/health', (req, res) => {
-  res.json({ ok: true })
-})
+// app.get('/api/health', (req, res) => {
+//   res.json({ ok: true })
+// })
 
 module.exports = app;
 

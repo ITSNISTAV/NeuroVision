@@ -1,125 +1,70 @@
 const fs = require('fs');
 const path = require('path');
+const { readData } = require('../utils/role.util');
 
-// Read data from JSON files in server/src/data folder
-const roleRequirementsPath = path.join(__dirname, '../data/roleRequirements.json');
-const tutorialLinksPath = path.join(__dirname, '../data/tutorialLinks.json');
+const tutorialLinks = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../data/tutorialLinks.json'), 'utf8')
+);
 
-let roleRequirements = {};
-let tutorialLinks = {};
-
-try {
-  roleRequirements = JSON.parse(fs.readFileSync(roleRequirementsPath, 'utf8'));
-  tutorialLinks = JSON.parse(fs.readFileSync(tutorialLinksPath, 'utf8'));
-  console.log('✅ Skill Gap data loaded successfully');
-} catch (error) {
-  console.error('❌ Error reading JSON files:', error.message);
-}
-
-const analyzeSkillGap = (profileData) => {
-  const { technicalSkills = [], tools = [], targetRole, cgpa } = profileData;
-
-  const requiredSkills = roleRequirements[targetRole];
-
-  if (!requiredSkills) {
-    return { error: "Role not found" };
-  }
-
-  const userSkills = [...technicalSkills, ...tools].map(s =>
-    s.toLowerCase()
-  );
-
-  const matchedSkills = requiredSkills.filter(skill =>
-    userSkills.includes(skill.toLowerCase())
-  );
-
-  const missingSkills = requiredSkills.filter(skill =>
-    !userSkills.includes(skill.toLowerCase())
-  );
-
-  // Create missing skills with tutorial links
-  const missingSkillsWithTutorials = missingSkills.map(skill => ({
-    skill,
-    tutorial: tutorialLinks[skill] || `https://www.geeksforgeeks.org/search/?q=${skill}`
-  }));
-
-  const compatibilityScore = Math.round(
-    (matchedSkills.length / requiredSkills.length) * 100
-  );
-
-  // CGPA-based status and recommendations (0-10 scale)
-  let cgpaStatus = "";
-  let cgpaBonus = "";
-  
-  if (cgpa >= 9.0) {
-    cgpaStatus = "Excellent Academic Performance 🌟";
-    cgpaBonus = " You have outstanding academic foundation.";
-  } else if (cgpa >= 8.5) {
-    cgpaStatus = "Very Good Academic Performance 👑";
-    cgpaBonus = " Your academics are excellent.";
-  } else if (cgpa >= 8.0) {
-    cgpaStatus = "Good Academic Performance 👍";
-    cgpaBonus = " You have strong academic record.";
-  } else if (cgpa >= 7.0) {
-    cgpaStatus = "Average Academic Performance 📚";
-    cgpaBonus = " Focus more on practical skills.";
-  } else if (cgpa >= 6.0) {
-    cgpaStatus = "Below Average Academic Performance 📝";
-    cgpaBonus = " Prioritize skill development urgently.";
-  } else {
-    cgpaStatus = "Low Academic Performance ⚠️";
-    cgpaBonus = " Need significant improvement in academics and skills.";
-  }
-
-  // Smart recommendation based on CGPA + Skills (0-10 scale)
-  let recommendation = "";
-  
-  if (compatibilityScore >= 80 && cgpa >= 8.0) {
-    recommendation = `Excellent! You're ${compatibilityScore}% ready for ${targetRole}. With your ${cgpaStatus}, you have strong potential. Focus on: ${missingSkills.slice(0, 2).join(", ") || "refinement"}`;
-  } else if (compatibilityScore >= 60 && cgpa >= 7.5) {
-    recommendation = `Good progress! You're ${compatibilityScore}% ready. Learn these skills: ${missingSkills.join(", ") || "advanced topics"}`;
-  } else if (compatibilityScore >= 40) {
-    recommendation = `You have ${compatibilityScore}% skill alignment.${cgpaBonus} Priority: ${missingSkills.slice(0, 3).join(", ")}`;
-  } else {
-    recommendation = `You're ${compatibilityScore}% ready.${cgpaBonus} Recommended: Learn ${missingSkills.slice(0, 4).join(", ")}. Consider internships to gain practical experience.`;
-  }
-
-  return {
-    targetRole,
-    cgpa,
-    cgpaStatus,
-    compatibilityScore,
-    matchedSkills,
-    missingSkills,
-    missingSkillsWithTutorials,
-    recommendation
-  };
+const getCgpaStatus = (cgpa) => {
+  if (cgpa >= 9.0) return { status: "Excellent Academic Performance 🌟", bonus: " You have outstanding academic foundation." };
+  if (cgpa >= 8.5) return { status: "Very Good Academic Performance 👑",  bonus: " Your academics are excellent." };
+  if (cgpa >= 8.0) return { status: "Good Academic Performance 👍",        bonus: " You have strong academic record." };
+  if (cgpa >= 7.0) return { status: "Average Academic Performance 📚",     bonus: " Focus more on practical skills." };
+  if (cgpa >= 6.0) return { status: "Below Average Academic Performance 📝", bonus: " Prioritize skill development urgently." };
+  return           { status: "Low Academic Performance ⚠️",                bonus: " Need significant improvement in academics and skills." };
 };
 
-// Controller function
-exports.analyzeSkillGap = (req, res) => {
+const getRecommendation = (compatibilityScore, cgpa, cgpaBonus, targetRole, missingSkills) => {
+  if (compatibilityScore >= 80 && cgpa >= 8.0)
+    return `Excellent! You're ${compatibilityScore}% ready for ${targetRole}. Focus on: ${missingSkills.slice(0, 2).join(", ") || "refinement"}`;
+  if (compatibilityScore >= 60 && cgpa >= 7.5)
+    return `Good progress! You're ${compatibilityScore}% ready. Learn: ${missingSkills.join(", ") || "advanced topics"}`;
+  if (compatibilityScore >= 40)
+    return `You have ${compatibilityScore}% skill alignment.${cgpaBonus} Priority: ${missingSkills.slice(0, 3).join(", ")}`;
+  return `You're ${compatibilityScore}% ready.${cgpaBonus} Recommended: Learn ${missingSkills.slice(0, 4).join(", ")}. Consider internships.`;
+};
+
+exports.analyzeSkillGap = async (req, res) => {
   try {
-    console.log('📥 Received skill gap analysis request:', req.body);
-    
-    const { cgpa } = req.body;
+    const { targetRole, cgpa, technicalSkills = [], tools = [] } = req.body;
 
-    if (!cgpa || cgpa < 0 || cgpa > 10) {
-      console.log('❌ Invalid CGPA:', cgpa);
-      return res.status(400).json({
-        error: "Valid CGPA (0-10) is required"
-      });
+    if (!targetRole || !cgpa || cgpa < 0 || cgpa > 10) {
+      return res.status(400).json({ error: "targetRole and valid CGPA (0-10) are required" });
     }
 
-    const result = analyzeSkillGap(req.body);
-    console.log('✅ Analysis result:', result);
-    
-    if (result.error) {
-      return res.status(400).json({ error: result.error });
+    const roleData = await readData();
+    const matchedRole = roleData.roles.find(r => r.role === targetRole);
+    if (!matchedRole) {
+      return res.status(404).json({ error: "Role not found" });
     }
 
-    res.json(result);
+    const userSkills = [...technicalSkills, ...tools].map(s => s.toLowerCase());
+    const requiredSkills = matchedRole.skills;
+
+    const matchedSkills = requiredSkills.filter(s => userSkills.includes(s.name.toLowerCase()));
+    const missingSkills = requiredSkills.filter(s => !userSkills.includes(s.name.toLowerCase()));
+
+    const compatibilityScore = Math.round((matchedSkills.length / requiredSkills.length) * 100);
+
+    const { status: cgpaStatus, bonus: cgpaBonus } = getCgpaStatus(cgpa);
+    const missingNames = missingSkills.map(s => s.name);
+
+    return res.status(200).json({
+      targetRole,
+      cgpa,
+      cgpaStatus,
+      compatibilityScore,
+      matchedSkills: matchedSkills.map(s => s.name),
+      missingSkills: missingNames,
+      missingSkillsWithTutorials: missingNames.map(name => ({
+        skill: name,
+        tutorial: tutorialLinks[name] || `https://www.geeksforgeeks.org/search/?q=${name}`
+      })),
+      recommendation: getRecommendation(compatibilityScore, cgpa, cgpaBonus, targetRole, missingNames)
+    });
+
   } catch (error) {
-    console.error('❌ Error in skill gap analysis:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 };

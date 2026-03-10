@@ -152,5 +152,19 @@
     "email": "muskangera@gmail.com",
     "passwordHash": "$2b$10$H8QR9sePpNcpLMNAuDmp7ODW/sC73oHHrL94o7mXADIZenilx9N0C",
     "role": "user"
+  },
+  {
+    "id": "b9f26ad4-d486-4366-af7f-d97134849966",
+    "name": "abc",
+    "email": "nistav@gmail.com",
+    "passwordHash": "$2b$10$C73s5ynJDCuEZDH1nf0kzuZbNEO8Yx/trwme8MWcfUBeLCn8YWGTS",
+    "role": "user"
+  },
+  {
+    "id": "79b2bae1-7a91-4faf-85c9-cff17bcc99fe",
+    "name": "saksham",
+    "email": "saksham@gmail.com",
+    "passwordHash": "$2b$10$VfDpJxCyE/WFcEtn6qm1iugfZcgc04XzYVNoe8XGNy5XT/BEY37MK",
+    "role": "user"
   }
 ]

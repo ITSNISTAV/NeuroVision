@@ -1,4 +1,5 @@
 const { readData, writeData } = require("../utils/file.util");
+const { readData: readUsersData } = require("../utils/user.util");
 
 exports.getProfile = (req, res) => {
   const data = readData();
@@ -8,7 +9,7 @@ exports.getProfile = (req, res) => {
   res.json(user || { roles: [] });
 };
 
-exports.saveProfile = (req, res) => {
+exports.saveProfile = async (req, res) => {
   const data = readData();
   let user = data.users.find(u => u.id === req.params.id);
 
@@ -23,7 +24,12 @@ exports.saveProfile = (req, res) => {
   }
 
   if (!user) {
-    user = { id: req.params.id, username: "unknown", roles: [] };
+    // Get actual username from users.json
+    const usersData = await readUsersData();
+    const actualUser = usersData.find(u => u.id === req.params.id);
+    const username = actualUser ? actualUser.name : "unknown";
+    
+    user = { id: req.params.id, username, roles: [] };
     data.users.push(user);
   }
 

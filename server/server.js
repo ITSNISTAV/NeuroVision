@@ -1,5 +1,5 @@
 const express=require("express");
-const cors = require('cors')
+const app = require("./src/app");
 require('dotenv').config()
 const path = require('path')
 const authRoutes=require("./src/routes/authRoutes");
@@ -12,6 +12,8 @@ app.get('/api/health', (req, res) => {
   res.json({ ok: true })
 })
 app.use('/api/auth', authRoutes)
+// const port =3000;
+
 const PORT = process.env.PORT || 3000
 app.listen(PORT,()=>{
     console.log(`app is running on port ${PORT}`)

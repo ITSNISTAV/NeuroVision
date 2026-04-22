@@ -157,6 +157,7 @@
   </div>
 
   <script src="main.js"></script>
+  <script src="auth.js"></script>
   <script>
     // ── Tab switching ──────────────────────────────────────────
     function switchTab(tab) {
@@ -295,6 +296,7 @@
     // ── Redirect if already logged in ─────────────────────────
     if (sessionStorage.getItem("nv_user")) {
       window.location.href = "/index.html";
+      window.location.href = "/skills.html";
     }
   </script>
 </body>

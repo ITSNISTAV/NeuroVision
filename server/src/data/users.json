@@ -117,26 +117,5 @@
     "email": "demotest3@gmail.com",
     "passwordHash": "$2b$10$G8FlXZ.lzrk5DDudGQcT3usXTrh/QBL.kFdjTsLCGAXlVVT/reFtq",
     "role": "user"
-  },
-  {
-    "id": "2b6834dd-dcf6-40b4-84db-f39dcc7db08b",
-    "name": "Raghav",
-    "email": "raghav@gmail.com",
-    "passwordHash": "$2b$10$3r3aSrEhL3r8dcYF2D0n8.JEy9EUnjDZ7yILaYu7xOF2MvQ.DuzuW",
-    "role": "user"
-  },
-  {
-    "id": "d9121929-21c3-4240-ada7-3bce6e2f1e21",
-    "name": "johney",
-    "email": "johney@gmail.com",
-    "passwordHash": "$2b$10$fFRuCEtSeHEn5V7Tm6mHNuBq2on0Vq2/UVarwVwzEkX957gkYfsAq",
-    "role": "user"
-  },
-  {
-    "id": "5bf27e8f-4db0-4e1f-8718-88a8c60ebb14",
-    "name": "johneyy",
-    "email": "johneyy@gmail.com",
-    "passwordHash": "$2b$10$Oe2vfcjgT1Vw6wrg5cR/ZejTK8KLWqBFkN4AtqAAsKFiUMvArt032",
-    "role": "user"
   }
 ]

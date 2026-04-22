@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroVision — Enter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css">
+  <!-- ── NEW: Google Identity Services SDK ── -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+  <!-- Ambient background -->
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+  <div class="grid-overlay"></div>
+
+  <div class="auth-wrapper">
+
+    <!-- LEFT PANEL: Branding -->
+    <div class="brand-panel">
+      <div class="brand-content">
+        <div class="brand-logo">
+          <span class="logo-symbol">✦</span>
+          <span class="logo-text">NeuroVision</span>
+        </div>
+        <div class="brand-tagline">
+          <h1>Map Your<br><em>Career DNA</em></h1>
+          <p>Build intelligent skill profiles, track your growth, and unlock your career potential with precision.</p>
+        </div>
+        <div class="brand-features">
+          <div class="feature-item">
+            <span class="feature-dot"></span>
+            Role-based skill profiling
+          </div>
+          <div class="feature-item">
+            <span class="feature-dot"></span>
+            AI-powered score analysis
+          </div>
+          <div class="feature-item">
+            <span class="feature-dot"></span>
+            Career readiness insights
+          </div>
+        </div>
+        <div class="brand-decoration">
+          <div class="deco-ring ring1"></div>
+          <div class="deco-ring ring2"></div>
+          <div class="deco-ring ring3"></div>
+          <span class="deco-symbol">◈</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: Auth Forms -->
+    <div class="auth-panel">
+      <div class="auth-card glass-card">
+
+        <!-- Tab switcher -->
+        <div class="auth-tabs">
+          <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">Sign In</button>
+          <button class="tab-btn" id="registerTab" onclick="switchTab('register')">Sign Up</button>
+          <div class="tab-indicator" id="tabIndicator"></div>
+        </div>
+
+        <!-- ── LOGIN FORM ── -->
+        <div class="auth-form" id="loginForm">
+          <div class="form-header">
+            <h2>Welcome back</h2>
+            <p>Sign in to continue your journey</p>
+          </div>
+
+          <div class="field-group">
+            <label>Email</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✉</span>
+              <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon">◉</span>
+              <input type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password">
+              <button class="toggle-pw" onclick="togglePassword('loginPassword', this)" tabindex="-1">👁</button>
+            </div>
+          </div>
+
+          <div class="form-error" id="loginError"></div>
+
+          <button class="btn-primary" id="loginBtn" onclick="handleLogin()">
+            <span class="btn-label">Sign In</span>
+            <span class="btn-arrow">→</span>
+            <span class="btn-loader" id="loginLoader"></span>
+          </button>
+
+          <!-- ── NEW: Google OAuth for Login ── -->
+          <div class="oauth-divider"><span>or</span></div>
+          <div id="g_id_onload"
+               data-client_id="314851830663-th9r3ail606i4f970b15qdb6q21uii80.apps.googleusercontent.com"
+               data-callback="handleGoogleSignIn"
+               data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin"
+               data-type="standard"
+               data-theme="filled_black"
+               data-text="signin_with"
+               data-shape="pill"
+               data-logo_alignment="left"
+               data-width="340">
+          </div>
+          <!-- ── END NEW ── -->
+
+          <p class="form-switch">
+            Don't have an account?
+            <a href="#" onclick="switchTab('register')">Create one →</a>
+          </p>
+        </div>
+
+        <!-- ── REGISTER FORM ── -->
+        <div class="auth-form hidden" id="registerForm">
+          <div class="form-header">
+            <h2>Create account</h2>
+            <p>Start building your skill profile</p>
+          </div>
+
+          <div class="field-group">
+            <label>Full Name</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✦</span>
+              <input type="text" id="regName" placeholder="Your full name" autocomplete="name">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Email</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✉</span>
+              <input type="email" id="regEmail" placeholder="you@example.com" autocomplete="email">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label>Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon">◉</span>
+              <input type="password" id="regPassword" placeholder="Min. 6 characters" autocomplete="new-password">
+              <button class="toggle-pw" onclick="togglePassword('regPassword', this)" tabindex="-1">👁</button>
+            </div>
+            <div class="strength-bar">
+              <div class="strength-fill" id="strengthFill"></div>
+            </div>
+            <span class="strength-label" id="strengthLabel"></span>
+          </div>
+
+          <div class="form-error" id="registerError"></div>
+
+          <button class="btn-primary" id="registerBtn" onclick="handleRegister()">
+            <span class="btn-label">Create Account</span>
+            <span class="btn-arrow">→</span>
+            <span class="btn-loader" id="registerLoader"></span>
+          </button>
+
+          <!-- ── NEW: Google OAuth for Register ── -->
+          <div class="oauth-divider"><span>or</span></div>
+          <div class="g_id_signin"
+               data-type="standard"
+               data-theme="filled_black"
+               data-text="signup_with"
+               data-shape="pill"
+               data-logo_alignment="left"
+               data-width="340">
+          </div>
+          <!-- ── END NEW ── -->
+
+          <p class="form-switch">
+            Already have an account?
+            <a href="#" onclick="switchTab('login')">Sign in →</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    // ── Tab switching ──────────────────────────────────────────
+    function switchTab(tab) {
+      const loginForm    = document.getElementById("loginForm");
+      const registerForm = document.getElementById("registerForm");
+      const loginTab     = document.getElementById("loginTab");
+      const registerTab  = document.getElementById("registerTab");
+      const indicator    = document.getElementById("tabIndicator");
+
+      if (tab === "login") {
+        loginForm.classList.remove("hidden");
+        registerForm.classList.add("hidden");
+        loginTab.classList.add("active");
+        registerTab.classList.remove("active");
+        indicator.style.transform = "translateX(0)";
+      } else {
+        registerForm.classList.remove("hidden");
+        loginForm.classList.add("hidden");
+        registerTab.classList.add("active");
+        loginTab.classList.remove("active");
+        indicator.style.transform = "translateX(100%)";
+      }
+
+      clearErrors();
+    }
+
+    // ── Toggle password visibility ─────────────────────────────
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      input.type  = input.type === "password" ? "text" : "password";
+      btn.style.opacity = input.type === "text" ? "1" : "0.4";
+    }
+
+    // ── Password strength ──────────────────────────────────────
+    document.getElementById("regPassword").addEventListener("input", function () {
+      const val  = this.value;
+      const fill = document.getElementById("strengthFill");
+      const lbl  = document.getElementById("strengthLabel");
+      let score  = 0;
+      if (val.length >= 6)                    score++;
+      if (val.length >= 10)                   score++;
+      if (/[A-Z]/.test(val))                  score++;
+      if (/[0-9]/.test(val))                  score++;
+      if (/[^A-Za-z0-9]/.test(val))          score++;
+
+      const levels = ["", "Weak", "Fair", "Good", "Strong", "Very Strong"];
+      const colors = ["", "#ef4444", "#f97316", "#eab308", "#22c55e", "#a855f7"];
+      const widths = ["0%", "20%", "40%", "60%", "80%", "100%"];
+
+      fill.style.width      = val.length ? widths[score] : "0%";
+      fill.style.background = colors[score];
+      lbl.textContent       = val.length ? levels[score] : "";
+      lbl.style.color       = colors[score];
+    });
+
+    // ── Error display ──────────────────────────────────────────
+    function showError(id, msg) {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.classList.add("visible");
+    }
+
+    function clearErrors() {
+      document.querySelectorAll(".form-error").forEach(e => {
+        e.textContent = "";
+        e.classList.remove("visible");
+      });
+    }
+
+    // ── Loading state ──────────────────────────────────────────
+    function setLoading(btnId, loaderId, loading) {
+      const btn    = document.getElementById(btnId);
+      const loader = document.getElementById(loaderId);
+      btn.disabled = loading;
+      loader.classList.toggle("spinning", loading);
+      btn.querySelector(".btn-label").style.opacity = loading ? "0.5" : "1";
+      btn.querySelector(".btn-arrow").style.opacity = loading ? "0"   : "1";
+    }
+
+    // ── Handle login ───────────────────────────────────────────
+    async function handleLogin() {
+      clearErrors();
+      const email    = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      if (!email || !password) {
+        showError("loginError", "Please fill in all fields.");
+        return;
+      }
+
+      setLoading("loginBtn", "loginLoader", true);
+      try {
+        await login(email, password);
+      } catch (err) {
+        showError("loginError", "Something went wrong. Try again.");
+      }
+      setLoading("loginBtn", "loginLoader", false);
+    }
+
+    // ── Handle register ────────────────────────────────────────
+    async function handleRegister() {
+      clearErrors();
+      const name     = document.getElementById("regName").value.trim();
+      const email    = document.getElementById("regEmail").value.trim();
+      const password = document.getElementById("regPassword").value;
+
+      if (!name || !email || !password) {
+        showError("registerError", "Please fill in all fields.");
+        return;
+      }
+      if (password.length < 6) {
+        showError("registerError", "Password must be at least 6 characters.");
+        return;
+      }
+
+      setLoading("registerBtn", "registerLoader", true);
+      try {
+        await register(name, email, password);
+        // Auto switch to login after successful register
+        switchTab("login");
+        document.getElementById("loginEmail").value = email;
+      } catch (err) {
+        showError("registerError", "Something went wrong. Try again.");
+      }
+      setLoading("registerBtn", "registerLoader", false);
+    }
+
+    // ── Enter key support ──────────────────────────────────────
+    document.addEventListener("keydown", e => {
+      if (e.key !== "Enter") return;
+      const loginVisible = !document.getElementById("loginForm").classList.contains("hidden");
+      if (loginVisible) handleLogin();
+      else handleRegister();
+    });
+
+    // ── Redirect if already logged in ─────────────────────────
+    if (sessionStorage.getItem("nv_user")) {
+      window.location.href = "/skills.html";
+    }
+  </script>
+</body>
+</html>

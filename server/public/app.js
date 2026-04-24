@@ -8,10 +8,12 @@ const userId   = currentUser ? currentUser.id       : "guest";
 const userName = currentUser ? currentUser.name     : "Guest";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const nameEl = document.getElementById("navUserName");
-  const roleEl = document.getElementById("navUserRole");
+  const nameEl   = document.getElementById("navUserName");
+  const roleEl   = document.getElementById("navUserRole");
+  const avatarEl = document.getElementById("navAvatar");
   if (nameEl) nameEl.textContent = userName;
   if (roleEl) roleEl.textContent = currentUser?.role || "Candidate";
+  if (avatarEl && currentUser?.picture) avatarEl.src = currentUser.picture;
 });
 
 const roleSkills = {

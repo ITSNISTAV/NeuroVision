@@ -3,9 +3,10 @@ const path = require('path')
 const { v4: uuidv4 } = require('uuid')
 const bcrypt = require('bcryptjs')
 const { OAuth2Client } = require('google-auth-library')
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+const { sendWelcomeEmail } = require('../config/mailer')
 
-const USERS_FILE = path.join(__dirname,  '..', 'data', 'users.json')
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+const USERS_FILE = path.join(__dirname, '..', 'data', 'users.json')
 
 function ensureStore() {
   const dir = path.dirname(USERS_FILE)
@@ -46,7 +47,7 @@ function postRegister(req, res) {
   res.json({ user: safeUser(user) })
 }
 
-function postLogin(req, res) {
+async function postLogin(req, res) {
   const { email, password } = req.body || {}
   if (!email || !password) return res.status(400).json({ error: 'Missing fields' })
   const users = loadUsers()
@@ -54,10 +55,12 @@ function postLogin(req, res) {
   if (!user) return res.status(401).json({ error: 'Invalid credentials' })
   const valid = bcrypt.compareSync(password, user.passwordHash)
   if (!valid) return res.status(401).json({ error: 'Invalid credentials' })
+
+  sendWelcomeEmail(user.email, user.name).catch(err => console.error('Email failed:', err))
+
   res.json({ user: safeUser(user) })
 }
 
-// OAuth
 async function postGoogleAuth(req, res) {
   const { credential } = req.body || {}
   if (!credential) return res.status(400).json({ error: 'Missing Google credential' })
@@ -91,6 +94,8 @@ async function postGoogleAuth(req, res) {
       users.push(user)
       saveUsers(users)
     }
+
+    sendWelcomeEmail(user.email, user.name).catch(err => console.error('Email failed:', err))
 
     res.json({ user: safeUser(user) })
   } catch (err) {

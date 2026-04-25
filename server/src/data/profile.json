@@ -185,6 +185,106 @@
           ]
         }
       ]
+    },
+    {
+      "id": "09ecac2b-b1f8-48bd-970e-cd748ca2a54c",
+      "username": "MUSKAN",
+      "roles": [
+        {
+          "role": "Backend Developer",
+          "cgpa": 9.26,
+          "internshipMonths": 0,
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 4
+            },
+            {
+              "skill": "Express",
+              "level": 5
+            },
+            {
+              "skill": "PostgreSQL",
+              "level": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "skillgap-demo-user",
+      "username": "skillgap-demo",
+      "roles": [
+        {
+          "role": "Backend Developer",
+          "cgpa": 8.7,
+          "internshipMonths": 5,
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 8
+            },
+            {
+              "skill": "Express.js",
+              "level": 7
+            },
+            {
+              "skill": "MongoDB",
+              "level": 6
+            },
+            {
+              "skill": "Git",
+              "level": 8
+            }
+          ]
+        },
+        {
+          "role": "Frontend Developer",
+          "cgpa": 7.9,
+          "internshipMonths": 3,
+          "technicalSkills": [
+            {
+              "skill": "HTML",
+              "level": 8
+            },
+            {
+              "skill": "CSS",
+              "level": 8
+            },
+            {
+              "skill": "JavaScript",
+              "level": 7
+            },
+            {
+              "skill": "React.js",
+              "level": 6
+            }
+          ]
+        },
+        {
+          "role": "Data Analyst",
+          "cgpa": 8.2,
+          "internshipMonths": 4,
+          "technicalSkills": [
+            {
+              "skill": "Python",
+              "level": 7
+            },
+            {
+              "skill": "SQL",
+              "level": 7
+            },
+            {
+              "skill": "Excel",
+              "level": 8
+            },
+            {
+              "skill": "Power BI",
+              "level": 6
+            }
+          ]
+        }
+      ]
     }
   ]
 }

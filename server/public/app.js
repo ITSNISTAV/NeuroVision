@@ -1,8 +1,8 @@
 const currentUser = JSON.parse(sessionStorage.getItem("nv_user") || "null");
 
-if (!currentUser) {
-  window.location.href = "/index.html";
-}
+// if (!currentUser) {
+//   window.location.href = "/index.html";
+// }
 
 const userId   = currentUser ? currentUser.id       : "guest";
 const userName = currentUser ? currentUser.name     : "Guest";
@@ -239,7 +239,7 @@ async function editRole(roleName) {
 
 function logout() {
   sessionStorage.removeItem("nv_user");
-  window.location.href = "/index.html";
+  window.location.href = "/login.html";
 }
 
 let toastTimer;
@@ -250,5 +250,8 @@ function showToast(message, type = "") {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
 }
-loadRoles();
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadRoles();
+});
 

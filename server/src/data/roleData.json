@@ -44,7 +44,7 @@
         { "name": "Excel", "requiredLevel": 4, "weight": 15 },
         { "name": "Data Visualization", "requiredLevel": 3, "weight": 15 },
         { "name": "Statistics", "requiredLevel": 3, "weight": 10 },
-        { "name": "Power BI", "requiredLevel": 3, "weight": 10 }
+        { "name": "PowerBI", "requiredLevel": 3, "weight": 10 }
       ]
     },
     {

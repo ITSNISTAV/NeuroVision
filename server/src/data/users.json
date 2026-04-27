@@ -166,5 +166,12 @@
     "email": "saksham@gmail.com",
     "passwordHash": "$2b$10$VfDpJxCyE/WFcEtn6qm1iugfZcgc04XzYVNoe8XGNy5XT/BEY37MK",
     "role": "user"
+  },
+  {
+    "id": "48a4cf43-6368-4648-9b2b-fc56b15988b9",
+    "name": "her",
+    "email": "nista@gmail.com",
+    "passwordHash": "$2b$10$YPVAQmd4zHz5Itmo1/llU.8o7MT7psarJBBXyNoH8aLcT3kbPZTZy",
+    "role": "user"
   }
 ]

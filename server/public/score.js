@@ -58,21 +58,30 @@ function computeScore(profile) {
     // technicalSkills use { skill, level }, fallback skills use { name, level }
     const userSkill = skills.find(s => (s.skill || s.name) === rs.name);
     const userLevel = userSkill?.level;
-    earned += userLevel !== undefined ? (userLevel / rs.requiredLevel) * rs.weight : 0;
+    // Cap skill contribution at 100% (don't exceed required level)
+    const skillPercentage = userLevel !== undefined ? Math.min(userLevel / rs.requiredLevel, 1) : 0;
+    earned += skillPercentage * rs.weight;
     return { ...rs, userLevel };
   });
 
-  return { finalScore: (earned / total) * 100, breakdown };
+  return { finalScore: Math.min((earned / total) * 100, 100), breakdown };
 }
 
 // ─── Load profiles from backend ───────────────────────────────────────────────
 
 async function loadUserProfiles() {
   try {
+    if (userId === "guest" || !userId) {
+      console.warn("User not authenticated (userId: " + userId + "). Using sample data.");
+      return [];
+    }
     const res = await fetch(`/api/profile/${userId}`);
     if (res.ok) {
       const data = await res.json();
+      console.log("Loaded profiles:", data);
       return data.roles || [];
+    } else {
+      console.error("Failed to load profiles. Status:", res.status);
     }
   } catch (err) {
     console.error("Failed to load profiles:", err);
@@ -124,6 +133,7 @@ async function handleScore(profileIndex) {
 
   if (!profile) {
     console.error("Profile not found at index:", profileIndex);
+    alert("Error: Profile not found. Make sure you've saved your profile first.");
     return;
   }
 
@@ -145,15 +155,24 @@ async function handleScore(profileIndex) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ role: profile.role }),
     });
-    if (!res.ok) throw new Error("API error");
+    
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("API error:", errorData);
+      throw new Error(errorData.message || "API error");
+    }
+    
     const data = await res.json();
     finalScore = data.finalScore;
     breakdown = computeScore(profile).breakdown; // local breakdown for visual bars
-  } catch {
+    console.log("Score received from API:", finalScore);
+  } catch (error) {
+    console.error("Scoring error:", error);
     showWarning = true;
     const local = computeScore(profile);
     finalScore = local.finalScore;
     breakdown = local.breakdown;
+    console.log("Using client-side calculation:", finalScore);
   }
 
   renderResult(profile, finalScore, breakdown, showWarning);

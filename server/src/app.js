@@ -9,8 +9,11 @@ const cors = require('cors');
 const app=express();
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/login.html'));
+});
 app.use("/api", scoreRoute);
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);

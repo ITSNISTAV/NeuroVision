@@ -145,12 +145,39 @@
               "level": 5
             },
             {
-              "skill": "Express",
+              "skill": "Express.js",
               "level": 5
             },
             {
-              "skill": "PostgreSQL",
+              "skill": "MongoDB",
               "level": 7
+            },
+            {
+              "skill": "REST APIs",
+              "level": 6
+            }
+          ]
+        },
+        {
+          "role": "Frontend Developer",
+          "cgpa": 9,
+          "internshipMonths": 4,
+          "technicalSkills": [
+            {
+              "skill": "React.js",
+              "level": 9
+            },
+            {
+              "skill": "HTML",
+              "level": 8
+            },
+            {
+              "skill": "CSS",
+              "level": 8
+            },
+            {
+              "skill": "JavaScript",
+              "level": 9
             }
           ]
         }
@@ -181,6 +208,27 @@
             {
               "skill": "Redis",
               "level": 9
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "48a4cf43-6368-4648-9b2b-fc56b15988b9",
+      "username": "her",
+      "roles": [
+        {
+          "role": "Backend Developer",
+          "cgpa": 10,
+          "internshipMonths": 6,
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 8
+            },
+            {
+              "skill": "MongoDB",
+              "level": 6
             }
           ]
         }

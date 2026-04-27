@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuroVision – Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<nav>
+  <div class="logo"><span class="logo-star">✦</span>NeuroVision</div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a class="nav-link" href="/index.html">Home</a>
+      <a class="nav-link" href="/skills.html">Profile</a>
+      <a class="nav-link" href="/skillGap.html">Skill Gap</a>
+    </div>
+    <div class="user-pill">
+      <div>
+        <div class="user-name" id="nav-username">—</div>
+        <div class="user-label">CANDIDATE</div>
+      </div>
+      <div class="avatar" id="nav-avatar">?</div>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="error-banner" id="error-banner"></div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-greeting" id="hero-greeting">Welcome back</div>
+      <div class="hero-sub">Here's how you stand across your saved roles</div>
+    </div>
+    <div class="hero-right">
+      <div class="stat-card">
+        <div class="stat-label">Roles saved</div>
+        <div class="stat-value" id="stat-roles">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Best fit</div>
+        <div class="stat-value" id="stat-best" style="color: var(--purple-light)">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total skills</div>
+        <div class="stat-value" id="stat-skills">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BEST ROLE BANNER -->
+  <div class="best-role-banner" id="best-role-banner" style="display:none">
+    <div class="best-role-left">
+      <div class="best-role-icon">&#9733;</div>
+      <div>
+        <div class="best-role-label">Best role match</div>
+        <div class="best-role-name" id="best-role-name">—</div>
+      </div>
+    </div>
+    <div class="best-role-score" id="best-role-score">—</div>
+  </div>
+
+  <!-- ROLE CARDS -->
+  <div class="section-header">
+    <div class="section-title">Role comparison</div>
+  </div>
+  <div class="role-grid" id="role-grid">
+    <div class="loading">Loading profiles…</div>
+  </div>
+
+  <!-- INSIGHT ROW -->
+  <div class="insight-row" id="insight-row" style="display:none">
+    <div class="insight-card">
+      <div class="insight-title">Most common missing skill</div>
+      <div id="insight-missing"></div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-title">Strongest role by skill match</div>
+      <div id="insight-strongest"></div>
+    </div>
+  </div>
+
+  <!-- DETAIL PANEL -->
+  <div class="section-header">
+    <div class="section-title">Role detail</div>
+  </div>
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-empty">Select a role card above to see your full analysis.</div>
+  </div>
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>

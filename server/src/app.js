@@ -1,11 +1,15 @@
 const express=require("express");
 const path = require("path");
+const dotenv = require("dotenv");
+dotenv.config();
+const connectDB=require("../config/db")
 const scoreRoute=require("./routes/scoringRoute");
 const profileRoutes = require("./routes/profile.routes");
 const authRoutes  = require("./routes/authRoutes");
 const skillGapRoutes = require("./routes/skillGapRoutes");
 const cors = require('cors');
 
+connectDB();
 const app=express();
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.json());

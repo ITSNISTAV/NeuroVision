@@ -34,7 +34,8 @@ function safeUser(user) {
   return rest
 }
 
-function postRegister(req, res) {
+// email only on register ✅
+async function postRegister(req, res) {
   const { name, email, password, role } = req.body || {}
   if (!name || !email || !password) return res.status(400).json({ error: 'Missing fields' })
   const users = loadUsers()
@@ -44,10 +45,15 @@ function postRegister(req, res) {
   const user = { id: uuidv4(), name, email: (email || '').trim(), passwordHash, role: role || 'user' }
   users.push(user)
   saveUsers(users)
+
+  // send welcome email once on registration
+  sendWelcomeEmail(user.email, user.name).catch(err => console.error('Email failed:', err))
+
   res.json({ user: safeUser(user) })
 }
 
-async function postLogin(req, res) {
+// no email on login ✅
+function postLogin(req, res) {
   const { email, password } = req.body || {}
   if (!email || !password) return res.status(400).json({ error: 'Missing fields' })
   const users = loadUsers()
@@ -55,12 +61,10 @@ async function postLogin(req, res) {
   if (!user) return res.status(401).json({ error: 'Invalid credentials' })
   const valid = bcrypt.compareSync(password, user.passwordHash)
   if (!valid) return res.status(401).json({ error: 'Invalid credentials' })
-
-  sendWelcomeEmail(user.email, user.name).catch(err => console.error('Email failed:', err))
-
   res.json({ user: safeUser(user) })
 }
 
+// email only if brand new Google user, not on repeat Google logins ✅
 async function postGoogleAuth(req, res) {
   const { credential } = req.body || {}
   if (!credential) return res.status(400).json({ error: 'Missing Google credential' })
@@ -75,14 +79,18 @@ async function postGoogleAuth(req, res) {
 
     const users = loadUsers()
     let user = findByEmail(users, email)
+    let isNewUser = false
 
     if (user) {
+      // existing user — just attach googleId if missing, no email
       if (!user.googleId) {
         user.googleId = googleId
         if (picture && !user.picture) user.picture = picture
         saveUsers(users)
       }
     } else {
+      // brand new user via Google
+      isNewUser = true
       user = {
         id: uuidv4(),
         name,
@@ -95,7 +103,10 @@ async function postGoogleAuth(req, res) {
       saveUsers(users)
     }
 
-    sendWelcomeEmail(user.email, user.name).catch(err => console.error('Email failed:', err))
+    // send welcome email only for new Google signups
+    if (isNewUser) {
+      sendWelcomeEmail(user.email, user.name).catch(err => console.error('Email failed:', err))
+    }
 
     res.json({ user: safeUser(user) })
   } catch (err) {

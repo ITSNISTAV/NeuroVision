@@ -168,10 +168,24 @@
     "role": "user"
   },
   {
-    "id": "48a4cf43-6368-4648-9b2b-fc56b15988b9",
-    "name": "her",
-    "email": "nista@gmail.com",
-    "passwordHash": "$2b$10$YPVAQmd4zHz5Itmo1/llU.8o7MT7psarJBBXyNoH8aLcT3kbPZTZy",
+    "id": "567a518b-66e7-482c-b9e6-95225c382385",
+    "name": "a",
+    "email": "a@abc",
+    "passwordHash": "$2b$10$ONtlDHxO0hu5TAFJVdev.OfB.AS1M1j6R6ShSZRGQ.DE4jA/kzLO.",
+    "role": "user"
+  },
+  {
+    "id": "b54ef3f7-d343-4b7e-909b-540c4c3e5a30",
+    "name": "a",
+    "email": "a@gmail.com",
+    "passwordHash": "$2b$10$U1mFPNyYkDCEt3yyGje.juB6fpIFNcv6T3YxWYl6gd5PsX4VY5BdW",
+    "role": "user"
+  },
+  {
+    "id": "09ecac2b-b1f8-48bd-970e-cd748ca2a54c",
+    "name": "MUSKAN",
+    "email": "muskan1274.becse24@chitkara.edu.in",
+    "passwordHash": "$2b$10$2VuCcIMmT1NggDALvABCaeTE.qQDPDyibc5Cr7RhkM7P9Vz89ofm2",
     "role": "user"
   }
 ]

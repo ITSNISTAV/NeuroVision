@@ -1,0 +1,290 @@
+{
+  "users": [
+    {
+      "id": "95cd87c1-373b-4369-a180-d4f8c5968348",
+      "username": "harshit",
+      "roles": [
+        {
+          "role": "Backend Developer",
+          "cgpa": 9,
+          "internshipMonths": 5,
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 8
+            },
+            {
+              "skill": "MongoDB",
+              "level": 6
+            }
+          ]
+        },
+        {
+          "role": "Frontend Developer",
+          "cgpa": 5,
+          "internshipMonths": 0,
+          "technicalSkills": [
+            {
+              "skill": "Redux",
+              "level": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aa5bd949-e0e3-4424-9566-890d61dc52c7",
+      "username": "harshit",
+      "roles": [
+        {
+          "role": "Data Analyst",
+          "cgpa": 2,
+          "internshipMonths": 6,
+          "technicalSkills": [
+            {
+              "skill": "PowerBI",
+              "level": 2
+            },
+            {
+              "skill": "Python",
+              "level": 4
+            }
+          ]
+        },
+        {
+          "role": "Full Stack Developer",
+          "cgpa": 5,
+          "internshipMonths": 2,
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 2
+            },
+            {
+              "skill": "MongoDB",
+              "level": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c2d4d275-4b18-4796-8555-ea611ede5522",
+      "username": "unknown",
+      "roles": [
+        {
+          "role": "Backend Developer",
+          "cgpa": 9,
+          "internshipMonths": 5,
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 8
+            },
+            {
+              "skill": "MongoDB",
+              "level": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aa3685b3-a255-40ed-80f7-89ad024074ed",
+      "username": "unknown",
+      "roles": [
+        {
+          "role": "Backend Developer",
+          "cgpa": 9,
+          "internshipMonths": 5,
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 8
+            },
+            {
+              "skill": "MongoDB",
+              "level": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ca7cd9bb-9251-4d85-94e1-874e8c1a4883",
+      "username": "lavaf",
+      "roles": [
+        {
+          "role": "Full Stack Developer",
+          "cgpa": 5,
+          "internshipMonths": 2,
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 2
+            },
+            {
+              "skill": "MongoDB",
+              "level": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1cbad5a5-09ec-4bb6-a21b-907c2be0e60b",
+      "username": "muskan gera",
+      "roles": [
+        {
+          "role": "Backend Developer",
+          "cgpa": 4,
+          "internshipMonths": 6,
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 5
+            },
+            {
+              "skill": "Express",
+              "level": 5
+            },
+            {
+              "skill": "PostgreSQL",
+              "level": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b9f26ad4-d486-4366-af7f-d97134849966",
+      "username": "abc",
+      "roles": []
+    },
+    {
+      "id": "79b2bae1-7a91-4faf-85c9-cff17bcc99fe",
+      "username": "saksham",
+      "roles": [
+        {
+          "role": "Backend Developer",
+          "cgpa": 8.4,
+          "internshipMonths": 6,
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 8
+            },
+            {
+              "skill": "MongoDB",
+              "level": 9
+            },
+            {
+              "skill": "Redis",
+              "level": 9
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "09ecac2b-b1f8-48bd-970e-cd748ca2a54c",
+      "username": "MUSKAN",
+      "roles": [
+        {
+          "role": "Backend Developer",
+          "cgpa": 9.26,
+          "internshipMonths": 0,
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 4
+            },
+            {
+              "skill": "Express",
+              "level": 5
+            },
+            {
+              "skill": "PostgreSQL",
+              "level": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "skillgap-demo-user",
+      "username": "skillgap-demo",
+      "roles": [
+        {
+          "role": "Backend Developer",
+          "cgpa": 8.7,
+          "internshipMonths": 5,
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 8
+            },
+            {
+              "skill": "Express.js",
+              "level": 7
+            },
+            {
+              "skill": "MongoDB",
+              "level": 6
+            },
+            {
+              "skill": "Git",
+              "level": 8
+            }
+          ]
+        },
+        {
+          "role": "Frontend Developer",
+          "cgpa": 7.9,
+          "internshipMonths": 3,
+          "technicalSkills": [
+            {
+              "skill": "HTML",
+              "level": 8
+            },
+            {
+              "skill": "CSS",
+              "level": 8
+            },
+            {
+              "skill": "JavaScript",
+              "level": 7
+            },
+            {
+              "skill": "React.js",
+              "level": 6
+            }
+          ]
+        },
+        {
+          "role": "Data Analyst",
+          "cgpa": 8.2,
+          "internshipMonths": 4,
+          "technicalSkills": [
+            {
+              "skill": "Python",
+              "level": 7
+            },
+            {
+              "skill": "SQL",
+              "level": 7
+            },
+            {
+              "skill": "Excel",
+              "level": 8
+            },
+            {
+              "skill": "Power BI",
+              "level": 6
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

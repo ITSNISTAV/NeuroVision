@@ -1,4 +1,4 @@
-const Role = require("../models/Role"); 
+const Role = require("../models/roleData.schema"); 
 const User = require("../models/User"); // Import your User Mongoose model
 
 const score = async (req, res) => {

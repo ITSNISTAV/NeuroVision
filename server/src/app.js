@@ -2,7 +2,7 @@ const express=require("express");
 const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config();
-const connectDB=require("../config/db")
+const connectDB=require("./config/db")
 const scoreRoute=require("./routes/scoringRoute");
 const profileRoutes = require("./routes/profile.routes");
 const authRoutes  = require("./routes/authRoutes");

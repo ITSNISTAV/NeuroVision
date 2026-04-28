@@ -1,57 +1,101 @@
-const fs = require('fs')
-const path = require('path')
-const { v4: uuidv4 } = require('uuid')
-const bcrypt = require('bcryptjs')
-const USERS_FILE = path.join(__dirname,  '..', 'data', 'users.json')
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-function ensureStore() {
-  const dir = path.dirname(USERS_FILE)
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
-  if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, '[]', 'utf-8')
+const JWT_SECRET = process.env.JWT_SECRET || 'your-default-secret-key';
+
+function generateToken(user) {
+  return jwt.sign(
+    { id: user._id, email: user.email, role: user.role },
+    JWT_SECRET,
+    { expiresIn: '24h' }
+  );
 }
 
-function loadUsers() {
-  ensureStore()
-  const raw = fs.readFileSync(USERS_FILE, 'utf-8') || '[]'
-  return JSON.parse(raw)
+async function postRegister(req, res) {
+  try {
+    const { name, email, password, role, profilePic } = req.body || {};
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: 'Missing fields' });
+    }
+
+    const userExists = await User.findOne({ email: email.toLowerCase().trim() });
+    if (userExists) {
+      return res.status(400).json({ error: 'Email already registered' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      name,
+      email: email.trim().toLowerCase(),
+      password: hashedPassword,
+      role: role || 'user',
+      profilePic: profilePic || ''
+    });
+
+    if (user) {
+      const token = generateToken(user);
+      res.status(201).json({
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          profilePic: user.profilePic
+        },
+        token
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
-function saveUsers(users) {
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf-8')
+async function postLogin(req, res) {
+  try {
+    const { email, password } = req.body || {};
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Missing fields' });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const token = generateToken(user);
+    res.json({
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        profilePic: user.profilePic
+      },
+      token
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
-function findByEmail(users, email) {
-  const e = (email || '').trim().toLowerCase()
-  return users.find(u => (u.email || '').trim().toLowerCase() === e)
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'Access denied, token missing' });
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ error: 'Invalid or expired token' });
+    req.user = user;
+    next();
+  });
 }
 
-function safeUser(user) {
-  const { passwordHash, ...rest } = user
-  return rest
-}
-
-function postRegister(req, res) {
-  const { name, email, password, role } = req.body || {}
-  if (!name || !email || !password) return res.status(400).json({ error: 'Missing fields' })
-  const users = loadUsers()
-  const exists = findByEmail(users, email)
-  if (exists) return res.status(400).json({ error: 'Email already registered' })
-  const passwordHash = bcrypt.hashSync(password, 10)
-  const user = { id: uuidv4(), name, email: (email || '').trim(), passwordHash, role: role || 'user' }
-  users.push(user)
-  saveUsers(users)
-  res.json({ user: safeUser(user) })
-}
-
-function postLogin(req, res) {
-  const { email, password } = req.body || {}
-  if (!email || !password) return res.status(400).json({ error: 'Missing fields' })
-  const users = loadUsers()
-  const user = findByEmail(users, email)
-  if (!user) return res.status(401).json({ error: 'Invalid credentials' })
-  const valid = bcrypt.compareSync(password, user.passwordHash)
-  if (!valid) return res.status(401).json({ error: 'Invalid credentials' })
-  res.json({ user: safeUser(user) })
-}
-
-module.exports = { postRegister, postLogin }
+module.exports = { postRegister, postLogin, authenticateToken };

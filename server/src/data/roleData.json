@@ -3,51 +3,60 @@
     {
       "role": "Backend Developer",
       "skills": [
-        { "name": "Node.js", "requiredLevel": 5, "weight": 30 },
-        { "name": "Express", "requiredLevel": 4, "weight": 25 },
-        { "name": "MongoDB", "requiredLevel": 4, "weight": 15 },
-        { "name": "PostgreSQL", "requiredLevel": 4, "weight": 15 },
-        { "name": "Redis", "requiredLevel": 3, "weight": 15 }
+        { "name": "Node.js", "requiredLevel": 4, "weight": 25 },
+        { "name": "Express.js", "requiredLevel": 4, "weight": 20 },
+        { "name": "MongoDB", "requiredLevel": 3, "weight": 20 },
+        { "name": "REST APIs", "requiredLevel": 4, "weight": 15 },
+        { "name": "JWT Authentication", "requiredLevel": 3, "weight": 10 },
+        { "name": "Git", "requiredLevel": 3, "weight": 10 }
       ]
     },
     {
       "role": "Frontend Developer",
       "skills": [
-        { "name": "React", "requiredLevel": 5, "weight": 30 },
-        { "name": "TypeScript", "requiredLevel": 4, "weight": 20 },
-        { "name": "Next.js", "requiredLevel": 4, "weight": 20 },
-        { "name": "Redux", "requiredLevel": 3, "weight": 15 },
-        { "name": "Tailwind", "requiredLevel": 3, "weight": 15 }
+        { "name": "HTML", "requiredLevel": 4, "weight": 20 },
+        { "name": "CSS", "requiredLevel": 4, "weight": 20 },
+        { "name": "JavaScript", "requiredLevel": 4, "weight": 25 },
+        { "name": "React.js", "requiredLevel": 4, "weight": 20 },
+        { "name": "Responsive Design", "requiredLevel": 3, "weight": 10 },
+        { "name": "Git", "requiredLevel": 3, "weight": 5 }
       ]
     },
     {
       "role": "Full Stack Developer",
       "skills": [
-        { "name": "React", "requiredLevel": 4, "weight": 20 },
-        { "name": "Node.js", "requiredLevel": 4, "weight": 20 },
-        { "name": "MongoDB", "requiredLevel": 3, "weight": 20 },
-        { "name": "Express", "requiredLevel": 3, "weight": 20 },
-        { "name": "Next.js", "requiredLevel": 3, "weight": 20 }
+        { "name": "HTML", "requiredLevel": 4, "weight": 10 },
+        { "name": "CSS", "requiredLevel": 4, "weight": 10 },
+        { "name": "JavaScript", "requiredLevel": 4, "weight": 15 },
+        { "name": "React.js", "requiredLevel": 4, "weight": 15 },
+        { "name": "Node.js", "requiredLevel": 4, "weight": 15 },
+        { "name": "Express.js", "requiredLevel": 3, "weight": 10 },
+        { "name": "MongoDB", "requiredLevel": 3, "weight": 10 },
+        { "name": "REST APIs", "requiredLevel": 3, "weight": 10 },
+        { "name": "Git", "requiredLevel": 3, "weight": 5 }
       ]
     },
     {
       "role": "Data Analyst",
       "skills": [
-        { "name": "SQL", "requiredLevel": 4, "weight": 25 },
         { "name": "Python", "requiredLevel": 4, "weight": 25 },
-        { "name": "Excel", "requiredLevel": 3, "weight": 20 },
-        { "name": "PowerBI", "requiredLevel": 3, "weight": 15 },
-        { "name": "Tableau", "requiredLevel": 3, "weight": 15 }
+        { "name": "SQL", "requiredLevel": 4, "weight": 25 },
+        { "name": "Excel", "requiredLevel": 4, "weight": 15 },
+        { "name": "Data Visualization", "requiredLevel": 3, "weight": 15 },
+        { "name": "Statistics", "requiredLevel": 3, "weight": 10 },
+        { "name": "Power BI", "requiredLevel": 3, "weight": 10 }
       ]
     },
     {
       "role": "Machine Learning Engineer",
       "skills": [
-        { "name": "Python", "requiredLevel": 5, "weight": 30 },
-        { "name": "TensorFlow", "requiredLevel": 4, "weight": 20 },
-        { "name": "PyTorch", "requiredLevel": 4, "weight": 20 },
-        { "name": "Scikit-Learn", "requiredLevel": 4, "weight": 15 },
-        { "name": "NumPy", "requiredLevel": 4, "weight": 15 }
+        { "name": "Python", "requiredLevel": 5, "weight": 20 },
+        { "name": "Machine Learning", "requiredLevel": 5, "weight": 25 },
+        { "name": "Data Structures", "requiredLevel": 4, "weight": 10 },
+        { "name": "Statistics", "requiredLevel": 4, "weight": 10 },
+        { "name": "Deep Learning", "requiredLevel": 4, "weight": 15 },
+        { "name": "TensorFlow", "requiredLevel": 3, "weight": 10 },
+        { "name": "Git", "requiredLevel": 3, "weight": 10 }
       ]
     }
   ]

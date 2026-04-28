@@ -1,101 +1,118 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const fs = require('fs')
+const path = require('path')
+const { v4: uuidv4 } = require('uuid')
+const bcrypt = require('bcryptjs')
+const { OAuth2Client } = require('google-auth-library')
+const { sendWelcomeEmail } = require('../config/mailer')
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-default-secret-key';
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+const USERS_FILE = path.join(__dirname, '..', 'data', 'users.json')
 
-function generateToken(user) {
-  return jwt.sign(
-    { id: user._id, email: user.email, role: user.role },
-    JWT_SECRET,
-    { expiresIn: '24h' }
-  );
+function ensureStore() {
+  const dir = path.dirname(USERS_FILE)
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+  if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, '[]', 'utf-8')
 }
 
+function loadUsers() {
+  ensureStore()
+  const raw = fs.readFileSync(USERS_FILE, 'utf-8') || '[]'
+  return JSON.parse(raw)
+}
+
+function saveUsers(users) {
+  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), 'utf-8')
+}
+
+function findByEmail(users, email) {
+  const e = (email || '').trim().toLowerCase()
+  return users.find(u => (u.email || '').trim().toLowerCase() === e)
+}
+
+function safeUser(user) {
+  const { passwordHash, ...rest } = user
+  return rest
+}
+
+// email only on register ✅
 async function postRegister(req, res) {
+  const { name, email, password, role } = req.body || {}
+  if (!name || !email || !password) return res.status(400).json({ error: 'Missing fields' })
+  const users = loadUsers()
+  const exists = findByEmail(users, email)
+  if (exists) return res.status(400).json({ error: 'Email already registered' })
+  const passwordHash = bcrypt.hashSync(password, 10)
+  const user = { id: uuidv4(), name, email: (email || '').trim(), passwordHash, role: role || 'user' }
+  users.push(user)
+  saveUsers(users)
+
+  // send welcome email once on registration
+  sendWelcomeEmail(user.email, user.name).catch(err => console.error('Email failed:', err))
+
+  res.json({ user: safeUser(user) })
+}
+
+// no email on login ✅
+function postLogin(req, res) {
+  const { email, password } = req.body || {}
+  if (!email || !password) return res.status(400).json({ error: 'Missing fields' })
+  const users = loadUsers()
+  const user = findByEmail(users, email)
+  if (!user) return res.status(401).json({ error: 'Invalid credentials' })
+  const valid = bcrypt.compareSync(password, user.passwordHash)
+  if (!valid) return res.status(401).json({ error: 'Invalid credentials' })
+  res.json({ user: safeUser(user) })
+}
+
+// email only if brand new Google user, not on repeat Google logins ✅
+async function postGoogleAuth(req, res) {
+  const { credential } = req.body || {}
+  if (!credential) return res.status(400).json({ error: 'Missing Google credential' })
+
   try {
-    const { name, email, password, role, profilePic } = req.body || {};
-    if (!name || !email || !password) {
-      return res.status(400).json({ error: 'Missing fields' });
-    }
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    })
+    const payload = ticket.getPayload()
+    const { sub: googleId, email, name, picture } = payload
 
-    const userExists = await User.findOne({ email: email.toLowerCase().trim() });
-    if (userExists) {
-      return res.status(400).json({ error: 'Email already registered' });
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const user = await User.create({
-      name,
-      email: email.trim().toLowerCase(),
-      password: hashedPassword,
-      role: role || 'user',
-      profilePic: profilePic || ''
-    });
+    const users = loadUsers()
+    let user = findByEmail(users, email)
+    let isNewUser = false
 
     if (user) {
-      const token = generateToken(user);
-      res.status(201).json({
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          profilePic: user.profilePic
-        },
-        token
-      });
+      // existing user — just attach googleId if missing, no email
+      if (!user.googleId) {
+        user.googleId = googleId
+        if (picture && !user.picture) user.picture = picture
+        saveUsers(users)
+      }
+    } else {
+      // brand new user via Google
+      isNewUser = true
+      user = {
+        id: uuidv4(),
+        name,
+        email: (email || '').trim().toLowerCase(),
+        googleId,
+        picture: picture || null,
+        role: 'user',
+      }
+      users.push(user)
+      saveUsers(users)
     }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+
+    // send welcome email only for new Google signups
+    if (isNewUser) {
+      sendWelcomeEmail(user.email, user.name).catch(err => console.error('Email failed:', err))
+    }
+
+    res.json({ user: safeUser(user) })
+  } catch (err) {
+    console.error('Google OAuth error:', err)
+    res.status(401).json({ error: 'Invalid Google token' })
   }
 }
 
-async function postLogin(req, res) {
-  try {
-    const { email, password } = req.body || {};
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Missing fields' });
-    }
-
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    const token = generateToken(user);
-    res.json({
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        profilePic: user.profilePic
-      },
-      token
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  if (!token) return res.status(401).json({ error: 'Access denied, token missing' });
-
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ error: 'Invalid or expired token' });
-    req.user = user;
-    next();
-  });
-}
-
-module.exports = { postRegister, postLogin, authenticateToken };
+module.exports = { postRegister, postLogin, postGoogleAuth }

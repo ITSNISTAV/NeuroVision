@@ -168,24 +168,11 @@
     "role": "user"
   },
   {
-    "id": "567a518b-66e7-482c-b9e6-95225c382385",
-    "name": "a",
-    "email": "a@abc",
-    "passwordHash": "$2b$10$ONtlDHxO0hu5TAFJVdev.OfB.AS1M1j6R6ShSZRGQ.DE4jA/kzLO.",
-    "role": "user"
-  },
-  {
-    "id": "b54ef3f7-d343-4b7e-909b-540c4c3e5a30",
-    "name": "a",
-    "email": "a@gmail.com",
-    "passwordHash": "$2b$10$U1mFPNyYkDCEt3yyGje.juB6fpIFNcv6T3YxWYl6gd5PsX4VY5BdW",
-    "role": "user"
-  },
-  {
-    "id": "09ecac2b-b1f8-48bd-970e-cd748ca2a54c",
-    "name": "MUSKAN",
-    "email": "muskan1274.becse24@chitkara.edu.in",
-    "passwordHash": "$2b$10$2VuCcIMmT1NggDALvABCaeTE.qQDPDyibc5Cr7RhkM7P9Vz89ofm2",
+    "id": "c3a9bf3c-7d52-4845-910e-a5956cfc2914",
+    "name": "SOULX8",
+    "email": "aroraluvi96@gmail.com",
+    "googleId": "117070071981755357788",
+    "picture": "https://lh3.googleusercontent.com/a/ACg8ocJ_9QuWWHALJJ_tgeHD0I6E5Z5XKi38l6zvlCsPfeqNJBDcYqg=s96-c",
     "role": "user"
   }
 ]

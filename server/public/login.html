@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="auth.css">
+  <!-- ── NEW: Google Identity Services SDK ── -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -95,6 +97,23 @@
             <span class="btn-loader" id="loginLoader"></span>
           </button>
 
+          <!-- ── NEW: Google OAuth for Login ── -->
+          <div class="oauth-divider"><span>or</span></div>
+          <div id="g_id_onload"
+               data-client_id="314851830663-th9r3ail606i4f970b15qdb6q21uii80.apps.googleusercontent.com"
+               data-callback="handleGoogleSignIn"
+               data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin"
+               data-type="standard"
+               data-theme="filled_black"
+               data-text="signin_with"
+               data-shape="pill"
+               data-logo_alignment="left"
+               data-width="340">
+          </div>
+          <!-- ── END NEW ── -->
+
           <p class="form-switch">
             Don't have an account?
             <a href="#" onclick="switchTab('register')">Create one →</a>
@@ -145,6 +164,18 @@
             <span class="btn-loader" id="registerLoader"></span>
           </button>
 
+          <!-- ── NEW: Google OAuth for Register ── -->
+          <div class="oauth-divider"><span>or</span></div>
+          <div class="g_id_signin"
+               data-type="standard"
+               data-theme="filled_black"
+               data-text="signup_with"
+               data-shape="pill"
+               data-logo_alignment="left"
+               data-width="340">
+          </div>
+          <!-- ── END NEW ── -->
+
           <p class="form-switch">
             Already have an account?
             <a href="#" onclick="switchTab('login')">Sign in →</a>
@@ -156,7 +187,6 @@
 
   </div>
 
-  <script src="main.js"></script>
   <script src="auth.js"></script>
   <script>
     // ── Tab switching ──────────────────────────────────────────
@@ -295,7 +325,6 @@
 
     // ── Redirect if already logged in ─────────────────────────
     if (sessionStorage.getItem("nv_user")) {
-      window.location.href = "/index.html";
       window.location.href = "/skills.html";
     }
   </script>

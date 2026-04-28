@@ -1,7 +1,5 @@
 const currentUser = JSON.parse(sessionStorage.getItem("nv_user") || "null");
-const DEMO_USER_ID = "skillgap-demo-user";
-const userId = currentUser?.id || DEMO_USER_ID;
-const isDemoMode = !currentUser?.id;
+const userId = currentUser?.id || null;
 let savedProfileRoles = [];
 const queryParams = new URLSearchParams(window.location.search);
 const queryRole = queryParams.get("role") || "";
@@ -16,8 +14,12 @@ async function initializeSavedProfileAnalyzer() {
   const profileOnlyMessage = document.getElementById("profileOnlyMessage");
   const countBadge = document.getElementById("profile-count");
 
-  if (isDemoMode) {
-    profileOnlyMessage.innerText = "Demo mode active: seeded skill-gap profiles are loaded automatically.";
+  if (!userId) {
+    box.style.display = "block";
+    countBadge.textContent = "0 profiles";
+    note.textContent = "Login required. Please login and save a role profile first.";
+    profileOnlyMessage.innerText = "This page works only with saved profiles from profile.json.";
+    return;
   }
 
   try {
@@ -42,9 +44,7 @@ async function initializeSavedProfileAnalyzer() {
     renderSavedProfileCards();
 
     box.style.display = "block";
-    note.textContent = isDemoMode
-      ? "Previewing seeded demo profiles. Login to analyze your own saved roles."
-      : `Logged in as ${currentUser?.name || currentUser?.username || "User"}.`;
+    note.textContent = `Logged in as ${currentUser?.name || currentUser?.username || "User"}.`;
 
     // Direct flow from URL: analyze selected role if present.
     if (queryRole && savedProfileRoles.some((profile) => profile.role === queryRole)) {
@@ -69,22 +69,11 @@ function renderSavedProfileCards() {
     card.className = "roleCard";
     card.id = `profile-${index}`;
     card.innerHTML = `
-      <div class="card-top-row">
-        <div class="card-role-name">${profile.role}</div>
-        <span class="profile-chip ${profile.cgpa >= 8 ? "chip-elite" : profile.cgpa >= 7 ? "chip-strong" : "chip-growth"}">
-          ${profile.cgpa >= 8 ? "Elite" : profile.cgpa >= 7 ? "Strong" : "Growth"}
-        </span>
-      </div>
+      <div class="card-role-name">${profile.role}</div>
       <div class="card-meta">
         <span class="meta-pill">CGPA ${profile.cgpa}</span>
         <span class="meta-pill">INTERNSHIP ${profile.internshipMonths}mo</span>
         <span class="meta-pill">SKILLS ${skillList.length}</span>
-      </div>
-      <div class="card-cgpa-track">
-        <span class="cgpa-label">Readiness by CGPA</span>
-        <div class="cgpa-bar-bg">
-          <div class="cgpa-bar-fill" style="width:${Math.max(0, Math.min(100, (Number(profile.cgpa) / 10) * 100))}%"></div>
-        </div>
       </div>
       <div class="card-skills-label">Technical Skills</div>
       <div class="card-skills-list">
@@ -146,78 +135,9 @@ function renderResults(data) {
   });
 
   if (data.missingSkillsWithTutorials && data.missingSkillsWithTutorials.length > 0) {
-    const tutorialData = data.missingSkillsWithTutorials;
-
-    const renderTutorialDetail = (item) => {
-      const safeReviews = Array.isArray(item.reviews) ? item.reviews.slice(0, 2) : [];
-      const safePrerequisites = Array.isArray(item.prerequisites) ? item.prerequisites.slice(0, 2) : [];
-      const safePath = Array.isArray(item.learningPath) ? item.learningPath.slice(0, 3) : [];
-      const reviewBlocks = safeReviews.length
-        ? safeReviews.map(r => `<li>${r.reviewer}: ${r.rating}/5 - ${r.comment}</li>`).join("")
-        : "<li>No reviews yet</li>";
-      const prereqBlocks = safePrerequisites.length
-        ? safePrerequisites.map(p => `<li>${p}</li>`).join("")
-        : "<li>Not required</li>";
-      const pathBlocks = safePath.length
-        ? safePath.map(step => `<li>${step}</li>`).join("")
-        : "<li>Self-paced</li>";
-
-      return `
-        <div class="tutorial-card dynamic-open-card">
-          <div class="tutorial-head">
-            <a class="tutorial-title" href="${item.tutorial}" target="_blank" rel="noopener">Learn ${item.skill}</a>
-            <span class="tutorial-rating">⭐ ${item.averageRating ?? "N/A"}</span>
-          </div>
-          <p class="tutorial-desc">${item.description || "Curated learning material."}</p>
-          <div class="tutorial-meta-row">
-            <span class="tutorial-pill">⏱ ${item.averageCompletionTime || "3-5 hours"}</span>
-            <span class="tutorial-pill">🧭 ${item.difficulty || "Beginner"}</span>
-            <span class="tutorial-pill">🗣 ${safeReviews.length} reviews</span>
-          </div>
-          <div class="tutorial-block-grid">
-            <div class="tutorial-block">
-              <div class="tutorial-block-title">Prerequisites</div>
-              <ul>${prereqBlocks}</ul>
-            </div>
-            <div class="tutorial-block">
-              <div class="tutorial-block-title">Learning Path</div>
-              <ul>${pathBlocks}</ul>
-            </div>
-            <div class="tutorial-block tutorial-block-wide">
-              <div class="tutorial-block-title">Top Reviews</div>
-              <ul>${reviewBlocks}</ul>
-            </div>
-          </div>
-        </div>
-      `;
-    };
-
-    const tabs = tutorialData
-      .map((item, index) => `
-        <button class="tutorial-skill-btn ${index === 0 ? "active" : ""}" data-index="${index}" type="button">
-          ${item.skill}
-        </button>
-      `)
-      .join("");
-
-    tutorialList.innerHTML = `
-      <div class="tutorial-skill-strip">${tabs}</div>
-      <div id="tutorialDetailCard"></div>
-    `;
-
-    const detailCard = document.getElementById("tutorialDetailCard");
-    detailCard.innerHTML = renderTutorialDetail(tutorialData[0]);
-
-    tutorialList.querySelectorAll(".tutorial-skill-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const index = Number(btn.getAttribute("data-index"));
-        tutorialList.querySelectorAll(".tutorial-skill-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        detailCard.innerHTML = renderTutorialDetail(tutorialData[index]);
-      });
+    data.missingSkillsWithTutorials.forEach(item => {
+      tutorialList.innerHTML += `<li><a href="${item.tutorial}" target="_blank" rel="noopener">Learn ${item.skill}</a></li>`;
     });
-  } else {
-    tutorialList.innerHTML = `<div class="tutorial-card tutorial-empty">No tutorial recommendations found.</div>`;
   }
 
   window.currentResults = data;
@@ -245,12 +165,25 @@ async function analyzeSavedProfile(selectedRole, cardIndex = -1) {
   note.textContent = `Analyzing saved profile for ${role}...`;
 
   try {
+    // Find the saved profile for this role to get cgpa and technicalSkills
     const profileIndex = savedProfileRoles.findIndex(p => p.role === role);
     if (profileIndex === -1) {
       throw new Error("Profile not found in saved data");
     }
-
-    const response = await fetch(`/api/skill-gap/${encodeURIComponent(userId)}?role=${encodeURIComponent(role)}`);
+    
+    const profile = savedProfileRoles[profileIndex];
+    const technicalSkills = profile.technicalSkills ? profile.technicalSkills.map(s => s.skill) : [];
+    
+    const response = await fetch(`/api/skill-gap`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        targetRole: role,
+        cgpa: profile.cgpa,
+        technicalSkills,
+        tools: []
+      }),
+    });
 
     if (!response.ok) {
       throw new Error(`Unable to analyze saved profile (${response.status})`);

@@ -28,17 +28,15 @@ exports.saveProfile = async (req, res) => {
     const usersData = await readUsersData();
     const actualUser = usersData.find(u => u.id === req.params.id);
     const username = actualUser ? actualUser.name : "unknown";
-    
+
     user = { id: req.params.id, username, roles: [] };
     data.users.push(user);
   }
 
-  
   if (!Array.isArray(user.roles)) {
     user.roles = [];
   }
 
-  
   const existingIndex = user.roles.findIndex(r => r.role === role);
   if (existingIndex !== -1) {
     return res.status(400).json({ message: "Role already saved. Use Edit to update it." });

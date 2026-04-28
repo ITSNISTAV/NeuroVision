@@ -351,30 +351,186 @@
       letter-spacing: 0.8px;
     }
 
-    .tutorial-section ul {
-      list-style: none;
-      padding: 0;
+    .tutorial-section #tutorialList {
+      display: grid;
+      gap: 12px;
     }
 
-    .tutorial-section li {
-      margin-bottom: 8px;
-      padding: 0;
-      border: none;
+    .tutorial-skill-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 4px;
     }
 
-    .tutorial-section li a {
-      color: var(--purple-300);
-      text-decoration: none;
-      font-size: 13px;
-      transition: all 0.2s;
-      display: inline-flex;
+    .tutorial-skill-btn {
+      border: 1px solid rgba(196, 181, 253, 0.35);
+      background: rgba(20, 8, 36, 0.5);
+      color: var(--purple-200);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex: 0 0 auto;
+    }
+
+    .tutorial-skill-btn:hover {
+      border-color: rgba(232, 121, 249, 0.45);
+      background: rgba(124,58,237,0.28);
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(168,85,247,0.25);
+    }
+
+    .tutorial-skill-btn.active {
+      background: linear-gradient(90deg, rgba(124,58,237,0.55), rgba(217,70,239,0.4));
+      border-color: rgba(232, 121, 249, 0.6);
+      color: #fff;
+      box-shadow: 0 0 18px rgba(217,70,239,0.25);
+    }
+
+    .dynamic-open-card {
+      animation: card-fade 0.2s ease;
+    }
+
+    @keyframes card-fade {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tutorial-card {
+      background: linear-gradient(145deg, rgba(124,58,237,0.14), rgba(217,70,239,0.08));
+      border: 1px solid rgba(196, 181, 253, 0.25);
+      border-radius: 12px;
+      padding: 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .tutorial-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(232, 121, 249, 0.45);
+      box-shadow: 0 8px 22px rgba(24, 4, 44, 0.45);
+    }
+
+    .tutorial-head {
+      display: flex;
       align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .tutorial-title {
+      color: var(--purple-100);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      transition: color 0.2s ease;
+    }
+
+    .tutorial-title:hover {
+      color: #f0abfc;
+      text-decoration: underline;
+    }
+
+    .tutorial-rating {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fbbf24;
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      border-radius: 999px;
+      padding: 4px 8px;
+      white-space: nowrap;
+    }
+
+    .tutorial-desc {
+      margin-bottom: 10px;
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+
+    .tutorial-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .tutorial-pill {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--purple-200);
+      border: 1px solid rgba(196, 181, 253, 0.25);
+      border-radius: 999px;
+      background: rgba(24, 8, 44, 0.35);
+      padding: 4px 8px;
+    }
+
+    .tutorial-extra {
+      display: grid;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(233, 213, 255, 0.86);
+      line-height: 1.4;
+    }
+
+    .tutorial-block-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .tutorial-block {
+      background: rgba(12, 2, 22, 0.5);
+      border: 1px solid rgba(196, 181, 253, 0.28);
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .tutorial-block-wide {
+      grid-column: 1 / -1;
+      background: rgba(18, 4, 34, 0.65);
+      border-color: rgba(217, 70, 239, 0.35);
+    }
+
+    .tutorial-block-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #f0abfc;
+      margin-bottom: 8px;
+    }
+
+    .tutorial-block ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
       gap: 6px;
     }
 
-    .tutorial-section li a:hover {
-      color: var(--accent);
-      text-decoration: underline;
+    .tutorial-block li {
+      margin: 0;
+      padding: 7px 8px;
+      border-radius: 8px;
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(168,85,247,0.22);
+      color: rgba(233, 213, 255, 0.92);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .tutorial-empty {
+      text-align: center;
+      color: var(--text-secondary);
     }
 
     .info-box {
@@ -439,23 +595,87 @@
     }
 
     .roleCard {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 92% -18%, rgba(236, 72, 153, 0.28), transparent 44%),
+        linear-gradient(145deg, rgba(28, 8, 52, 0.92), rgba(12, 2, 24, 0.92));
+      border: 1px solid rgba(196, 181, 253, 0.28);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 10px 20px rgba(0,0,0,0.32);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .roleCard::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.03) 52%, transparent 100%);
+      transform: translateX(-120%);
+      transition: transform 0.45s ease;
+      pointer-events: none;
+    }
+
+    .roleCard:hover {
+      transform: translateY(-4px);
+      border-color: rgba(232, 121, 249, 0.65);
+      box-shadow: 0 16px 28px rgba(8, 0, 18, 0.58), 0 0 0 1px rgba(232, 121, 249, 0.15);
+    }
+
+    .roleCard:hover::before {
+      transform: translateX(120%);
     }
 
     .roleCard.active {
-      border-color: var(--purple-400);
-      box-shadow: 0 0 20px rgba(168,85,247,0.25);
+      border-color: rgba(232, 121, 249, 0.92);
+      box-shadow: 0 0 0 1px rgba(232, 121, 249, 0.24), 0 0 22px rgba(217,70,239,0.38);
+    }
+
+    .card-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
     }
 
     .card-role-name {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 10px;
+      color: #fdf4ff;
+      line-height: 1.2;
+      letter-spacing: 0.2px;
+      text-shadow: 0 2px 16px rgba(168, 85, 247, 0.2);
+    }
+
+    .profile-chip {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 5px 10px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .chip-elite {
+      color: #fde68a;
+      border-color: rgba(251, 191, 36, 0.5);
+      background: rgba(251, 191, 36, 0.14);
+    }
+
+    .chip-strong {
+      color: #86efac;
+      border-color: rgba(74, 222, 128, 0.45);
+      background: rgba(34, 197, 94, 0.14);
+    }
+
+    .chip-growth {
+      color: #fca5a5;
+      border-color: rgba(248, 113, 113, 0.4);
+      background: rgba(239, 68, 68, 0.12);
     }
 
     .card-meta {
@@ -469,9 +689,37 @@
       font-size: 12px;
       padding: 5px 10px;
       border-radius: 999px;
-      border: 1px solid var(--glass-border);
-      background: rgba(124,58,237,0.18);
-      color: var(--purple-200);
+      border: 1px solid rgba(196, 181, 253, 0.26);
+      background: rgba(91, 33, 182, 0.22);
+      color: #f3e8ff;
+    }
+
+    .card-cgpa-track {
+      margin-bottom: 12px;
+    }
+
+    .cgpa-label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: rgba(221, 214, 254, 0.84);
+      margin-bottom: 6px;
+    }
+
+    .cgpa-bar-bg {
+      height: 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(196, 181, 253, 0.24);
+      background: rgba(36, 8, 66, 0.6);
+      overflow: hidden;
+    }
+
+    .cgpa-bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #06b6d4, #8b5cf6 55%, #ec4899);
+      box-shadow: 0 0 14px rgba(147, 51, 234, 0.4);
     }
 
     .card-skills-label {
@@ -492,9 +740,9 @@
       font-size: 12px;
       padding: 5px 8px;
       border-radius: 999px;
-      border: 1px solid var(--glass-border);
-      background: rgba(168,85,247,0.12);
-      color: var(--purple-200);
+      border: 1px solid rgba(192, 132, 252, 0.24);
+      background: rgba(168, 85, 247, 0.16);
+      color: #f5e8ff;
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -513,12 +761,22 @@
     .card-btn {
       padding: 10px 14px;
       font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border-radius: 10px;
     }
 
     .btn-score {
-      background: linear-gradient(90deg, var(--purple-500), var(--accent));
+      background: linear-gradient(92deg, #8b5cf6 0%, #d946ef 48%, #ec4899 100%);
       border: none;
       width: 100%;
+      box-shadow: 0 8px 16px rgba(168, 85, 247, 0.36);
+    }
+
+    .btn-score:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(217, 70, 239, 0.36);
     }
 
     .profile-analyze-row {
@@ -577,5 +835,26 @@
 
       .button-group {
         flex-direction: column;
+      }
+
+      .tutorial-block-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tutorial-skill-strip {
+        gap: 6px;
+      }
+
+      .tutorial-skill-btn {
+        font-size: 11px;
+        padding: 7px 10px;
+      }
+
+      .card-role-name {
+        font-size: 18px;
+      }
+
+      .profile-chip {
+        font-size: 10px;
       }
     }

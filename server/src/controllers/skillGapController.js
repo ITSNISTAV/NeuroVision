@@ -1,10 +1,84 @@
 const fs = require('fs');
 const path = require('path');
-const { readData } = require('../utils/role.util');
+const { readData: readRoleData } = require('../utils/role.util');
+const { readData: readProfileData } = require('../utils/file.util');
 
 const tutorialLinks = JSON.parse(
   fs.readFileSync(path.join(__dirname, '../data/tutorialLinks.json'), 'utf8')
 );
+
+const normalizeSkillKey = (value = '') =>
+  String(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const tutorialMap = new Map(
+  Object.entries(tutorialLinks).map(([key, val]) => [normalizeSkillKey(key), val])
+);
+
+const tutorialAliases = {
+  'express js': 'express',
+  'expressjs': 'express',
+  'react js': 'react',
+  'reactjs': 'react',
+  'rest api': 'rest apis',
+  'restapi': 'rest apis',
+  'restapis': 'rest apis',
+  'jwt auth': 'jwt authentication'
+};
+
+const getTutorialDetails = (skillName) => {
+  const defaultTutorial = `https://www.geeksforgeeks.org/search/?q=${encodeURIComponent(skillName)}`;
+  const normalizedName = normalizeSkillKey(skillName);
+  const compactName = normalizedName.replace(/\s+/g, '');
+  const aliasName = tutorialAliases[normalizedName] || tutorialAliases[compactName] || normalizedName;
+  const entry = tutorialMap.get(aliasName);
+
+  // Backward-compatible: supports both string and object tutorial formats.
+  if (!entry) {
+    return {
+      tutorial: defaultTutorial,
+      description: `Curated learning material for ${skillName}.`,
+      averageCompletionTime: '3-5 hours',
+      difficulty: 'Beginner',
+      prerequisites: [],
+      learningPath: [],
+      reviews: [],
+      averageRating: null
+    };
+  }
+
+  if (typeof entry === 'string') {
+    return {
+      tutorial: entry,
+      description: `Curated learning material for ${skillName}.`,
+      averageCompletionTime: '3-5 hours',
+      difficulty: 'Beginner',
+      prerequisites: [],
+      learningPath: [],
+      reviews: [],
+      averageRating: null
+    };
+  }
+
+  const reviews = Array.isArray(entry.reviews) ? entry.reviews : [];
+  const averageRating = reviews.length
+    ? Number((reviews.reduce((sum, review) => sum + Number(review.rating || 0), 0) / reviews.length).toFixed(1))
+    : null;
+
+  return {
+    tutorial: entry.tutorial || defaultTutorial,
+    description: entry.description || `Curated learning material for ${skillName}.`,
+    averageCompletionTime: entry.averageCompletionTime || '3-5 hours',
+    difficulty: entry.difficulty || 'Beginner',
+    prerequisites: Array.isArray(entry.prerequisites) ? entry.prerequisites : [],
+    learningPath: Array.isArray(entry.learningPath) ? entry.learningPath : [],
+    reviews,
+    averageRating
+  };
+};
 
 const getCgpaStatus = (cgpa) => {
   if (cgpa >= 9.0) return { status: "Excellent Academic Performance 🌟", bonus: " You have outstanding academic foundation." };
@@ -27,19 +101,45 @@ const getRecommendation = (compatibilityScore, cgpa, cgpaBonus, targetRole, miss
 
 exports.analyzeSkillGap = async (req, res) => {
   try {
-    const { targetRole, cgpa, technicalSkills = [], tools = [] } = req.body;
+    const { id } = req.params;
+    const selectedRole = req.query.role;
 
-    if (!targetRole || !cgpa || cgpa < 0 || cgpa > 10) {
-      return res.status(400).json({ error: "targetRole and valid CGPA (0-10) are required" });
+    if (!id) {
+      return res.status(400).json({ error: "User id is required" });
     }
 
-    const roleData = await readData();
+    const profileData = readProfileData();
+    const user = profileData.users.find(u => u.id === id);
+    if (!user || !Array.isArray(user.roles) || user.roles.length === 0) {
+      return res.status(404).json({ error: "Saved profile not found for this user" });
+    }
+
+    const profile = selectedRole
+      ? user.roles.find(r => r.role === selectedRole)
+      : user.roles[0];
+
+    if (!profile) {
+      return res.status(404).json({ error: "Saved role profile not found" });
+    }
+
+    const targetRole = profile.role;
+    const cgpa = Number(profile.cgpa);
+
+    if (!targetRole || Number.isNaN(cgpa) || cgpa < 0 || cgpa > 10) {
+      return res.status(400).json({ error: "Saved profile must contain valid targetRole and CGPA (0-10)" });
+    }
+
+    const technicalSkills = Array.isArray(profile.technicalSkills)
+      ? profile.technicalSkills.map(skill => (typeof skill === 'string' ? skill : skill.skill)).filter(Boolean)
+      : [];
+
+    const roleData = await readRoleData();
     const matchedRole = roleData.roles.find(r => r.role === targetRole);
     if (!matchedRole) {
       return res.status(404).json({ error: "Role not found" });
     }
 
-    const userSkills = [...technicalSkills, ...tools].map(s => s.toLowerCase());
+    const userSkills = technicalSkills.map(s => String(s).toLowerCase());
     const requiredSkills = matchedRole.skills;
 
     const matchedSkills = requiredSkills.filter(s => userSkills.includes(s.name.toLowerCase()));
@@ -59,7 +159,7 @@ exports.analyzeSkillGap = async (req, res) => {
       missingSkills: missingNames,
       missingSkillsWithTutorials: missingNames.map(name => ({
         skill: name,
-        tutorial: tutorialLinks[name] || `https://www.geeksforgeeks.org/search/?q=${name}`
+        ...getTutorialDetails(name)
       })),
       recommendation: getRecommendation(compatibilityScore, cgpa, cgpaBonus, targetRole, missingNames)
     });

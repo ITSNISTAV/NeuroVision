@@ -1,8 +1,8 @@
 const currentUser = JSON.parse(sessionStorage.getItem("nv_user") || "null");
 
-if (!currentUser) {
-  window.location.href = "/index.html";
-}
+// if (!currentUser) {
+//   window.location.href = "/index.html";
+// }
 
 const userId   = currentUser ? currentUser.id       : "guest";
 const userName = currentUser ? currentUser.name     : "Guest";
@@ -15,11 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const roleSkills = {
-  "Backend Developer":         ["Node.js", "Express", "MongoDB", "PostgreSQL", "Redis"],
-  "Frontend Developer":        ["React", "Next.js", "Redux", "Tailwind", "TypeScript"],
-  "Full Stack Developer":      ["React", "Node.js", "MongoDB", "Express", "Next.js"],
-  "Data Analyst":              ["SQL", "Excel", "PowerBI", "Python", "Tableau"],
-  "Machine Learning Engineer": ["Python", "TensorFlow", "PyTorch", "Scikit-Learn", "NumPy"]
+  "Backend Developer":         ["Node.js", "Express.js", "MongoDB", "REST APIs", "JWT Authentication", "Git"],
+  "Frontend Developer":        ["HTML", "CSS", "JavaScript", "React.js", "Responsive Design", "Git"],
+  "Full Stack Developer":      ["HTML", "CSS", "JavaScript", "React.js", "Node.js", "Express.js", "MongoDB", "REST APIs", "Git"],
+  "Data Analyst":              ["Python", "SQL", "Excel", "Data Visualization", "Statistics", "Power BI"],
+  "Machine Learning Engineer": ["Python", "Machine Learning", "Data Structures", "Statistics", "Deep Learning", "TensorFlow", "Git"]
 };
 
 let internshipMonths = 0;
@@ -184,7 +184,7 @@ async function loadRoles() {
         <div class="cardBtns">
           <button class="card-btn btn-delete" onclick="deleteRole('${role.role}')">🗑 Delete</button>
           <button class="card-btn btn-edit"   onclick="editRole('${role.role}')">✏ Edit</button>
-          <button class="card-btn btn-score"  onclick="window.location.href='score.html?role=${encodeURIComponent(role.role)}&uid=${userId}'">Analyze Skill Gap</button>
+          <button class="card-btn btn-score"  onclick="window.location.href='skillGap.html?role=${encodeURIComponent(role.role)}'">Analyze Skill Gap</button>
         </div>
       `;
       container.appendChild(card);
@@ -239,7 +239,7 @@ async function editRole(roleName) {
 
 function logout() {
   sessionStorage.removeItem("nv_user");
-  window.location.href = "/index.html";
+  window.location.href = "/login.html";
 }
 
 let toastTimer;
@@ -250,5 +250,8 @@ function showToast(message, type = "") {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
 }
-loadRoles();
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadRoles();
+});
 

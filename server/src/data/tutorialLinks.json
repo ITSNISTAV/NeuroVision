@@ -1,27 +1,935 @@
 {
-  "Node.js": "https://www.geeksforgeeks.org/nodejs/",
-  "Express": "https://www.geeksforgeeks.org/express-js/",
-  "MongoDB": "https://www.geeksforgeeks.org/mongodb/",
-  "Redis": "https://www.geeksforgeeks.org/redis/",
-  "Docker": "https://www.geeksforgeeks.org/docker/",
-  "Python": "https://www.geeksforgeeks.org/python-programming-language/",
-  "SQL": "https://www.geeksforgeeks.org/sql/",
-  "Excel": "https://www.geeksforgeeks.org/ms-excel/",
-  "Power BI": "https://www.geeksforgeeks.org/power-bi/",
-  "Tableau": "https://www.geeksforgeeks.org/tableau/",
-  "Pandas": "https://www.geeksforgeeks.org/pandas/",
-  "HTML": "https://www.geeksforgeeks.org/html/",
-  "CSS": "https://www.geeksforgeeks.org/css/",
-  "JavaScript": "https://www.geeksforgeeks.org/javascript/",
-  "React": "https://www.geeksforgeeks.org/react/",
-  "TypeScript": "https://www.geeksforgeeks.org/typescript/",
-  "Kubernetes": "https://www.geeksforgeeks.org/kubernetes/",
-  "AWS": "https://www.geeksforgeeks.org/aws/",
-  "Jenkins": "https://www.geeksforgeeks.org/jenkins/",
-  "Git": "https://www.geeksforgeeks.org/git/",
-  "Linux": "https://www.geeksforgeeks.org/linux/",
-  "TensorFlow": "https://www.geeksforgeeks.org/tensorflow/",
-  "PyTorch": "https://www.geeksforgeeks.org/pytorch/",
-  "Scikit-learn": "https://www.geeksforgeeks.org/scikit-learn/",
-  "NumPy": "https://www.geeksforgeeks.org/numpy/"
+  "Node.js": {
+    "tutorial": "https://www.geeksforgeeks.org/nodejs/",
+    "description": "Learn Node.js fundamentals, modules, async programming, and backend API patterns.",
+    "averageCompletionTime": "7-10 hours",
+    "difficulty": "Beginner to Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Aarav",
+        "rating": 4.7,
+        "comment": "Clear examples and practical backend flow."
+      },
+      {
+        "reviewer": "Meera",
+        "rating": 4.5,
+        "comment": "Great for understanding event loop basics."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "Express": {
+    "tutorial": "https://www.geeksforgeeks.org/express-js/",
+    "description": "Build REST APIs with routing, middleware, validation, and error handling.",
+    "averageCompletionTime": "5-8 hours",
+    "difficulty": "Beginner",
+    "reviews": [
+      {
+        "reviewer": "Rohan",
+        "rating": 4.6,
+        "comment": "Very useful for route and middleware structure."
+      },
+      {
+        "reviewer": "Nisha",
+        "rating": 4.4,
+        "comment": "Simple and fast to follow for mini projects."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "MongoDB": {
+    "tutorial": "https://www.geeksforgeeks.org/mongodb/",
+    "description": "Understand MongoDB documents, queries, indexing, and schema design essentials.",
+    "averageCompletionTime": "6-9 hours",
+    "difficulty": "Beginner to Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Ishaan",
+        "rating": 4.5,
+        "comment": "Helped me with CRUD and aggregation basics."
+      },
+      {
+        "reviewer": "Pooja",
+        "rating": 4.3,
+        "comment": "Good practical orientation for app development."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "Redis": {
+    "tutorial": "https://www.geeksforgeeks.org/redis/",
+    "description": "Learn caching, in-memory data structures, and performance optimization with Redis.",
+    "averageCompletionTime": "4-6 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Kabir",
+        "rating": 4.4,
+        "comment": "Excellent intro to caching strategies."
+      },
+      {
+        "reviewer": "Ananya",
+        "rating": 4.2,
+        "comment": "Easy to understand use-cases."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "Docker": {
+    "tutorial": "https://www.geeksforgeeks.org/docker/",
+    "description": "Containerize applications with Dockerfiles, images, and compose workflows.",
+    "averageCompletionTime": "6-8 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Dev",
+        "rating": 4.6,
+        "comment": "Strong foundation for deployment setup."
+      },
+      {
+        "reviewer": "Sneha",
+        "rating": 4.5,
+        "comment": "Examples are practical and easy to test."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "Python": {
+    "tutorial": "https://www.geeksforgeeks.org/python-programming-language/",
+    "description": "Master Python syntax, data structures, OOP, and scripting for problem solving.",
+    "averageCompletionTime": "10-14 hours",
+    "difficulty": "Beginner",
+    "reviews": [
+      {
+        "reviewer": "Sahil",
+        "rating": 4.8,
+        "comment": "Perfect beginner path with many examples."
+      },
+      {
+        "reviewer": "Ira",
+        "rating": 4.6,
+        "comment": "Covers fundamentals very thoroughly."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "SQL": {
+    "tutorial": "https://www.geeksforgeeks.org/sql/",
+    "description": "Query relational databases with joins, grouping, filtering, and optimization basics.",
+    "averageCompletionTime": "8-12 hours",
+    "difficulty": "Beginner to Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Vikram",
+        "rating": 4.7,
+        "comment": "Great coverage of joins and subqueries."
+      },
+      {
+        "reviewer": "Ritu",
+        "rating": 4.5,
+        "comment": "Very helpful for interviews and projects."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "Excel": {
+    "tutorial": "https://www.geeksforgeeks.org/ms-excel/",
+    "description": "Learn formulas, pivots, charts, and spreadsheet analysis workflows.",
+    "averageCompletionTime": "5-7 hours",
+    "difficulty": "Beginner",
+    "reviews": [
+      {
+        "reviewer": "Tara",
+        "rating": 4.3,
+        "comment": "Good for day-to-day data reporting tasks."
+      },
+      {
+        "reviewer": "Arjun",
+        "rating": 4.2,
+        "comment": "Easy and practical examples."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "Power BI": {
+    "tutorial": "https://www.geeksforgeeks.org/power-bi/",
+    "description": "Design clean dashboards and transform raw data into actionable insights.",
+    "averageCompletionTime": "7-10 hours",
+    "difficulty": "Intermediate",
+    "prerequisites": [
+      "Basic data analysis"
+    ],
+    "learningPath": [
+      "Import data",
+      "Model relations",
+      "Create visuals",
+      "Publish dashboard"
+    ],
+    "reviews": [
+      {
+        "reviewer": "NeuroVision Seed",
+        "rating": 4.5,
+        "comment": "Useful for portfolio-ready dashboards."
+      }
+    ]
+  },
+  "Tableau": {
+    "tutorial": "https://www.geeksforgeeks.org/tableau/",
+    "description": "Build interactive visual analytics dashboards and reports.",
+    "averageCompletionTime": "6-9 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Ishita",
+        "rating": 4.5,
+        "comment": "Clear visual analytics examples."
+      },
+      {
+        "reviewer": "Yash",
+        "rating": 4.3,
+        "comment": "Helpful for basic to medium dashboards."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "Pandas": {
+    "tutorial": "https://www.geeksforgeeks.org/pandas/",
+    "description": "Perform data cleaning, transformation, and analysis with Pandas.",
+    "averageCompletionTime": "8-11 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Aditi",
+        "rating": 4.7,
+        "comment": "Excellent for practical data wrangling."
+      },
+      {
+        "reviewer": "Mihir",
+        "rating": 4.5,
+        "comment": "Useful snippets for real datasets."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "HTML": {
+    "tutorial": "https://www.geeksforgeeks.org/html/",
+    "description": "Learn semantic HTML, forms, and structure for modern websites.",
+    "averageCompletionTime": "4-6 hours",
+    "difficulty": "Beginner",
+    "reviews": [
+      {
+        "reviewer": "Om",
+        "rating": 4.4,
+        "comment": "Simple and beginner friendly."
+      },
+      {
+        "reviewer": "Naina",
+        "rating": 4.3,
+        "comment": "Very clear concept-wise explanation."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "CSS": {
+    "tutorial": "https://www.geeksforgeeks.org/css/",
+    "description": "Style layouts with flexbox, grid, responsive rules, and visual hierarchy.",
+    "averageCompletionTime": "6-9 hours",
+    "difficulty": "Beginner to Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Karan",
+        "rating": 4.5,
+        "comment": "Great for responsive design understanding."
+      },
+      {
+        "reviewer": "Siya",
+        "rating": 4.4,
+        "comment": "Practical and easy to apply."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "JavaScript": {
+    "tutorial": "https://www.geeksforgeeks.org/javascript/",
+    "description": "Cover JavaScript fundamentals, DOM, ES6+, async, and real-world coding patterns.",
+    "averageCompletionTime": "12-16 hours",
+    "difficulty": "Beginner to Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Pranav",
+        "rating": 4.8,
+        "comment": "Comprehensive and interview-oriented."
+      },
+      {
+        "reviewer": "Diya",
+        "rating": 4.6,
+        "comment": "Good pace and examples for practice."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "React": {
+    "tutorial": "https://www.geeksforgeeks.org/react/",
+    "description": "Build component-based UIs with hooks, state, props, and routing concepts.",
+    "averageCompletionTime": "10-14 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Harsh",
+        "rating": 4.7,
+        "comment": "Strong hooks and component examples."
+      },
+      {
+        "reviewer": "Mona",
+        "rating": 4.5,
+        "comment": "Very useful for frontend projects."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "TypeScript": {
+    "tutorial": "https://www.geeksforgeeks.org/typescript/",
+    "description": "Add type safety to JavaScript with interfaces, generics, and typed tooling.",
+    "averageCompletionTime": "7-10 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Raghav",
+        "rating": 4.6,
+        "comment": "Solid intro to types and interfaces."
+      },
+      {
+        "reviewer": "Esha",
+        "rating": 4.4,
+        "comment": "Great for moving from JS to TS."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "Kubernetes": {
+    "tutorial": "https://www.geeksforgeeks.org/kubernetes/",
+    "description": "Deploy and scale containers with pods, services, deployments, and config maps.",
+    "averageCompletionTime": "9-13 hours",
+    "difficulty": "Advanced",
+    "reviews": [
+      {
+        "reviewer": "Manav",
+        "rating": 4.5,
+        "comment": "Good conceptual clarity for orchestration."
+      },
+      {
+        "reviewer": "Rhea",
+        "rating": 4.3,
+        "comment": "Helpful for devops learning path."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "AWS": {
+    "tutorial": "https://www.geeksforgeeks.org/aws/",
+    "description": "Understand core AWS services for compute, storage, and deployment workflows.",
+    "averageCompletionTime": "10-15 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Aditya",
+        "rating": 4.4,
+        "comment": "Good broad coverage of cloud basics."
+      },
+      {
+        "reviewer": "Pallavi",
+        "rating": 4.2,
+        "comment": "Easy starter path for AWS services."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "Jenkins": {
+    "tutorial": "https://www.geeksforgeeks.org/jenkins/",
+    "description": "Automate CI/CD pipelines using Jenkins jobs, stages, and plugins.",
+    "averageCompletionTime": "6-8 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Neel",
+        "rating": 4.3,
+        "comment": "Practical CI setup examples."
+      },
+      {
+        "reviewer": "Priti",
+        "rating": 4.1,
+        "comment": "Useful for deployment automation basics."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "Git": {
+    "tutorial": "https://www.geeksforgeeks.org/git/",
+    "description": "Master version control workflows: branching, merging, rebasing, and collaboration.",
+    "averageCompletionTime": "5-7 hours",
+    "difficulty": "Beginner",
+    "reviews": [
+      {
+        "reviewer": "Uday",
+        "rating": 4.6,
+        "comment": "Great for daily developer workflow."
+      },
+      {
+        "reviewer": "Kavya",
+        "rating": 4.5,
+        "comment": "Clear explanations of branching strategies."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "Linux": {
+    "tutorial": "https://www.geeksforgeeks.org/linux/",
+    "description": "Learn Linux commands, shell basics, permissions, and system navigation.",
+    "averageCompletionTime": "6-9 hours",
+    "difficulty": "Beginner to Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Aryan",
+        "rating": 4.4,
+        "comment": "Good command-level practice."
+      },
+      {
+        "reviewer": "Sana",
+        "rating": 4.3,
+        "comment": "Simple and effective for beginners."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "TensorFlow": {
+    "tutorial": "https://www.geeksforgeeks.org/tensorflow/",
+    "description": "Develop deep learning models with TensorFlow and model training workflows.",
+    "averageCompletionTime": "12-18 hours",
+    "difficulty": "Advanced",
+    "reviews": [
+      {
+        "reviewer": "Rishabh",
+        "rating": 4.5,
+        "comment": "Good base for neural network projects."
+      },
+      {
+        "reviewer": "Asha",
+        "rating": 4.2,
+        "comment": "Helpful but requires prior ML basics."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "PyTorch": {
+    "tutorial": "https://www.geeksforgeeks.org/pytorch/",
+    "description": "Build and train deep learning models with dynamic computation graphs in PyTorch.",
+    "averageCompletionTime": "12-18 hours",
+    "difficulty": "Advanced",
+    "reviews": [
+      {
+        "reviewer": "Tanmay",
+        "rating": 4.6,
+        "comment": "Excellent for practical ML experimentation."
+      },
+      {
+        "reviewer": "Jiya",
+        "rating": 4.4,
+        "comment": "Strong examples for model building."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "Scikit-learn": {
+    "tutorial": "https://www.geeksforgeeks.org/scikit-learn/",
+    "description": "Implement machine learning pipelines, model evaluation, and feature engineering.",
+    "averageCompletionTime": "9-13 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Varun",
+        "rating": 4.7,
+        "comment": "Great for classical ML workflow."
+      },
+      {
+        "reviewer": "Myra",
+        "rating": 4.5,
+        "comment": "Very useful for evaluation techniques."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "NumPy": {
+    "tutorial": "https://www.geeksforgeeks.org/numpy/",
+    "description": "Master arrays, broadcasting, vectorized operations, and numerical computation basics.",
+    "averageCompletionTime": "6-8 hours",
+    "difficulty": "Beginner to Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Ved",
+        "rating": 4.6,
+        "comment": "Excellent for array fundamentals."
+      },
+      {
+        "reviewer": "Aanya",
+        "rating": 4.4,
+        "comment": "Makes data computing concepts easy."
+      }
+    ],
+    "prerequisites": [
+      "Basic computer literacy"
+    ],
+    "learningPath": [
+      "Read fundamentals and syntax",
+      "Practice guided examples",
+      "Build one mini project",
+      "Revise common interview questions"
+    ]
+  },
+  "REST APIs": {
+    "tutorial": "https://www.geeksforgeeks.org/rest-api-introduction/",
+    "description": "Learn REST architecture, HTTP methods, status codes, and API best practices.",
+    "averageCompletionTime": "5-7 hours",
+    "difficulty": "Beginner to Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Nitin",
+        "rating": 4.5,
+        "comment": "Very clear explanation of endpoint design."
+      },
+      {
+        "reviewer": "Rashi",
+        "rating": 4.4,
+        "comment": "Good practical examples with HTTP methods."
+      }
+    ],
+    "prerequisites": [
+      "Basic backend knowledge"
+    ],
+    "learningPath": [
+      "Understand REST constraints",
+      "Learn HTTP verbs and status codes",
+      "Design API routes and resources",
+      "Implement validation and error handling"
+    ]
+  },
+  "JWT Authentication": {
+    "tutorial": "https://www.geeksforgeeks.org/json-web-token-jwt/",
+    "description": "Implement secure authentication with JWT tokens, refresh flow, and route protection.",
+    "averageCompletionTime": "4-6 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Sarthak",
+        "rating": 4.6,
+        "comment": "Helpful for auth middleware understanding."
+      },
+      {
+        "reviewer": "Rimjhim",
+        "rating": 4.3,
+        "comment": "Good starter for token-based auth."
+      }
+    ],
+    "prerequisites": [
+      "Node.js basics",
+      "REST API basics"
+    ],
+    "learningPath": [
+      "Learn JWT structure",
+      "Generate and verify tokens",
+      "Protect private routes",
+      "Add refresh-token strategy"
+    ]
+  },
+  "Responsive Design": {
+    "tutorial": "https://www.geeksforgeeks.org/responsive-web-design/",
+    "description": "Build responsive layouts with media queries, fluid grids, and mobile-first principles.",
+    "averageCompletionTime": "4-6 hours",
+    "difficulty": "Beginner",
+    "reviews": [
+      {
+        "reviewer": "Aman",
+        "rating": 4.4,
+        "comment": "Simple and practical responsive techniques."
+      },
+      {
+        "reviewer": "Neha",
+        "rating": 4.2,
+        "comment": "Helped me fix mobile layout issues quickly."
+      }
+    ],
+    "prerequisites": [
+      "HTML and CSS basics"
+    ],
+    "learningPath": [
+      "Understand viewport concepts",
+      "Use media queries effectively",
+      "Apply flexible grid systems",
+      "Test across devices"
+    ]
+  },
+  "Data Visualization": {
+    "tutorial": "https://www.geeksforgeeks.org/data-visualization-in-python/",
+    "description": "Communicate insights through charts, dashboards, and visual storytelling techniques.",
+    "averageCompletionTime": "6-8 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Kriti",
+        "rating": 4.5,
+        "comment": "Great practical chart selection guidance."
+      },
+      {
+        "reviewer": "Dhruv",
+        "rating": 4.3,
+        "comment": "Useful for real reporting scenarios."
+      }
+    ],
+    "prerequisites": [
+      "Basic data analysis"
+    ],
+    "learningPath": [
+      "Learn visual encodings",
+      "Pick right chart per data type",
+      "Build insight-first dashboards",
+      "Validate readability and accessibility"
+    ]
+  },
+  "Statistics": {
+    "tutorial": "https://www.geeksforgeeks.org/statistics/",
+    "description": "Understand probability, distributions, hypothesis testing, and core statistics concepts.",
+    "averageCompletionTime": "8-12 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Vansh",
+        "rating": 4.5,
+        "comment": "Solid base for analytics and ML preparation."
+      },
+      {
+        "reviewer": "Mahi",
+        "rating": 4.4,
+        "comment": "Concepts explained in an easy sequence."
+      }
+    ],
+    "prerequisites": [
+      "High school math"
+    ],
+    "learningPath": [
+      "Cover descriptive statistics",
+      "Learn probability distributions",
+      "Practice hypothesis testing",
+      "Apply stats to real datasets"
+    ]
+  },
+  "Machine Learning": {
+    "tutorial": "https://www.geeksforgeeks.org/machine-learning/",
+    "description": "Learn supervised and unsupervised learning, model training, and evaluation workflows.",
+    "averageCompletionTime": "12-16 hours",
+    "difficulty": "Intermediate to Advanced",
+    "reviews": [
+      {
+        "reviewer": "Suyash",
+        "rating": 4.6,
+        "comment": "Comprehensive path for ML foundations."
+      },
+      {
+        "reviewer": "Ishani",
+        "rating": 4.5,
+        "comment": "Great beginner-to-intermediate progression."
+      }
+    ],
+    "prerequisites": [
+      "Python basics",
+      "Statistics basics"
+    ],
+    "learningPath": [
+      "Understand ML problem types",
+      "Prepare and split datasets",
+      "Train and evaluate models",
+      "Tune and compare model performance"
+    ]
+  },
+  "Data Structures": {
+    "tutorial": "https://www.geeksforgeeks.org/data-structures/",
+    "description": "Build strong DS fundamentals: arrays, linked lists, trees, graphs, and complexity.",
+    "averageCompletionTime": "10-14 hours",
+    "difficulty": "Intermediate",
+    "reviews": [
+      {
+        "reviewer": "Parth",
+        "rating": 4.7,
+        "comment": "Very useful for problem solving and interviews."
+      },
+      {
+        "reviewer": "Tanya",
+        "rating": 4.6,
+        "comment": "Clear stepwise DS explanations."
+      }
+    ],
+    "prerequisites": [
+      "Programming basics"
+    ],
+    "learningPath": [
+      "Revise Big-O notation",
+      "Practice core data structures",
+      "Solve DS-based coding problems",
+      "Apply structures in mini projects"
+    ]
+  },
+  "Deep Learning": {
+    "tutorial": "https://www.geeksforgeeks.org/deep-learning-tutorial/",
+    "description": "Understand neural networks, CNNs, RNNs, and deep learning model training.",
+    "averageCompletionTime": "14-20 hours",
+    "difficulty": "Advanced",
+    "reviews": [
+      {
+        "reviewer": "Ronit",
+        "rating": 4.5,
+        "comment": "Great progression from neural basics to architectures."
+      },
+      {
+        "reviewer": "Anvi",
+        "rating": 4.4,
+        "comment": "Useful practical notes for training models."
+      }
+    ],
+    "prerequisites": [
+      "Machine Learning basics",
+      "Linear algebra basics"
+    ],
+    "learningPath": [
+      "Understand neural network fundamentals",
+      "Build and train simple networks",
+      "Explore CNN/RNN architectures",
+      "Evaluate and optimize deep models"
+    ]
+  },
+  "Express.js": {
+    "tutorial": "https://www.geeksforgeeks.org/express-js/",
+    "description": "Build backend APIs with routes, middleware, and robust error handling.",
+    "averageCompletionTime": "5-8 hours",
+    "difficulty": "Beginner",
+    "prerequisites": [
+      "Node.js basics"
+    ],
+    "learningPath": [
+      "Setup project",
+      "Build routes",
+      "Add middleware",
+      "Handle errors"
+    ],
+    "reviews": [
+      {
+        "reviewer": "NeuroVision Seed",
+        "rating": 4.6,
+        "comment": "Great for practical API building."
+      }
+    ]
+  },
+  "React.js": {
+    "tutorial": "https://www.geeksforgeeks.org/reactjs/",
+    "description": "Create interactive UIs using components, hooks, and state management basics.",
+    "averageCompletionTime": "8-12 hours",
+    "difficulty": "Beginner to Intermediate",
+    "prerequisites": [
+      "JavaScript basics"
+    ],
+    "learningPath": [
+      "Understand JSX",
+      "Build components",
+      "Use hooks",
+      "Build mini app"
+    ],
+    "reviews": [
+      {
+        "reviewer": "NeuroVision Seed",
+        "rating": 4.7,
+        "comment": "Excellent intro for frontend growth."
+      }
+    ]
+  }
 }

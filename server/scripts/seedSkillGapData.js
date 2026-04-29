@@ -1,10 +1,6 @@
-const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
 require("dotenv").config({ path: path.join(__dirname, "../.env") });
-
-const profilePath = path.join(__dirname, "../src/data/profile.json");
-const tutorialPath = path.join(__dirname, "../src/data/tutorialLinks.json");
 
 const DEMO_USER_ID = "skillgap-demo-user";
 
@@ -80,46 +76,6 @@ const tutorialSeed = {
   }
 };
 
-function loadJson(filePath) {
-  return JSON.parse(fs.readFileSync(filePath, "utf8"));
-}
-
-function saveJson(filePath, data) {
-  fs.writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
-}
-
-function upsertProfileSeed() {
-  const profileData = loadJson(profilePath);
-  if (!Array.isArray(profileData.users)) {
-    profileData.users = [];
-  }
-
-  const existingIndex = profileData.users.findIndex((user) => user.id === DEMO_USER_ID);
-  const seededUser = {
-    id: DEMO_USER_ID,
-    username: "skillgap-demo",
-    roles: seedRoles
-  };
-
-  if (existingIndex === -1) {
-    profileData.users.push(seededUser);
-  } else {
-    profileData.users[existingIndex] = seededUser;
-  }
-
-  saveJson(profilePath, profileData);
-  return seededUser.roles.length;
-}
-
-function upsertTutorialSeed() {
-  const tutorialData = loadJson(tutorialPath);
-  Object.entries(tutorialSeed).forEach(([key, value]) => {
-    tutorialData[key] = value;
-  });
-  saveJson(tutorialPath, tutorialData);
-  return Object.keys(tutorialSeed).length;
-}
-
 async function upsertMongoSeed() {
   const mongoUri = process.env.MONGODB_URI;
   if (!mongoUri) {
@@ -165,14 +121,12 @@ async function upsertMongoSeed() {
 }
 
 async function main() {
-  const roleCount = upsertProfileSeed();
-  const tutorialCount = upsertTutorialSeed();
   const mongoSeeded = await upsertMongoSeed();
 
-  console.log("SkillGap seed completed successfully.");
+  console.log("SkillGap seed completed.");
   console.log(`Seeded demo user: ${DEMO_USER_ID}`);
-  console.log(`Seeded roles: ${roleCount}`);
-  console.log(`Upserted tutorial entries: ${tutorialCount}`);
+  console.log(`Seeded roles (mongo payload): ${seedRoles.length}`);
+  console.log(`Upserted tutorial entries (mongo payload): ${Object.keys(tutorialSeed).length}`);
   console.log(`Mongo seed status: ${mongoSeeded ? "done" : "skipped/failed"}`);
 }
 

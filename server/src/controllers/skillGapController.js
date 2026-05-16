@@ -1,11 +1,8 @@
-const fs = require('fs');
-const path = require('path');
 const { readData: readRoleData } = require('../utils/role.util');
 const { readData: readProfileData } = require('../utils/file.util');
+const { Profile, TutorialLink } = require('../models/skillGap.models');
 
-const tutorialLinks = JSON.parse(
-  fs.readFileSync(path.join(__dirname, '../data/tutorialLinks.json'), 'utf8')
-);
+const localTutorialLinks = require('../data/tutorialLinks.json');
 
 const normalizeSkillKey = (value = '') =>
   String(value)
@@ -13,10 +10,6 @@ const normalizeSkillKey = (value = '') =>
     .replace(/[^a-z0-9]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
-
-const tutorialMap = new Map(
-  Object.entries(tutorialLinks).map(([key, val]) => [normalizeSkillKey(key), val])
-);
 
 const tutorialAliases = {
   'express js': 'express',
@@ -29,12 +22,94 @@ const tutorialAliases = {
   'jwt auth': 'jwt authentication'
 };
 
-const getTutorialDetails = (skillName) => {
+const buildTutorialMap = (tutorialLinks) => new Map(
+  Object.entries(tutorialLinks).map(([key, val]) => [normalizeSkillKey(key), val])
+);
+
+const toTutorialObject = (entry) => {
+  if (!entry) {
+    return {};
+  }
+
+  if (typeof entry === 'string') {
+    return { tutorial: entry };
+  }
+
+  return entry;
+};
+
+const getNonEmptyArray = (value, fallback = []) => (
+  Array.isArray(value) && value.length > 0 ? value : fallback
+);
+
+const mergeTutorialEntry = (localEntry, mongoDoc) => {
+  const local = toTutorialObject(localEntry);
+
+  return {
+    tutorial: mongoDoc.tutorial || local.tutorial,
+    description: mongoDoc.description || local.description,
+    averageCompletionTime: mongoDoc.averageCompletionTime || local.averageCompletionTime,
+    difficulty: mongoDoc.difficulty || local.difficulty,
+    prerequisites: getNonEmptyArray(mongoDoc.prerequisites, Array.isArray(local.prerequisites) ? local.prerequisites : []),
+    learningPath: getNonEmptyArray(mongoDoc.learningPath, Array.isArray(local.learningPath) ? local.learningPath : []),
+    reviews: getNonEmptyArray(mongoDoc.reviews, Array.isArray(local.reviews) ? local.reviews : [])
+  };
+};
+
+const getTutorialLinksData = async () => {
+  if (Profile.db.readyState === 1) {
+    try {
+      const docs = await TutorialLink.find({}, { _id: 0, __v: 0 }).lean();
+      if (docs.length > 0) {
+        const mongoTutorialLinks = docs.reduce((acc, doc) => {
+          if (!doc.key) {
+            return acc;
+          }
+
+          acc[doc.key] = mergeTutorialEntry(localTutorialLinks[doc.key], doc);
+
+          return acc;
+        }, {});
+
+        // Keep local JSON as fallback so missing Mongo keys still return rich metadata.
+        return {
+          ...localTutorialLinks,
+          ...mongoTutorialLinks
+        };
+      }
+    } catch (error) {
+      console.warn('[SkillGap] Mongo tutorial load failed, using local JSON fallback.');
+    }
+  }
+
+  return localTutorialLinks;
+};
+
+const getUserProfile = async (id) => {
+  if (Profile.db.readyState === 1) {
+    try {
+      const mongoUser = await Profile.findOne({ id }).lean();
+      if (mongoUser) {
+        return mongoUser;
+      }
+    } catch (error) {
+      console.warn('[SkillGap] Mongo profile load failed, using local JSON fallback.');
+    }
+  }
+
+  const profileData = readProfileData();
+  return profileData.users.find((u) => u.id === id);
+};
+
+const getTutorialDetails = (skillName, tutorialMap) => {
   const defaultTutorial = `https://www.geeksforgeeks.org/search/?q=${encodeURIComponent(skillName)}`;
   const normalizedName = normalizeSkillKey(skillName);
   const compactName = normalizedName.replace(/\s+/g, '');
-  const aliasName = tutorialAliases[normalizedName] || tutorialAliases[compactName] || normalizedName;
-  const entry = tutorialMap.get(aliasName);
+  const aliasName = tutorialAliases[normalizedName] || tutorialAliases[compactName] || '';
+  const lookupKeys = [normalizedName, compactName, aliasName]
+    .filter(Boolean)
+    .map((key) => normalizeSkillKey(key));
+  const entry = lookupKeys.map((key) => tutorialMap.get(key)).find(Boolean);
 
   // Backward-compatible: supports both string and object tutorial formats.
   if (!entry) {
@@ -108,8 +183,7 @@ exports.analyzeSkillGap = async (req, res) => {
       return res.status(400).json({ error: "User id is required" });
     }
 
-    const profileData = readProfileData();
-    const user = profileData.users.find(u => u.id === id);
+    const user = await getUserProfile(id);
     if (!user || !Array.isArray(user.roles) || user.roles.length === 0) {
       return res.status(404).json({ error: "Saved profile not found for this user" });
     }
@@ -149,6 +223,8 @@ exports.analyzeSkillGap = async (req, res) => {
 
     const { status: cgpaStatus, bonus: cgpaBonus } = getCgpaStatus(cgpa);
     const missingNames = missingSkills.map(s => s.name);
+    const tutorialLinks = await getTutorialLinksData();
+    const tutorialMap = buildTutorialMap(tutorialLinks);
 
     return res.status(200).json({
       targetRole,
@@ -159,7 +235,7 @@ exports.analyzeSkillGap = async (req, res) => {
       missingSkills: missingNames,
       missingSkillsWithTutorials: missingNames.map(name => ({
         skill: name,
-        ...getTutorialDetails(name)
+        ...getTutorialDetails(name, tutorialMap)
       })),
       recommendation: getRecommendation(compatibilityScore, cgpa, cgpaBonus, targetRole, missingNames)
     });

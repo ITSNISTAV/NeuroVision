@@ -553,6 +553,130 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    .tutorial-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .tutorial-pill {
+      background: transparent;
+      border: 1px solid rgba(168,85,247,0.4);
+      color: var(--text-primary);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tutorial-pill:hover {
+      background: rgba(168,85,247,0.1);
+      border-color: var(--purple-400);
+    }
+    .tutorial-pill.active {
+      background: var(--purple-700);
+      border-color: var(--purple-400);
+      box-shadow: 0 0 12px rgba(168,85,247,0.4);
+    }
+    .tutorial-detail-card {
+      background: rgba(15,0,32,0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin-top: 12px;
+      animation: fade-in 0.3s ease;
+    }
+    .tutorial-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .tutorial-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .tutorial-rating {
+      font-size: 12px;
+      background: rgba(245,158,11,0.2);
+      color: var(--warning);
+      padding: 2px 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(245,158,11,0.4);
+    }
+    .tutorial-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .tutorial-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .tutorial-badges span {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .tutorial-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .tutorial-box {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .review-box {
+      grid-column: 1 / -1;
+    }
+    .box-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .box-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .prereq-item, .path-item {
+      font-size: 12px;
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.03);
+      padding: 6px 10px;
+      border-radius: 4px;
+      border-left: 2px solid var(--purple-500);
+    }
+    .review-item {
+      font-size: 12px;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.02);
+      padding: 8px 12px;
+      border-radius: 6px;
+      border-left: 2px solid var(--accent);
+    }
+    .review-item strong {
+      color: var(--text-primary);
+    }
+
     @media(max-width: 768px) {
       .navbar {
         padding: 0 20px;

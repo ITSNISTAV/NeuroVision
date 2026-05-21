@@ -14,20 +14,38 @@
   <div class="bg-orb orb2"></div>
   <div class="bg-orb orb3"></div>
 
+  <style>
+    .nav-links { display: flex; gap: 8px; }
+    .nav-link { font-size: 13px; color: var(--text-secondary); padding: 6px 14px; border-radius: 40px; text-decoration: none; transition: all 0.2s; }
+    .nav-link:hover { background: var(--glass-bg); color: var(--text-primary); }
+    .user-pill { display: flex; align-items: center; gap: 12px; background: var(--glass-bg); padding: 4px 12px 4px 8px; border-radius: 60px; border: 1px solid var(--glass-border); cursor: pointer; }
+    .user-label { font-size: 9px; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+  </style>
+
   <nav class="navbar">
     <div class="logo">
       <span class="logo-symbol">✦</span>
       <span class="logo-text">NeuroVision</span>
     </div>
-    <div class="user">
-      <div class="user-info">
-        <span class="user-name" id="navUserName">...</span>
-        <span class="user-role" id="navUserRole">Candidate</span>
+    <div class="nav-links">
+      <a class="nav-link" href="/dashboard.html">Home</a>
+      <a class="nav-link" href="/skills.html">Profile</a>
+      <a class="nav-link" href="/skillGap.html">Skill Gap</a>
+      <a class="nav-link" href="/score.html">Score</a>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div class="user-pill" onclick="document.getElementById('avatar-upload').click()" style="margin: 0;">
+        <div>
+          <div class="user-name" id="nav-username">—</div>
+          <div class="user-label">CANDIDATE</div>
+        </div>
+        <div class="avatar" id="nav-avatar">?</div>
+        <img id="nav-profile-pic" style="display:none; width:36px; height:36px; border-radius:50%; object-fit:cover;">
       </div>
-      <img id="navAvatar" src="https://i.pravatar.cc/40?img=12" alt="avatar" class="avatar">
-      <button class="logout-btn" onclick="logout()" title="Logout">⏻</button>
+      <button class="logout-btn" onclick="logout()" title="Logout" style="background: transparent; border: 1px solid rgba(168,85,247,0.3); color: rgba(196,181,253,0.5); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 16px;">⏻</button>
     </div>
   </nav>
+  <input type="file" id="avatar-upload" accept="image/*" style="display: none;" onchange="uploadAvatarFile(event)">
 
   <div class="page-wrapper">
 
@@ -73,9 +91,9 @@
         </div>
 
         <div class="form-group">
-          <label>Proficiency Level (1–10)</label>
+          <label>Proficiency Level (1–5)</label>
           <div class="skill-input-group">
-            <input type="number" id="skillLevel" min="1" max="10" placeholder="e.g. 7">
+            <input type="number" id="skillLevel" min="1" max="5" placeholder="e.g. 4">
             <button class="btn-add" onclick="addSkill()">＋ Add Skill</button>
           </div>
         </div>

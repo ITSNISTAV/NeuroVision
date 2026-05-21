@@ -48,4 +48,18 @@ async function sendWelcomeEmail(toEmail, userName) {
   await transporter.sendMail(mailOptions)
 }
 
-module.exports = { sendWelcomeEmail }
+async function sendResetEmail(toEmail, resetLink) {
+  await transporter.sendMail({
+    from: `"NeuroVision" <${process.env.EMAIL_USER}>`,
+    to: toEmail,
+    subject: '🔑 Reset your NeuroVision password',
+    html: `<div style="font-family:Arial;background:#0f0f1a;color:#fff;padding:40px;border-radius:16px;max-width:600px;margin:auto">
+      <h2 style="color:#a855f7">Reset your password</h2>
+      <p style="color:#c4b5fd;margin:16px 0">Click the button below. Link expires in 1 hour.</p>
+      <a href="${resetLink}" style="background:linear-gradient(135deg,#7c3aed,#d946ef);color:#fff;padding:12px 32px;border-radius:50px;text-decoration:none;font-weight:600;display:inline-block">Reset Password →</a>
+      <p style="color:#52525b;font-size:12px;margin-top:24px">If you didn't request this, ignore this email.</p>
+    </div>`
+  })
+}
+
+module.exports = { sendWelcomeEmail, sendResetEmail }

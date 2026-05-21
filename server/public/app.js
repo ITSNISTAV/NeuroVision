@@ -1,48 +1,113 @@
 const currentUser = JSON.parse(sessionStorage.getItem("nv_user") || "null");
 
 if (!currentUser) {
-  window.location.href = "/index.html";
+  window.location.href = "/login.html";
 }
 
-const userId   = currentUser ? currentUser.id       : "guest";
-const userName = currentUser ? currentUser.name     : "Guest";
+const userId   = currentUser ? currentUser._id   : "guest";
+const userName = currentUser ? currentUser.name  : "Guest";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const nameEl   = document.getElementById("navUserName");
-  const roleEl   = document.getElementById("navUserRole");
-  const avatarEl = document.getElementById("navAvatar");
+  const nameEl   = document.getElementById("nav-username");
   if (nameEl) nameEl.textContent = userName;
-  if (roleEl) roleEl.textContent = currentUser?.role || "Candidate";
-  if (avatarEl && currentUser?.picture) avatarEl.src = currentUser.picture;
+
+  const initial = userName.charAt(0).toUpperCase();
+  let pic = null;
+  if (currentUser && currentUser.profilePic) pic = currentUser.profilePic;
+
+  const navAvatar = document.getElementById('nav-avatar');
+  const navProfilePic = document.getElementById('nav-profile-pic');
+  if (pic && navProfilePic) {
+    if (navAvatar) navAvatar.style.display = 'none';
+    navProfilePic.style.display = 'block';
+    navProfilePic.src = pic;
+  } else if (navAvatar) {
+    navAvatar.textContent = initial;
+  }
 });
 
-const roleSkills = {
-  "Backend Developer":         ["Node.js", "Express", "MongoDB", "PostgreSQL", "Redis"],
-  "Frontend Developer":        ["React", "Next.js", "Redux", "Tailwind", "TypeScript"],
-  "Full Stack Developer":      ["React", "Node.js", "MongoDB", "Express", "Next.js"],
-  "Data Analyst":              ["SQL", "Excel", "PowerBI", "Python", "Tableau"],
-  "Machine Learning Engineer": ["Python", "TensorFlow", "PyTorch", "Scikit-Learn", "NumPy"]
-};
+async function uploadAvatarFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (!userId || userId === 'guest') {
+    alert("Please login first to change your avatar.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("avatar", file);
+  formData.append("userId", userId);
+
+  try {
+    const res = await fetch("/api/auth/upload-avatar", {
+      method: "POST",
+      body: formData
+    });
+    const data = await res.json();
+    if (res.ok) {
+      sessionStorage.setItem("nv_user", JSON.stringify(data.user));
+      location.reload();
+    } else {
+      alert(data.error || "Failed to upload avatar");
+    }
+  } catch (err) {
+    console.error("Upload error:", err);
+    alert("An error occurred during upload.");
+  }
+}
+
+let roleSkills = {};
 
 let internshipMonths = 0;
 let technicalSkills  = [];
 let editingRole      = null;  
 
 const roleSelect = document.getElementById("role");
-Object.keys(roleSkills).forEach(r => {
-  roleSelect.innerHTML += `<option value="${r}">${r}</option>`;
-});
 
-roleSelect.addEventListener("change", updateSkillDropdown);
-updateSkillDropdown();
+async function initRoles() {
+  try {
+    const res = await fetch('/api/roles');
+    if (res.ok) {
+      const data = await res.json();
+      data.forEach(roleData => {
+        roleSkills[roleData.role] = roleData.skills.map(s => s.name);
+      });
+    }
+  } catch (err) {
+    console.error("Failed to fetch roles from API, using fallback.");
+  }
+
+  // Fallback if API fails or returns no roles
+  if (Object.keys(roleSkills).length === 0) {
+    roleSkills = {
+      "Backend Developer":         ["Node.js", "Express", "MongoDB", "PostgreSQL", "Redis"],
+      "Frontend Developer":        ["React", "Next.js", "Redux", "Tailwind", "TypeScript"],
+      "Full Stack Developer":      ["React", "Node.js", "MongoDB", "Express", "Next.js"],
+      "Data Analyst":              ["SQL", "Excel", "PowerBI", "Python", "Tableau"],
+      "Machine Learning Engineer": ["Python", "TensorFlow", "PyTorch", "Scikit-Learn", "NumPy"]
+    };
+  }
+
+  Object.keys(roleSkills).forEach(r => {
+    roleSelect.innerHTML += `<option value="${r}">${r}</option>`;
+  });
+  roleSelect.addEventListener("change", updateSkillDropdown);
+  updateSkillDropdown();
+}
 
 function updateSkillDropdown() {
   const skillSelect = document.getElementById("skillSelect");
   skillSelect.innerHTML = "";
-  roleSkills[roleSelect.value].forEach(skill => {
-    skillSelect.innerHTML += `<option value="${skill}">${skill}</option>`;
-  });
+  if (roleSkills[roleSelect.value]) {
+    roleSkills[roleSelect.value].forEach(skill => {
+      skillSelect.innerHTML += `<option value="${skill}">${skill}</option>`;
+    });
+  }
 }
+
+// Initialize roles when DOM is ready
+initRoles();
 
 function changeInternship(val) {
   internshipMonths = Math.max(0, internshipMonths + val);
@@ -60,7 +125,7 @@ function addSkill() {
   const level = parseInt(document.getElementById("skillLevel").value);
 
   if (!skill) return showToast("Please select a skill.", "error");
-  if (!level || level < 1 || level > 10) return showToast("Enter a level between 1 and 10.", "error");
+  if (!level || level < 1 || level > 5) return showToast("Enter a level between 1 and 10.", "error");
 
   if (technicalSkills.find(s => s.skill === skill)) {
     return showToast(`${skill} is already added.`, "error");
@@ -111,12 +176,11 @@ async function saveProfile() {
   const role = roleSelect.value;
   const cgpa = parseFloat(document.getElementById("cgpa").value);
 
-  if (!role)                           return showToast("Please select a role.", "error");
+  if (!role) return showToast("Please select a role.", "error");
   if (!cgpa || cgpa < 1 || cgpa > 10) return showToast("Enter a valid CGPA (1–10).", "error");
-  if (technicalSkills.length === 0)   return showToast("Add at least one skill.", "error");
+  if (technicalSkills.length === 0) return showToast("Add at least one skill.", "error");
 
   try {
-
     if (editingRole) {
       await fetch(`/api/profile/${userId}/${encodeURIComponent(editingRole)}`, {
         method: "DELETE"
@@ -127,7 +191,7 @@ async function saveProfile() {
     const response = await fetch(`/api/profile/${userId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ role, cgpa, internshipMonths, technicalSkills })
+      body: JSON.stringify({ role, cgpa, internshipMonths, technicalSkills }) // ✅ fixed
     });
 
     const result = await response.json();
@@ -139,7 +203,6 @@ async function saveProfile() {
     showToast(result.message || "Profile saved!", "success");
     resetForm();
     loadRoles();
-
   } catch (err) {
     showToast("Failed to save. Is the server running?", "error");
   }
@@ -186,7 +249,8 @@ async function loadRoles() {
         <div class="cardBtns">
           <button class="card-btn btn-delete" onclick="deleteRole('${role.role}')">🗑 Delete</button>
           <button class="card-btn btn-edit"   onclick="editRole('${role.role}')">✏ Edit</button>
-          <button class="card-btn btn-score"  onclick="window.location.href='score.html?role=${encodeURIComponent(role.role)}&uid=${userId}'">Analyze Skill Gap</button>
+          <button class="card-btn btn-score"  onclick="window.location.href='score.html?role=${encodeURIComponent(role.role)}&uid=${userId}'">Analyze Score</button>
+          <button class="card-btn btn-score"  onclick="window.location.href='skillGap.html?role=${encodeURIComponent(role.role)}&uid=${userId}'">Analyze Skill Gap</button>
         </div>
       `;
       container.appendChild(card);
@@ -241,7 +305,7 @@ async function editRole(roleName) {
 
 function logout() {
   sessionStorage.removeItem("nv_user");
-  window.location.href = "/index.html";
+  window.location.href = "/login.html";
 }
 
 let toastTimer;
@@ -252,5 +316,5 @@ function showToast(message, type = "") {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
 }
-loadRoles();
 
+loadRoles();

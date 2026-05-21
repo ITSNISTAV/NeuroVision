@@ -210,6 +210,217 @@
           ]
         }
       ]
+    },
+    {
+      "id": "skillgap-demo-user",
+      "username": "skillgap-demo",
+      "roles": [
+        {
+          "role": "Backend Developer",
+          "preferredStack": "MERN / Node.js",
+          "cgpa": 8.7,
+          "internshipMonths": 5,
+          "githubUsername": "backend-guru",
+          "technicalSkills": [
+            {
+              "skill": "Node.js",
+              "level": 5
+            },
+            {
+              "skill": "Express.js",
+              "level": 4
+            },
+            {
+              "skill": "MongoDB",
+              "level": 4
+            },
+            {
+              "skill": "Git",
+              "level": 5
+            }
+          ],
+          "tools": [
+            "VS Code",
+            "Postman",
+            "Docker"
+          ],
+          "strengths": [
+            "Problem Solving",
+            "Database Design"
+          ],
+          "weaknesses": [
+            "Frontend CSS",
+            "Public Speaking"
+          ],
+          "dsa": {
+            "level": "Intermediate",
+            "problemsSolvedRange": "75-150"
+          },
+          "coreSubjects": {
+            "oop": 4,
+            "dbms": 5,
+            "os": 4,
+            "cn": 4
+          },
+          "projects": [
+            {
+              "name": "E-Commerce API",
+              "type": "Backend",
+              "problemSolved": "Created a scalable e-commerce REST API backend with secure payment processing and inventory tracking.",
+              "techStack": [
+                "Node.js",
+                "Express",
+                "MongoDB",
+                "Stripe"
+              ],
+              "githubLink": "https://github.com/backend-guru/ecommerce-api",
+              "liveLink": "https://ecommerce-api.demo.com",
+              "features": {
+                "authentication": true,
+                "database": true,
+                "restApi": true,
+                "paymentIntegration": true,
+                "errorHandling": true
+              }
+            }
+          ]
+        },
+        {
+          "role": "Frontend Developer",
+          "preferredStack": "React / Next.js",
+          "cgpa": 7.9,
+          "internshipMonths": 3,
+          "githubUsername": "pixel-perfect",
+          "technicalSkills": [
+            {
+              "skill": "HTML",
+              "level": 5
+            },
+            {
+              "skill": "CSS",
+              "level": 5
+            },
+            {
+              "skill": "JavaScript",
+              "level": 4
+            },
+            {
+              "skill": "React.js",
+              "level": 4
+            }
+          ],
+          "tools": [
+            "Figma",
+            "VS Code",
+            "Webpack"
+          ],
+          "strengths": [
+            "UI/UX Design",
+            "Responsive Layouts"
+          ],
+          "weaknesses": [
+            "SQL Queries",
+            "System Architecture"
+          ],
+          "dsa": {
+            "level": "Beginner",
+            "problemsSolvedRange": "25-75"
+          },
+          "coreSubjects": {
+            "oop": 3,
+            "dbms": 2,
+            "os": 3,
+            "cn": 2
+          },
+          "projects": [
+            {
+              "name": "SaaS Landing Page",
+              "type": "Frontend",
+              "problemSolved": "Designed and built a highly responsive, modern landing page with smooth animations and interactive product walkthroughs.",
+              "techStack": [
+                "React",
+                "Vite",
+                "Tailwind CSS"
+              ],
+              "githubLink": "https://github.com/pixel-perfect/saas-page",
+              "liveLink": "https://saas-demo.com",
+              "features": {
+                "responsiveUI": true,
+                "readme": true,
+                "testing": true
+              }
+            }
+          ]
+        },
+        {
+          "role": "Data Analyst",
+          "preferredStack": "Python / SQL",
+          "cgpa": 8.2,
+          "internshipMonths": 4,
+          "githubUsername": "data-wizard",
+          "technicalSkills": [
+            {
+              "skill": "Python",
+              "level": 4
+            },
+            {
+              "skill": "SQL",
+              "level": 4
+            },
+            {
+              "skill": "Excel",
+              "level": 5
+            },
+            {
+              "skill": "Power BI",
+              "level": 3
+            }
+          ],
+          "tools": [
+            "Jupyter Notebook",
+            "Tableau",
+            "Excel"
+          ],
+          "strengths": [
+            "Statistical Analysis",
+            "Data Visualization"
+          ],
+          "weaknesses": [
+            "Object Oriented Programming",
+            "Web Security"
+          ],
+          "dsa": {
+            "level": "Beginner",
+            "problemsSolvedRange": "0-25"
+          },
+          "coreSubjects": {
+            "oop": 2,
+            "dbms": 4,
+            "os": 2,
+            "cn": 2
+          },
+          "projects": [
+            {
+              "name": "Sales Insight Dashboard",
+              "type": "Data Analytics",
+              "problemSolved": "Cleaned and processed raw sales data to build interactive reports showing growth regions.",
+              "techStack": [
+                "Python",
+                "Pandas",
+                "Power BI",
+                "SQL"
+              ],
+              "githubLink": "https://github.com/data-wizard/sales-insights",
+              "liveLink": "https://sales-insights.demo.com",
+              "features": {
+                "database": true,
+                "dashboard": true,
+                "charts": true
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

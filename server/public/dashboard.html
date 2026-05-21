@@ -7,12 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    /* (your existing CSS – unchanged, kept as in previous message) */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --bg-deep: #0a0010;
       --bg-mid: #0f0020;
@@ -39,377 +35,66 @@
       --warning: #f59e0b;
       --error: #ef4444;
     }
-
-    body {
-      font-family: var(--font-body);
-      background: var(--bg-deep);
-      color: var(--text-primary);
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    /* animated orbs */
-    .bg-orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .orb1 {
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(124,58,237,0.18), transparent 70%);
-      top: -100px; left: -100px;
-      animation: drift1 14s ease-in-out infinite alternate;
-    }
-    .orb2 {
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(217,70,239,0.12), transparent 70%);
-      top: 30%; right: -80px;
-      animation: drift2 18s ease-in-out infinite alternate;
-    }
-    .orb3 {
-      width: 350px; height: 350px;
-      background: radial-gradient(circle, rgba(139,92,246,0.14), transparent 70%);
-      bottom: 10%; left: 25%;
-      animation: drift1 22s ease-in-out infinite alternate-reverse;
-    }
-
-    @keyframes drift1 {
-      from { transform: translate(0,0); }
-      to { transform: translate(30px, 40px); }
-    }
-    @keyframes drift2 {
-      from { transform: translate(0,0); }
-      to { transform: translate(-25px, 30px); }
-    }
-
-    /* navbar */
-    .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 48px;
-      height: 68px;
-      background: rgba(10, 0, 16, 0.75);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--glass-border);
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo-symbol {
-      color: var(--accent);
-      font-size: 20px;
-      animation: pulse-glow 3s ease-in-out infinite;
-    }
-    .logo-text {
-      font-family: var(--font-display);
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      background: linear-gradient(135deg, var(--purple-200), var(--accent));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    @keyframes pulse-glow {
-      0%, 100% { text-shadow: 0 0 8px var(--accent-glow); }
-      50% { text-shadow: 0 0 20px var(--accent-glow); }
-    }
-    .nav-links {
-      display: flex;
-      gap: 8px;
-    }
-    .nav-link {
-      font-size: 13px;
-      color: var(--text-secondary);
-      padding: 6px 14px;
-      border-radius: 40px;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-    .nav-link:hover {
-      background: var(--glass-bg);
-      color: var(--text-primary);
-    }
-    .user-pill {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--glass-bg);
-      padding: 4px 12px 4px 8px;
-      border-radius: 60px;
-      border: 1px solid var(--glass-border);
-    }
-    .avatar {
-      width: 36px;
-      height: 36px;
-      background: var(--purple-700);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 15px;
-      color: var(--purple-200);
-    }
-    .user-name {
-      font-size: 13px;
-      font-weight: 500;
-    }
-    .user-label {
-      font-size: 9px;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-    }
-
-    /* main container */
-    .page-wrapper {
-      position: relative;
-      z-index: 2;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 36px 32px 80px;
-    }
-
-    /* glass card */
-    .glass-card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
-      backdrop-filter: blur(16px);
-      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.05);
-      padding: 28px 32px;
-      margin-bottom: 24px;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .error-banner {
-      background: rgba(239,68,68,0.12);
-      border-left: 4px solid var(--error);
-      padding: 12px 20px;
-      border-radius: var(--radius-sm);
-      margin-bottom: 24px;
-      font-size: 13px;
-      color: #fca5a5;
-    }
-
-    /* candidate card (glass variant) */
-    .candidate-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 24px;
-    }
-    .candidate-identity {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    .candidate-avatar-lg {
-      width: 72px;
-      height: 72px;
-      background: linear-gradient(135deg, var(--purple-500), var(--accent));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      font-weight: 700;
-      box-shadow: 0 0 0 2px rgba(168,85,247,0.3);
-    }
-    .candidate-name {
-      font-size: 26px;
-      font-weight: 700;
-      font-family: var(--font-display);
-      letter-spacing: 1px;
-    }
-    .candidate-best-role {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-top: 6px;
-    }
-    .candidate-best-role span {
-      color: var(--purple-300);
-      font-weight: 600;
-    }
-    .candidate-stats {
-      display: flex;
-      gap: 16px;
-    }
-    .c-stat {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-sm);
-      padding: 12px 18px;
-      min-width: 85px;
-      text-align: center;
-    }
-    .c-stat-value {
-      font-size: 26px;
-      font-weight: 700;
-      line-height: 1;
-    }
-    .c-stat-label {
-      font-size: 10px;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      margin-top: 6px;
-    }
-
-    /* two column grid */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-    .panel {
-      background: rgba(0,0,0,0.2);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-    }
-    .panel-title {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: var(--purple-300);
-      margin-bottom: 20px;
-    }
-
-    /* radar container */
-    .radar-wrap {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    /* fit bars */
-    .fit-bar-row {
-      margin-bottom: 18px;
-    }
-    .fit-bar-top {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 6px;
-      font-size: 13px;
-    }
-    .fit-bar-label {
-      font-weight: 500;
-    }
-    .fit-bar-pct {
-      font-weight: 600;
-    }
-    .fit-bar-track {
-      height: 6px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .fit-bar-fill {
-      height: 100%;
-      border-radius: 10px;
-      transition: width 0.5s ease;
-    }
-
-    /* learn next section */
-    .learn-card {
-      background: rgba(0,0,0,0.2);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-    }
-    .learn-items {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-      margin-top: 8px;
-    }
-    .learn-item {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-sm);
-      padding: 16px;
-      transition: 0.2s;
-    }
-    .learn-item:hover {
-      background: rgba(255,255,255,0.06);
-    }
-    .learn-item-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 10px;
-    }
-    .learn-skill-name {
-      font-weight: 700;
-      font-size: 15px;
-    }
-    .learn-boost {
-      font-size: 11px;
-      background: rgba(16,185,129,0.15);
-      padding: 4px 8px;
-      border-radius: 40px;
-      color: var(--success);
-    }
-    .learn-roles {
-      font-size: 11px;
-      color: var(--text-secondary);
-      margin-bottom: 12px;
-    }
-    .learn-link {
-      font-size: 12px;
-      color: var(--purple-300);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: 0.2s;
-    }
-    .learn-link:hover {
-      color: var(--accent);
-      text-decoration: underline;
-    }
-
-    .loading {
-      color: var(--text-muted);
-      padding: 20px;
-      text-align: center;
-      font-size: 13px;
-    }
-
+    body { font-family: var(--font-body); background: var(--bg-deep); color: var(--text-primary); overflow-x: hidden; position: relative; }
+    .bg-orb { position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; }
+    .orb1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(124,58,237,0.18), transparent 70%); top: -100px; left: -100px; animation: drift1 14s ease-in-out infinite alternate; }
+    .orb2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(217,70,239,0.12), transparent 70%); top: 30%; right: -80px; animation: drift2 18s ease-in-out infinite alternate; }
+    .orb3 { width: 350px; height: 350px; background: radial-gradient(circle, rgba(139,92,246,0.14), transparent 70%); bottom: 10%; left: 25%; animation: drift1 22s ease-in-out infinite alternate-reverse; }
+    @keyframes drift1 { from { transform: translate(0,0); } to { transform: translate(30px, 40px); } }
+    @keyframes drift2 { from { transform: translate(0,0); } to { transform: translate(-25px, 30px); } }
+    .navbar { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 68px; background: rgba(10, 0, 16, 0.75); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-symbol { color: var(--accent); font-size: 20px; animation: pulse-glow 3s ease-in-out infinite; }
+    .logo-text { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: 2px; background: linear-gradient(135deg, var(--purple-200), var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    @keyframes pulse-glow { 0%, 100% { text-shadow: 0 0 8px var(--accent-glow); } 50% { text-shadow: 0 0 20px var(--accent-glow); } }
+    .nav-links { display: flex; gap: 8px; }
+    .nav-link { font-size: 13px; color: var(--text-secondary); padding: 6px 14px; border-radius: 40px; text-decoration: none; transition: all 0.2s; }
+    .nav-link:hover { background: var(--glass-bg); color: var(--text-primary); }
+    .user-pill { display: flex; align-items: center; gap: 12px; background: var(--glass-bg); padding: 4px 12px 4px 8px; border-radius: 60px; border: 1px solid var(--glass-border); }
+    .avatar { width: 36px; height: 36px; background: var(--purple-700); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; color: var(--purple-200); }
+    .user-name { font-size: 13px; font-weight: 500; }
+    .user-label { font-size: 9px; color: var(--text-muted); letter-spacing: 0.5px; }
+    .page-wrapper { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 36px 32px 80px; }
+    .glass-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius); backdrop-filter: blur(16px); box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.05); padding: 28px 32px; margin-bottom: 24px; transition: transform 0.2s, border-color 0.2s; }
+    .error-banner { background: rgba(239,68,68,0.12); border-left: 4px solid var(--error); padding: 12px 20px; border-radius: var(--radius-sm); margin-bottom: 24px; font-size: 13px; color: #fca5a5; }
+    .candidate-card { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+    .candidate-identity { display: flex; align-items: center; gap: 20px; }
+    .candidate-avatar-lg { width: 72px; height: 72px; background: linear-gradient(135deg, var(--purple-500), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; box-shadow: 0 0 0 2px rgba(168,85,247,0.3); }
+    .candidate-name { font-size: 26px; font-weight: 700; font-family: var(--font-display); letter-spacing: 1px; }
+    .candidate-best-role { font-size: 13px; color: var(--text-secondary); margin-top: 6px; }
+    .candidate-best-role span { color: var(--purple-300); font-weight: 600; }
+    .candidate-stats { display: flex; gap: 16px; }
+    .c-stat { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); padding: 12px 18px; min-width: 85px; text-align: center; }
+    .c-stat-value { font-size: 26px; font-weight: 700; line-height: 1; }
+    .c-stat-label { font-size: 10px; letter-spacing: 1px; color: var(--text-muted); margin-top: 6px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    .panel { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 20px 24px; }
+    .panel-title { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--purple-300); margin-bottom: 20px; }
+    .radar-wrap { display: flex; justify-content: center; align-items: center; flex-direction: column; }
+    .fit-bar-row { margin-bottom: 18px; }
+    .fit-bar-top { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
+    .fit-bar-label { font-weight: 500; }
+    .fit-bar-pct { font-weight: 600; }
+    .fit-bar-track { height: 6px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; }
+    .fit-bar-fill { height: 100%; border-radius: 10px; transition: width 0.5s ease; }
+    .learn-card { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 20px 24px; }
+    .learn-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 8px; }
+    .learn-item { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); padding: 16px; transition: 0.2s; }
+    .learn-item:hover { background: rgba(255,255,255,0.06); }
+    .learn-item-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+    .learn-skill-name { font-weight: 700; font-size: 15px; }
+    .learn-boost { font-size: 11px; background: rgba(16,185,129,0.15); padding: 4px 8px; border-radius: 40px; color: var(--success); }
+    .learn-roles { font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; }
+    .learn-link { font-size: 12px; color: var(--purple-300); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+    .learn-link:hover { color: var(--accent); text-decoration: underline; }
+    .loading { color: var(--text-muted); padding: 20px; text-align: center; font-size: 13px; }
     @media (max-width: 780px) {
-      .navbar {
-        padding: 0 20px;
-      }
-      .page-wrapper {
-        padding: 24px 20px;
-      }
-      .two-col {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-      .candidate-card {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .candidate-stats {
-        width: 100%;
-        justify-content: space-between;
-      }
-      .glass-card {
-        padding: 20px;
-      }
+      .navbar { padding: 0 20px; }
+      .page-wrapper { padding: 24px 20px; }
+      .two-col { grid-template-columns: 1fr; gap: 20px; }
+      .candidate-card { flex-direction: column; align-items: flex-start; }
+      .candidate-stats { width: 100%; justify-content: space-between; }
+      .glass-card { padding: 20px; }
     }
   </style>
 </head>
@@ -427,20 +112,25 @@
       <a class="nav-link" href="/dashboard.html">Home</a>
       <a class="nav-link" href="/skills.html">Profile</a>
       <a class="nav-link" href="/skillGap.html">Skill Gap</a>
+      <a class="nav-link" href="/score.html">Score</a>
     </div>
-    <div class="user-pill">
-      <div>
-        <div class="user-name" id="nav-username">—</div>
-        <div class="user-label">CANDIDATE</div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div class="user-pill" style="cursor: pointer; margin: 0;" onclick="document.getElementById('avatar-upload').click()">
+        <div>
+          <div class="user-name" id="nav-username">—</div>
+          <div class="user-label">CANDIDATE</div>
+        </div>
+        <div class="avatar" id="nav-avatar">?</div>
+        <img id="nav-profile-pic" style="display:none; width:36px; height:36px; border-radius:50%; object-fit:cover;">
       </div>
-      <div class="avatar" id="nav-avatar">?</div>
+      <button class="logout-btn" onclick="logout()" title="Logout" style="background: transparent; border: 1px solid rgba(168,85,247,0.3); color: rgba(196,181,253,0.5); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 16px;">⏻</button>
     </div>
   </nav>
+  <input type="file" id="avatar-upload" accept="image/*" style="display: none;" onchange="uploadAvatarFile(event)">
 
   <div class="page-wrapper">
     <div class="error-banner" id="error-banner" style="display: none;"></div>
 
-    <!-- candidate glass card -->
     <div class="glass-card">
       <div class="candidate-card">
         <div class="candidate-identity">
@@ -471,7 +161,6 @@
       </div>
     </div>
 
-    <!-- radar + role fit -->
     <div class="two-col">
       <div class="panel">
         <div class="panel-title">✨ Skill radar — your best role</div>
@@ -483,7 +172,6 @@
       </div>
     </div>
 
-    <!-- learn next -->
     <div class="learn-card">
       <div class="panel-title">🎯 What to learn next — highest score impact</div>
       <div class="learn-items" id="learn-items">
@@ -493,11 +181,11 @@
   </div>
 
   <script>
-    // ---------- session / constants ----------
+    // ---------- dashboard JS using POST /api/skill-gap ----------
     const SESSION_KEY = 'nv_user';
     const BASE = '';
 
-    // roleData (exactly as you defined, matching new skills)
+    // roleData (client-side copy for impact calculation)
     const ROLE_DATA = {
       "Backend Developer": [
         { "name": "Node.js", "requiredLevel": 5, "weight": 30 },
@@ -543,7 +231,7 @@
     function getUserId() {
       try {
         const u = JSON.parse(sessionStorage.getItem(SESSION_KEY));
-        return u?.id || null;
+        return u?._id || u?.id || null;
       } catch { return null; }
     }
 
@@ -565,10 +253,12 @@
     function buildLearnNext() {
       if (!profileData) return;
       const skillMap = {};
+
       profileData.roles.forEach(roleObj => {
         const res = roleResults[roleObj.role] || {};
         const userSkillNames = roleObj.technicalSkills.map(s => s.skill.toLowerCase());
         const roleSkills = ROLE_DATA[roleObj.role] || [];
+
         roleSkills.forEach(rs => {
           if (!userSkillNames.includes(rs.name.toLowerCase())) {
             const impact = computeScoreImpact(roleObj.role, rs.name, roleObj.technicalSkills);
@@ -579,6 +269,7 @@
             skillMap[rs.name].maxImpact = Math.max(skillMap[rs.name].maxImpact, impact);
           }
         });
+
         if (res.missingSkillsWithTutorials) {
           res.missingSkillsWithTutorials.forEach(s => {
             if (skillMap[s.skill]) skillMap[s.skill].tutorial = s.tutorial;
@@ -586,7 +277,7 @@
         }
       });
 
-      const sorted = Object.entries(skillMap).sort((a,b) => b[1].maxImpact - a[1].maxImpact).slice(0,6);
+      const sorted = Object.entries(skillMap).sort((a, b) => b[1].maxImpact - a[1].maxImpact).slice(0, 6);
       const el = document.getElementById('learn-items');
       if (!sorted.length) {
         el.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:16px;">✨ No missing skills — you have full coverage!</div>';
@@ -595,11 +286,11 @@
       el.innerHTML = sorted.map(([skill, data]) => `
         <div class="learn-item">
           <div class="learn-item-top">
-            <div class="learn-skill-name">${skill}</div>
-            <div class="learn-boost">+${Math.round(data.maxImpact)}%</div>
+            <div class="learn-skill-name">${escapeHtml(skill)}</div>
+            <div class="learn-boost">+${Math.round(data.maxImpact)}% score boost</div>
           </div>
           <div class="learn-roles">Needed for: ${data.roles.join(', ')}</div>
-          <a class="learn-link" href="${data.tutorial}" target="_blank">📘 Learn ${skill} ↗</a>
+          <a class="learn-link" href="${escapeHtml(data.tutorial)}" target="_blank" rel="noopener">📘 Learn ${escapeHtml(skill)} ↗</a>
         </div>
       `).join('');
     }
@@ -608,13 +299,13 @@
       const el = document.getElementById('fit-bars');
       const entries = profileData.roles.map(r => ({
         role: r.role,
-        score: roleResults[r.role]?.finalScore ?? null
-      })).filter(e => e.score !== null).sort((a,b) => b.score - a.score);
-      if (!entries.length) { el.innerHTML = '<div class="loading">No scores yet</div>'; return; }
+        score: roleResults[r.role]?.compatibilityScore ?? null
+      })).filter(e => e.score !== null).sort((a, b) => b.score - a.score);
+      if (!entries.length) { el.innerHTML = '<div class="loading">Scoring…</div>'; return; }
       el.innerHTML = entries.map(e => `
         <div class="fit-bar-row">
           <div class="fit-bar-top">
-            <span class="fit-bar-label">${e.role}</span>
+            <span class="fit-bar-label">${escapeHtml(e.role)}</span>
             <span class="fit-bar-pct" style="color:${scoreColor(e.score)}">${Math.round(e.score)}%</span>
           </div>
           <div class="fit-bar-track">
@@ -627,16 +318,16 @@
     function renderRadar() {
       const el = document.getElementById('radar-wrap');
       const best = profileData.roles
-        .filter(r => roleResults[r.role]?.finalScore != null)
-        .sort((a,b) => roleResults[b.role].finalScore - roleResults[a.role].finalScore)[0];
+        .filter(r => roleResults[r.role]?.compatibilityScore != null)
+        .sort((a, b) => roleResults[b.role].compatibilityScore - roleResults[a.role].compatibilityScore)[0];
       if (!best) { el.innerHTML = '<div class="loading">Calculating…</div>'; return; }
 
       const roleSkills = ROLE_DATA[best.role] || [];
       if (!roleSkills.length) return;
 
-      const size = 240;
-      const cx = size/2, cy = size/2;
-      const maxR = 90;
+      const size = 220;
+      const cx = size / 2, cy = size / 2;
+      const maxR = 80;
       const n = roleSkills.length;
       const angleStep = (2 * Math.PI) / n;
       const getPoint = (i, r) => ({
@@ -647,14 +338,13 @@
       let rings = '';
       [0.25, 0.5, 0.75, 1].forEach(t => {
         const pts = Array.from({ length: n }, (_, i) => getPoint(i, maxR * t));
-        rings += `<polygon points="${pts.map(p=>`${p.x},${p.y}`).join(' ')}" fill="none" stroke="rgba(168,85,247,0.18)" stroke-width="0.6"/>`;
+        rings += `<polygon points="${pts.map(p => `${p.x},${p.y}`).join(' ')}" fill="none" stroke="rgba(168,85,247,0.15)" stroke-width="0.5"/>`;
       });
       let axes = '';
-      roleSkills.forEach((_,i) => {
+      roleSkills.forEach((_, i) => {
         const p = getPoint(i, maxR);
-        axes += `<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="rgba(168,85,247,0.2)" stroke-width="0.6"/>`;
+        axes += `<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="rgba(168,85,247,0.15)" stroke-width="0.5"/>`;
       });
-
       const userSkillMap = {};
       best.technicalSkills.forEach(s => { userSkillMap[s.skill.toLowerCase()] = s.level; });
       const dataPoints = roleSkills.map((rs, i) => {
@@ -662,16 +352,14 @@
         const ratio = Math.min(userLevel / 10, 1);
         return getPoint(i, maxR * ratio);
       });
-      const polyPoints = dataPoints.map(p=>`${p.x},${p.y}`).join(' ');
-
+      const polyPoints = dataPoints.map(p => `${p.x},${p.y}`).join(' ');
       let labels = '';
       roleSkills.forEach((rs, i) => {
-        const p = getPoint(i, maxR + 18);
+        const p = getPoint(i, maxR + 16);
         const userLevel = userSkillMap[rs.name.toLowerCase()];
         const color = userLevel != null ? '#c084fc' : 'rgba(196,181,253,0.3)';
-        labels += `<text x="${p.x}" y="${p.y}" text-anchor="middle" dominant-baseline="middle" font-size="9.5" fill="${color}" font-family="DM Sans">${rs.name}</text>`;
+        labels += `<text x="${p.x}" y="${p.y}" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="${color}" font-family="DM Sans">${rs.name}</text>`;
       });
-
       let dots = '';
       dataPoints.forEach(p => { dots += `<circle cx="${p.x}" cy="${p.y}" r="3" fill="#d946ef" />`; });
 
@@ -681,59 +369,47 @@
           <polygon points="${polyPoints}" fill="rgba(168,85,247,0.2)" stroke="#a855f7" stroke-width="1.5"/>
           ${dots}${labels}
         </svg>
-        <div style="font-size:11px; color:var(--text-secondary); margin-top:12px;">${best.role} · radar view</div>
+        <div style="font-size:10px;color:var(--text-muted);text-align:center;margin-top:8px">${best.role}</div>
       `;
+      el.style.flexDirection = 'column';
     }
 
     function updateCard() {
-      const scores = Object.entries(roleResults).filter(([,r]) => r.finalScore != null).sort((a,b)=>b[1].finalScore - a[1].finalScore);
+      const scores = Object.entries(roleResults)
+        .filter(([, r]) => r.compatibilityScore != null)
+        .sort((a, b) => b[1].compatibilityScore - a[1].compatibilityScore);
       if (scores.length) {
         const [bestRole, bestRes] = scores[0];
         document.getElementById('card-best-role').textContent = bestRole;
-        document.getElementById('stat-best').textContent = Math.round(bestRes.finalScore) + '%';
-        document.getElementById('stat-best').style.color = scoreColor(bestRes.finalScore);
+        document.getElementById('stat-best').textContent = Math.round(bestRes.compatibilityScore) + '%';
+        document.getElementById('stat-best').style.color = scoreColor(bestRes.compatibilityScore);
       }
     }
 
-    // API calls
-    async function fetchScore(userId, role) {
-      const res = await fetch(`${BASE}/api/score/${userId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role })
-      });
-      if (!res.ok) throw new Error();
-      return res.json();
-    }
+    // ─── Use GET /api/skill-gap/:userId/:targetRole ───
     async function fetchSkillGap(roleObj) {
-      const res = await fetch(`${BASE}/api/skill-gap`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          targetRole: roleObj.role,
-          cgpa: roleObj.cgpa,
-          technicalSkills: roleObj.technicalSkills.map(s => s.skill),
-          tools: []
-        })
-      });
-      if (!res.ok) throw new Error();
+      const userId = getUserId() || 'demo';
+      const url = `${BASE}/api/skill-gap/${userId}/${encodeURIComponent(roleObj.role)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Skill-gap API error: ${res.status}`);
       return res.json();
     }
 
-    async function loadRoleData(userId, roleObj) {
+    async function loadRoleData(roleObj) {
       try {
-        const [scoreRes, gapRes] = await Promise.all([fetchScore(userId, roleObj.role), fetchSkillGap(roleObj)]);
+        const gapRes = await fetchSkillGap(roleObj);
         roleResults[roleObj.role] = {
-          finalScore: scoreRes.finalScore,
           compatibilityScore: gapRes.compatibilityScore,
           matchedSkills: gapRes.matchedSkills,
           missingSkillsWithTutorials: gapRes.missingSkillsWithTutorials,
           recommendation: gapRes.recommendation,
           cgpaStatus: gapRes.cgpaStatus
         };
-      } catch {
+      } catch (err) {
+        console.warn(`Failed to load data for role ${roleObj.role}:`, err);
         roleResults[roleObj.role] = roleResults[roleObj.role] || {};
       }
+      // Refresh UI
       updateCard();
       renderFitBars();
       renderRadar();
@@ -760,29 +436,103 @@
       } else {
         try {
           const res = await fetch(`${BASE}/api/profile/${userId}`);
-          if (!res.ok) throw new Error();
+          if (!res.ok) throw new Error(`Profile API error: ${res.status}`);
           profileData = await res.json();
-        } catch {
+        } catch (err) {
           errorBanner.style.display = 'block';
-          errorBanner.textContent = 'Could not load profile. Make sure API is running.';
+          errorBanner.textContent = 'Could not load profile. Make sure the backend is running.';
+          console.error(err);
           return;
         }
       }
 
-      const name = profileData.username || 'User';
+      let name = 'User';
+      try {
+        const u = JSON.parse(sessionStorage.getItem(SESSION_KEY));
+        if (u && u.name) name = u.name;
+      } catch (e) {}
+
+      if (profileData && profileData.username) {
+        name = profileData.username;
+      }
+      
       const initial = name.charAt(0).toUpperCase();
       document.getElementById('nav-username').textContent = name;
-      document.getElementById('nav-avatar').textContent = initial;
-      document.getElementById('card-avatar').textContent = initial;
       document.getElementById('card-name').textContent = name;
 
-      const totalSkills = profileData.roles.reduce((s, r) => s + r.technicalSkills.length, 0);
+      let pic = null;
+      try {
+        const u = JSON.parse(sessionStorage.getItem(SESSION_KEY));
+        if (u && u.profilePic) pic = u.profilePic;
+      } catch (e) {}
+
+      if (pic) {
+        document.getElementById('nav-avatar').style.display = 'none';
+        document.getElementById('nav-profile-pic').style.display = 'block';
+        document.getElementById('nav-profile-pic').src = pic;
+        document.getElementById('card-avatar').style.background = 'none';
+        document.getElementById('card-avatar').innerHTML = `<img src="${pic}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+      } else {
+        document.getElementById('nav-avatar').textContent = initial;
+        document.getElementById('card-avatar').textContent = initial;
+      }
+
+      const totalSkills = profileData.roles.reduce((s, r) => s + (r.technicalSkills?.length || 0), 0);
       const totalInternship = profileData.roles.reduce((s, r) => s + (r.internshipMonths || 0), 0);
       document.getElementById('stat-roles').textContent = profileData.roles.length;
       document.getElementById('stat-skills').textContent = totalSkills;
       document.getElementById('stat-internship').textContent = totalInternship;
 
-      profileData.roles.forEach(r => loadRoleData(profileData.id, r));
+      // Load data for each role
+      profileData.roles.forEach(r => loadRoleData(r));
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+
+    function logout() {
+      sessionStorage.removeItem(SESSION_KEY);
+      window.location.href = '/login.html';
+    }
+
+    async function uploadAvatarFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const userId = getUserId();
+      if (!userId || userId === 'demo') {
+        alert("Please login first to change your avatar.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("avatar", file);
+      formData.append("userId", userId);
+
+      try {
+        const res = await fetch("/api/auth/upload-avatar", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        if (res.ok) {
+          // Update session storage
+          sessionStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
+          location.reload();
+        } else {
+          alert(data.error || "Failed to upload avatar");
+        }
+      } catch (err) {
+        console.error("Upload error:", err);
+        alert("An error occurred during upload.");
+      }
     }
 
     init();

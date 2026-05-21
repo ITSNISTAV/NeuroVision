@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: false,   // not required for Google users
   },
   role: {
     type: String,
@@ -20,13 +20,19 @@ const userSchema = new mongoose.Schema({
   },
   profilePic: {
     type: String,
-    required: false,
     default: '',
-  }
+  },
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true,
+  },
+  resetToken: { type: String, default: null },
+  resetTokenExpiry: { type: Date, default: null },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.models.User || mongoose.model('User', userSchema);
 
 module.exports = User;

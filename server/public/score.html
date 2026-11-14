@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NeuroVision – Score</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroVision — Score</title>
   <link rel="stylesheet" href="score.css">
 </head>
 <body>
@@ -12,71 +12,176 @@
   <div class="bg-orb orb2"></div>
   <div class="bg-orb orb3"></div>
 
-  <!-- NAV -->
+  <style>
+    .nav-links { display: flex; gap: 8px; }
+    .nav-link { font-size: 13px; color: var(--text-secondary); padding: 6px 14px; border-radius: 40px; text-decoration: none; transition: all 0.2s; }
+    .nav-link:hover { background: var(--glass-bg); color: var(--text-primary); }
+    .user-pill { display: flex; align-items: center; gap: 12px; background: var(--glass-bg); padding: 4px 12px 4px 8px; border-radius: 60px; border: 1px solid var(--glass-border); cursor: pointer; }
+    .user-label { font-size: 9px; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; }
+  </style>
+
   <nav class="navbar">
     <div class="logo">
       <span class="logo-symbol">✦</span>
       <span class="logo-text">NeuroVision</span>
     </div>
-    <div class="nav-right">
-      <div class="nav-user-info">
-        <span class="nav-username" id="nav-username">Guest</span>
-        <span class="nav-role-label">User</span>
+    <div class="nav-links">
+      <a class="nav-link" href="/dashboard.html">Home</a>
+      <a class="nav-link" href="/skills.html">Profile</a>
+      <a class="nav-link" href="/skillGap.html">Skill Gap</a>
+      <a class="nav-link" href="/score.html">Score</a>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div class="user-pill" onclick="document.getElementById('avatar-upload').click()" style="margin: 0;">
+        <div>
+          <div class="user-name" id="nav-username">—</div>
+          <div class="user-label">CANDIDATE</div>
+        </div>
+        <div class="avatar" id="nav-avatar">?</div>
+        <img id="nav-profile-pic" style="display:none; width:36px; height:36px; border-radius:50%; object-fit:cover;">
       </div>
-      <div class="nav-avatar" id="nav-avatar">?</div>
-      <button class="logout-btn" onclick="sessionStorage.clear(); location.href='/login.html';" title="Logout">⏻</button>
+      <button class="logout-btn" onclick="logout()" title="Logout" style="background: transparent; border: 1px solid rgba(168,85,247,0.3); color: rgba(196,181,253,0.5); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 16px;">⏻</button>
     </div>
   </nav>
+  <input type="file" id="avatar-upload" accept="image/*" style="display: none;" onchange="uploadAvatarFile(event)">
 
   <div class="page-wrapper">
-
-    <!-- PROFILE PICKER -->
-    <div class="main-card">
-      <h2 class="card-title">Score a Profile</h2>
-      <p class="card-subtitle">Select a saved profile to calculate your role fit score</p>
-      <hr class="card-divider">
-      <div class="section-row">
-        <span class="section-title">Saved Role Profiles</span>
-        <span class="count-badge" id="profile-count">0 profiles</span>
+    <section class="form-section glass-card">
+      <div class="section-header">
+        <h2>Score a Profile</h2>
+        <p class="section-sub">Select a saved profile to calculate your role fit score</p>
       </div>
-      <div class="profile-grid" id="profile-grid"></div>
+      <div class="display-header" style="margin-top:0; margin-bottom:24px;">
+        <h2>Saved Role Profiles</h2>
+        <span id="roleCount" class="badge">0 profiles</span>
+      </div>
+      <div id="rolesDisplay" class="roles-grid"></div>
+      <div id="emptyState" class="empty-state">
+        <div class="empty-icon">◈</div>
+        <p>No profiles saved yet.<br>Go to Skills page to create one.</p>
+      </div>
+    </section>
+
+   <section id="resultCard" class="form-section glass-card" style="display: none;">
+  <div class="section-header">
+    <h2>Score Result</h2>
+    <p class="section-sub">Detailed role-fit analysis based on your saved profile</p>
+  </div>
+
+  <div id="apiWarning" class="warning-banner" style="display: none;"></div>
+
+  <div class="result-inner">
+    <div class="score-col">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(45,31,78,0.8)" stroke-width="10"/>
+        <circle id="scoreArc" cx="70" cy="70" r="54" fill="none"
+          stroke="#a855f7" stroke-width="10"
+          stroke-dasharray="0 339.3"
+          stroke-linecap="round"
+          transform="rotate(-90 70 70)"/>
+        <text id="scoreText" x="70" y="65" text-anchor="middle" fill="white" font-size="22" font-weight="bold">0%</text>
+        <text x="70" y="85" text-anchor="middle" fill="#a78bfa" font-size="10" letter-spacing="1">FIT SCORE</text>
+      </svg>
+
+      <div class="fit-label" id="fitLabel">–</div>
+      <div class="result-role" id="resultRoleName"></div>
+      <div class="result-stack" id="resultStackName"></div>
     </div>
 
-    <!-- RESULT -->
-    <div class="result-card" id="result-card">
-      <div class="warning-banner" id="api-warning"></div>
-      <h2 class="card-title" style="margin-bottom:28px;">Score Result</h2>
-      <div class="result-inner">
-
-        <div class="score-col">
-          <svg width="140" height="140" viewBox="0 0 140 140">
-            <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(45,31,78,0.8)" stroke-width="10"/>
-            <circle id="score-arc" cx="70" cy="70" r="54" fill="none"
-              stroke="#a855f7" stroke-width="10"
-              stroke-dasharray="0 339.3"
-              stroke-linecap="round"
-              transform="rotate(-90 70 70)"
-              style="transition: stroke-dasharray 0.8s ease, stroke 0.4s ease"/>
-            <text id="score-text" x="70" y="65" text-anchor="middle"
-              fill="white" font-size="22" font-weight="bold" font-family="DM Sans, sans-serif">0%</text>
-            <text x="70" y="85" text-anchor="middle"
-              fill="#a78bfa" font-size="10" font-family="DM Sans, sans-serif" letter-spacing="1">FIT SCORE</text>
-          </svg>
-          <div class="fit-label" id="fit-label">–</div>
-          <div class="result-role" id="result-role-name"></div>
-        </div>
-
-        <div class="breakdown-col">
-          <div class="breakdown-header">
-            <h3>Skill Breakdown</h3>
-            <span class="legend"><span class="legend-mark">│</span> = required level</span>
-          </div>
-          <div id="skill-bars"></div>
-        </div>
-
+    <div class="breakdown-col">
+      <div class="breakdown-header">
+        <h3>Score Composition</h3>
+        <span class="legend">based on role skill weights</span>
       </div>
+
+      <div id="scoreSummaryGrid" class="summary-grid"></div>
+
+      <div id="whyScoreBox" class="why-score-box"></div>
+    </div>
+  </div>
+
+  <div class="analysis-grid">
+    <div class="analysis-panel">
+      <div class="panel-header">
+        <h3>Matched Skills</h3>
+        <span id="matchedCount" class="mini-badge">0</span>
+      </div>
+      <div id="matchedSkillsList" class="tag-list"></div>
     </div>
 
+    <div class="analysis-panel">
+      <div class="panel-header">
+        <h3>Missing Skills</h3>
+        <span id="missingCount" class="mini-badge danger">0</span>
+      </div>
+      <div id="missingSkillsList" class="tag-list"></div>
+    </div>
+  </div>
+
+  <div class="skill-breakdown-section">
+    <div class="breakdown-header">
+      <h3>Skill Breakdown</h3>
+      <span class="legend"><span class="legend-mark">│</span> = required level</span>
+    </div>
+    <div id="skillBars"></div>
+  </div>
+
+    
+<div class="project-quality-section">
+  <div class="breakdown-header">
+    <h3>Project Quality</h3>
+    <span class="legend">evidence-based project analysis</span>
+  </div>
+
+  <div class="project-quality-grid">
+    <div class="project-score-card">
+      <div class="project-score-value" id="projectQualityScore">0</div>
+      <div class="project-score-label">PROJECT QUALITY</div>
+      <div class="fit-label" id="projectQualityLevel">No Evidence</div>
+    </div>
+
+    <div class="project-evidence-panel">
+      <div class="panel-header"><h3>Strengths</h3></div>
+      <div id="projectStrengths" class="evidence-list"></div>
+    </div>
+
+    <div class="project-evidence-panel">
+      <div class="panel-header"><h3>Weaknesses</h3></div>
+      <div id="projectWeaknesses" class="evidence-list"></div>
+    </div>
+  </div>
+</div>
+
+<div class="reality-gap-section">
+  <div class="breakdown-header">
+    <h3>Reality Gap</h3>
+    <span class="legend">what is blocking role readiness</span>
+  </div>
+
+  <div id="realityGapList" class="reality-gap-list"></div>
+</div>
+
+<div class="priority-section">
+  <div class="breakdown-header">
+    <h3>Improvement Priorities</h3>
+    <span class="legend">highest impact improvements first</span>
+  </div>
+
+  <div id="nextBestAction" class="next-action-card"></div>
+
+  <div id="priorityGrid" class="priority-grid"></div>
+</div>
+
+<div class="roadmap-section">
+  <div class="breakdown-header">
+    <h3>Personalized Roadmap</h3>
+    <span class="legend">phase-wise recovery plan</span>
+  </div>
+
+  <div id="roadmapList" class="roadmap-list"></div>
+</div>
+
+</section>
   </div>
 
   <script src="score.js"></script>

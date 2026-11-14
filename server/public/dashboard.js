@@ -4,39 +4,39 @@ const BASE = '';
 // roleData duplicated client-side only for score-impact calculation
 const ROLE_DATA = {
   "Backend Developer": [
-   { "name": "Node.js", "requiredLevel": 5, "weight": 30 },
-        { "name": "Express", "requiredLevel": 4, "weight": 25 },
-        { "name": "MongoDB", "requiredLevel": 4, "weight": 15 },
-        { "name": "PostgreSQL", "requiredLevel": 4, "weight": 15 },
-        { "name": "Redis", "requiredLevel": 3, "weight": 15 }
+    { "name": "Node.js", "requiredLevel": 5, "weight": 30 },
+    { "name": "Express", "requiredLevel": 4, "weight": 25 },
+    { "name": "MongoDB", "requiredLevel": 4, "weight": 15 },
+    { "name": "PostgreSQL", "requiredLevel": 4, "weight": 15 },
+    { "name": "Redis", "requiredLevel": 3, "weight": 15 }
   ],
   "Frontend Developer": [
     { "name": "React", "requiredLevel": 5, "weight": 30 },
-        { "name": "TypeScript", "requiredLevel": 4, "weight": 20 },
-        { "name": "Next.js", "requiredLevel": 4, "weight": 20 },
-        { "name": "Redux", "requiredLevel": 3, "weight": 15 },
-        { "name": "Tailwind", "requiredLevel": 3, "weight": 15 }
+    { "name": "TypeScript", "requiredLevel": 4, "weight": 20 },
+    { "name": "Next.js", "requiredLevel": 4, "weight": 20 },
+    { "name": "Redux", "requiredLevel": 3, "weight": 15 },
+    { "name": "Tailwind", "requiredLevel": 3, "weight": 15 }
   ],
   "Full Stack Developer": [
-     { "name": "React", "requiredLevel": 4, "weight": 20 },
-        { "name": "Node.js", "requiredLevel": 4, "weight": 20 },
-        { "name": "MongoDB", "requiredLevel": 3, "weight": 20 },
-        { "name": "Express", "requiredLevel": 3, "weight": 20 },
-        { "name": "Next.js", "requiredLevel": 3, "weight": 20 }
+    { "name": "React", "requiredLevel": 4, "weight": 20 },
+    { "name": "Node.js", "requiredLevel": 4, "weight": 20 },
+    { "name": "MongoDB", "requiredLevel": 3, "weight": 20 },
+    { "name": "Express", "requiredLevel": 3, "weight": 20 },
+    { "name": "Next.js", "requiredLevel": 3, "weight": 20 }
   ],
   "Data Analyst": [
-     { "name": "SQL", "requiredLevel": 4, "weight": 25 },
-        { "name": "Python", "requiredLevel": 4, "weight": 25 },
-        { "name": "Excel", "requiredLevel": 3, "weight": 20 },
-        { "name": "PowerBI", "requiredLevel": 3, "weight": 15 },
-        { "name": "Tableau", "requiredLevel": 3, "weight": 15 }
+    { "name": "SQL", "requiredLevel": 4, "weight": 25 },
+    { "name": "Python", "requiredLevel": 4, "weight": 25 },
+    { "name": "Excel", "requiredLevel": 3, "weight": 20 },
+    { "name": "PowerBI", "requiredLevel": 3, "weight": 15 },
+    { "name": "Tableau", "requiredLevel": 3, "weight": 15 }
   ],
   "Machine Learning Engineer": [
     { "name": "Python", "requiredLevel": 5, "weight": 30 },
-        { "name": "TensorFlow", "requiredLevel": 4, "weight": 20 },
-        { "name": "PyTorch", "requiredLevel": 4, "weight": 20 },
-        { "name": "Scikit-Learn", "requiredLevel": 4, "weight": 15 },
-        { "name": "NumPy", "requiredLevel": 4, "weight": 15 }
+    { "name": "TensorFlow", "requiredLevel": 4, "weight": 20 },
+    { "name": "PyTorch", "requiredLevel": 4, "weight": 20 },
+    { "name": "Scikit-Learn", "requiredLevel": 4, "weight": 15 },
+    { "name": "NumPy", "requiredLevel": 4, "weight": 15 }
   ]
 };
 
@@ -250,16 +250,8 @@ async function fetchScore(userId, role) {
 }
 
 async function fetchSkillGap(roleObj) {
-  const res = await fetch(`${BASE}/api/skill-gap`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      targetRole: roleObj.role,
-      cgpa: roleObj.cgpa,
-      technicalSkills: roleObj.technicalSkills.map(s => s.skill),
-      tools: []
-    })
-  });
+  const userId = getUserId() || 'demo';
+  const res = await fetch(`${BASE}/api/skill-gap/${userId}/${encodeURIComponent(roleObj.role)}`);
   if (!res.ok) throw new Error();
   return res.json();
 }
@@ -300,10 +292,14 @@ async function init() {
       id: 'demo',
       username: 'Harshit',
       roles: [
-        { role: 'Backend Developer', cgpa: 5, internshipMonths: 0,
-          technicalSkills: [{ skill: 'Node.js', level: 4 }, { skill: 'Express.js', level: 3 }, { skill: 'MongoDB', level: 5 }] },
-        { role: 'Frontend Developer', cgpa: 8, internshipMonths: 2,
-          technicalSkills: [{ skill: 'React.js', level: 7 }, { skill: 'HTML', level: 8 }, { skill: 'CSS', level: 7 }, { skill: 'JavaScript', level: 6 }] },
+        {
+          role: 'Backend Developer', cgpa: 5, internshipMonths: 0,
+          technicalSkills: [{ skill: 'Node.js', level: 4 }, { skill: 'Express.js', level: 3 }, { skill: 'MongoDB', level: 5 }]
+        },
+        {
+          role: 'Frontend Developer', cgpa: 8, internshipMonths: 2,
+          technicalSkills: [{ skill: 'React.js', level: 7 }, { skill: 'HTML', level: 8 }, { skill: 'CSS', level: 7 }, { skill: 'JavaScript', level: 6 }]
+        },
       ]
     };
   } else {
@@ -318,7 +314,16 @@ async function init() {
     }
   }
 
-  const name = profileData.username || 'User';
+  let name = 'User';
+  try {
+    const u = JSON.parse(sessionStorage.getItem(SESSION_KEY));
+    if (u && u.name) name = u.name;
+  } catch (e) { }
+
+  if (profileData && profileData.username) {
+    name = profileData.username;
+  }
+
   const initial = name.charAt(0).toUpperCase();
 
   document.getElementById('nav-username').textContent = name;

@@ -33,3 +33,27 @@ async function register(name, email, password) {
 
   // Registration successful — calling code switches to login tab
 }
+
+//Google OAuth handler
+async function handleGoogleSignIn(response) {
+  const errEl = document.getElementById("loginError") || document.getElementById("registerError");
+  try {
+    const res = await fetch(`${AUTH_API}/google`, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ credential: response.credential })
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      if (errEl) errEl.textContent = data.error || "Google sign-in failed";
+      return;
+    }
+
+    sessionStorage.setItem("nv_user", JSON.stringify(data.user));
+    window.location.href = SKILLS_URL;
+  } catch (err) {
+    if (errEl) errEl.textContent = "Google sign-in failed. Please try again.";
+    console.error("Google OAuth error:", err);
+  }
+}

@@ -1,14 +1,70 @@
+// ─── Session user ──────────────────────────────────────────────
 const currentUser = JSON.parse(sessionStorage.getItem("nv_user") || "null");
-const DEMO_USER_ID = "skillgap-demo-user";
-const userId = currentUser?.id || DEMO_USER_ID;
-const isDemoMode = !currentUser?.id;
+const userId = currentUser?._id || null;   // ✅ use _id, not id
 let savedProfileRoles = [];
 const queryParams = new URLSearchParams(window.location.search);
 const queryRole = queryParams.get("role") || "";
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeSavedProfileAnalyzer();
+  initNavbar();
 });
+
+function initNavbar() {
+  const nameEl   = document.getElementById("nav-username");
+  const userName = currentUser ? currentUser.name || currentUser.username : "Guest";
+  if (nameEl) nameEl.textContent = userName;
+
+  const initial = userName.charAt(0).toUpperCase();
+  let pic = null;
+  if (currentUser && currentUser.profilePic) pic = currentUser.profilePic;
+
+  const navAvatar = document.getElementById('nav-avatar');
+  const navProfilePic = document.getElementById('nav-profile-pic');
+  if (pic && navProfilePic) {
+    if (navAvatar) navAvatar.style.display = 'none';
+    navProfilePic.style.display = 'block';
+    navProfilePic.src = pic;
+  } else if (navAvatar) {
+    navAvatar.textContent = initial;
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem("nv_user");
+  window.location.href = "/login.html";
+}
+
+async function uploadAvatarFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (!userId) {
+    alert("Please login first to change your avatar.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("avatar", file);
+  formData.append("userId", userId);
+
+  try {
+    const res = await fetch("/api/auth/upload-avatar", {
+      method: "POST",
+      body: formData
+    });
+    const data = await res.json();
+    if (res.ok) {
+      sessionStorage.setItem("nv_user", JSON.stringify(data.user));
+      location.reload();
+    } else {
+      alert(data.error || "Failed to upload avatar");
+    }
+  } catch (err) {
+    console.error("Upload error:", err);
+    alert("An error occurred during upload.");
+  }
+}
 
 async function initializeSavedProfileAnalyzer() {
   const note = document.getElementById("savedProfileNote");
@@ -16,8 +72,12 @@ async function initializeSavedProfileAnalyzer() {
   const profileOnlyMessage = document.getElementById("profileOnlyMessage");
   const countBadge = document.getElementById("profile-count");
 
-  if (isDemoMode) {
-    profileOnlyMessage.innerText = "Demo mode active: seeded skill-gap profiles are loaded automatically.";
+  if (!userId) {
+    box.style.display = "block";
+    countBadge.textContent = "0 profiles";
+    note.textContent = "Login required. Please login and save a role profile first.";
+    profileOnlyMessage.innerText = "This page works only with saved profiles from profile.json.";
+    return;
   }
 
   try {
@@ -42,9 +102,7 @@ async function initializeSavedProfileAnalyzer() {
     renderSavedProfileCards();
 
     box.style.display = "block";
-    note.textContent = isDemoMode
-      ? "Previewing seeded demo profiles. Login to analyze your own saved roles."
-      : `Logged in as ${currentUser?.name || currentUser?.username || "User"}.`;
+    note.textContent = `Logged in as ${currentUser?.name || currentUser?.username || "User"}.`;
 
     // Direct flow from URL: analyze selected role if present.
     if (queryRole && savedProfileRoles.some((profile) => profile.role === queryRole)) {
@@ -60,6 +118,7 @@ async function initializeSavedProfileAnalyzer() {
 
 function renderSavedProfileCards() {
   const grid = document.getElementById("profile-grid");
+  if (!grid) return;
 
   grid.innerHTML = "";
   savedProfileRoles.forEach((profile, index) => {
@@ -69,160 +128,47 @@ function renderSavedProfileCards() {
     card.className = "roleCard";
     card.id = `profile-${index}`;
     card.innerHTML = `
-      <div class="card-top-row">
-        <div class="card-role-name">${profile.role}</div>
-        <span class="profile-chip ${profile.cgpa >= 8 ? "chip-elite" : profile.cgpa >= 7 ? "chip-strong" : "chip-growth"}">
-          ${profile.cgpa >= 8 ? "Elite" : profile.cgpa >= 7 ? "Strong" : "Growth"}
-        </span>
-      </div>
+      <div class="card-role-name">${escapeHtml(profile.role)}</div>
       <div class="card-meta">
         <span class="meta-pill">CGPA ${profile.cgpa}</span>
         <span class="meta-pill">INTERNSHIP ${profile.internshipMonths}mo</span>
         <span class="meta-pill">SKILLS ${skillList.length}</span>
       </div>
-      <div class="card-cgpa-track">
-        <span class="cgpa-label">Readiness by CGPA</span>
-        <div class="cgpa-bar-bg">
-          <div class="cgpa-bar-fill" style="width:${Math.max(0, Math.min(100, (Number(profile.cgpa) / 10) * 100))}%"></div>
-        </div>
-      </div>
       <div class="card-skills-label">Technical Skills</div>
       <div class="card-skills-list">
         ${skillList.map((skill) => `
-          <span class="card-skill-tag">${skill.skill}<span class="tag-level">${skill.level}</span></span>
+          <span class="card-skill-tag">${escapeHtml(skill.skill)}<span class="tag-level">${skill.level}</span></span>
         `).join("")}
       </div>
       <div class="cardBtns">
-        <button class="card-btn btn-score" onclick="analyzeSavedProfile('${profile.role.replace(/'/g, "\\'")}', ${index})">Analyze Skill Gap</button>
+        <button class="card-btn btn-score" onclick="analyzeSavedProfile('${escapeHtml(profile.role).replace(/'/g, "\\'")}', ${index})">Analyze Skill Gap</button>
       </div>
     `;
-
     grid.appendChild(card);
+  });
+}
+
+// Helper to prevent XSS
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+    return c;
   });
 }
 
 function resetForm() {
   document.querySelectorAll(".roleCard").forEach((card) => card.classList.remove("active"));
-  document.getElementById("result").style.display = "none";
+  const resultDiv = document.getElementById("result");
+  if (resultDiv) resultDiv.style.display = "none";
   console.log('✅ View reset');
 }
 
-function buildResultFromSkillGapApi(data) {
-  // skillGapController already returns properly formatted data
-  return {
-    targetRole: data.targetRole,
-    cgpa: data.cgpa,
-    cgpaStatus: data.cgpaStatus,
-    compatibilityScore: data.compatibilityScore,
-    matchedSkills: data.matchedSkills,
-    missingSkills: data.missingSkills,
-    missingSkillsWithTutorials: data.missingSkillsWithTutorials,
-    recommendation: data.recommendation,
-  };
-}
-
-function renderResults(data) {
-  document.getElementById("result").style.display = "block";
-  document.getElementById("roleTitle").innerText = data.targetRole;
-  document.getElementById("scoreText").innerText = data.compatibilityScore + "%";
-  document.getElementById("progressBar").style.width = data.compatibilityScore + "%";
-  document.getElementById("cgpaInfo").innerText = `CGPA: ${data.cgpa} - ${data.cgpaStatus}`;
-  document.getElementById("recommendation").innerText = `Tip: ${data.recommendation}`;
-
-  const matched = document.getElementById("matched");
-  const missing = document.getElementById("missing");
-  const tutorialList = document.getElementById("tutorialList");
-
-  matched.innerHTML = "";
-  missing.innerHTML = "";
-  tutorialList.innerHTML = "";
-
-  data.matchedSkills.forEach(skill => {
-    matched.innerHTML += `<li class="skill-matched">✓ ${skill}</li>`;
-  });
-
-  data.missingSkills.forEach(skill => {
-    missing.innerHTML += `<li class="skill-missing">✗ ${skill}</li>`;
-  });
-
-  if (data.missingSkillsWithTutorials && data.missingSkillsWithTutorials.length > 0) {
-    const tutorialData = data.missingSkillsWithTutorials;
-
-    const renderTutorialDetail = (item) => {
-      const safeReviews = Array.isArray(item.reviews) ? item.reviews.slice(0, 2) : [];
-      const safePrerequisites = Array.isArray(item.prerequisites) ? item.prerequisites.slice(0, 2) : [];
-      const safePath = Array.isArray(item.learningPath) ? item.learningPath.slice(0, 3) : [];
-      const reviewBlocks = safeReviews.length
-        ? safeReviews.map(r => `<li>${r.reviewer}: ${r.rating}/5 - ${r.comment}</li>`).join("")
-        : "<li>No reviews yet</li>";
-      const prereqBlocks = safePrerequisites.length
-        ? safePrerequisites.map(p => `<li>${p}</li>`).join("")
-        : "<li>Not required</li>";
-      const pathBlocks = safePath.length
-        ? safePath.map(step => `<li>${step}</li>`).join("")
-        : "<li>Self-paced</li>";
-
-      return `
-        <div class="tutorial-card dynamic-open-card">
-          <div class="tutorial-head">
-            <a class="tutorial-title" href="${item.tutorial}" target="_blank" rel="noopener">Learn ${item.skill}</a>
-            <span class="tutorial-rating">⭐ ${item.averageRating ?? "N/A"}</span>
-          </div>
-          <p class="tutorial-desc">${item.description || "Curated learning material."}</p>
-          <div class="tutorial-meta-row">
-            <span class="tutorial-pill">⏱ ${item.averageCompletionTime || "3-5 hours"}</span>
-            <span class="tutorial-pill">🧭 ${item.difficulty || "Beginner"}</span>
-            <span class="tutorial-pill">🗣 ${safeReviews.length} reviews</span>
-          </div>
-          <div class="tutorial-block-grid">
-            <div class="tutorial-block">
-              <div class="tutorial-block-title">Prerequisites</div>
-              <ul>${prereqBlocks}</ul>
-            </div>
-            <div class="tutorial-block">
-              <div class="tutorial-block-title">Learning Path</div>
-              <ul>${pathBlocks}</ul>
-            </div>
-            <div class="tutorial-block tutorial-block-wide">
-              <div class="tutorial-block-title">Top Reviews</div>
-              <ul>${reviewBlocks}</ul>
-            </div>
-          </div>
-        </div>
-      `;
-    };
-
-    const tabs = tutorialData
-      .map((item, index) => `
-        <button class="tutorial-skill-btn ${index === 0 ? "active" : ""}" data-index="${index}" type="button">
-          ${item.skill}
-        </button>
-      `)
-      .join("");
-
-    tutorialList.innerHTML = `
-      <div class="tutorial-skill-strip">${tabs}</div>
-      <div id="tutorialDetailCard"></div>
-    `;
-
-    const detailCard = document.getElementById("tutorialDetailCard");
-    detailCard.innerHTML = renderTutorialDetail(tutorialData[0]);
-
-    tutorialList.querySelectorAll(".tutorial-skill-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const index = Number(btn.getAttribute("data-index"));
-        tutorialList.querySelectorAll(".tutorial-skill-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        detailCard.innerHTML = renderTutorialDetail(tutorialData[index]);
-      });
-    });
-  } else {
-    tutorialList.innerHTML = `<div class="tutorial-card tutorial-empty">No tutorial recommendations found.</div>`;
-  }
-
-  window.currentResults = data;
-}
-
+// ─── New: use backend skill‑gap API with userId and role ──────
 async function analyzeSavedProfile(selectedRole, cardIndex = -1) {
   if (!userId) {
     alert("Please login first.");
@@ -235,6 +181,7 @@ async function analyzeSavedProfile(selectedRole, cardIndex = -1) {
     return;
   }
 
+  // Highlight active card
   document.querySelectorAll(".roleCard").forEach((card) => card.classList.remove("active"));
   if (cardIndex >= 0) {
     const activeCard = document.getElementById(`profile-${cardIndex}`);
@@ -245,25 +192,155 @@ async function analyzeSavedProfile(selectedRole, cardIndex = -1) {
   note.textContent = `Analyzing saved profile for ${role}...`;
 
   try {
-    const profileIndex = savedProfileRoles.findIndex(p => p.role === role);
-    if (profileIndex === -1) {
-      throw new Error("Profile not found in saved data");
-    }
-
-    const response = await fetch(`/api/skill-gap/${encodeURIComponent(userId)}?role=${encodeURIComponent(role)}`);
-
+    // ✅ CALL NEW ENDPOINT: GET /api/skill-gap/:userId/:targetRole
+    const response = await fetch(`/api/skill-gap/${userId}/${encodeURIComponent(role)}`);
     if (!response.ok) {
-      throw new Error(`Unable to analyze saved profile (${response.status})`);
+      const errText = await response.text();
+      throw new Error(`Server error (${response.status}): ${errText}`);
     }
 
     const data = await response.json();
-    const transformed = buildResultFromSkillGapApi(data);
-    renderResults(transformed);
+    // data structure from backend: targetRole, cgpa, cgpaStatus, compatibilityScore,
+    // matchedSkills, missingSkills, missingSkillsWithTutorials, recommendation
+    renderResults(data);
     note.textContent = `Showing analysis for ${role}.`;
   } catch (error) {
     console.error("Saved profile analysis failed:", error);
-    alert("Could not analyze saved profile. Please try again.");
+    alert(`Could not analyze saved profile: ${error.message}`);
+    note.textContent = `Analysis failed for ${role}. Please try again.`;
   }
+}
+
+function renderResults(data) {
+  const resultDiv = document.getElementById("result");
+  if (resultDiv) resultDiv.style.display = "block";
+
+  // Update UI elements (make sure your HTML has these ids)
+  const roleTitle = document.getElementById("roleTitle");
+  if (roleTitle) roleTitle.innerText = data.targetRole;
+
+  const scoreText = document.getElementById("scoreText");
+  if (scoreText) scoreText.innerText = data.compatibilityScore + "%";
+
+  const progressBar = document.getElementById("progressBar");
+  if (progressBar) progressBar.style.width = data.compatibilityScore + "%";
+
+  const cgpaInfo = document.getElementById("cgpaInfo");
+  if (cgpaInfo) cgpaInfo.innerText = `CGPA: ${data.cgpa} - ${data.cgpaStatus}`;
+
+  const recommendation = document.getElementById("recommendation");
+  if (recommendation) recommendation.innerText = `Tip: ${data.recommendation}`;
+
+  const matchedList = document.getElementById("matched");
+  const missingList = document.getElementById("missing");
+  const tutorialPills = document.getElementById("tutorialPills");
+  const detailCard = document.getElementById("tutorialDetailCard");
+
+  if (matchedList) {
+    matchedList.innerHTML = "";
+    data.matchedSkills.forEach(skill => {
+      matchedList.innerHTML += `<li class="skill-matched">✓ ${escapeHtml(skill)}</li>`;
+    });
+  }
+
+  if (missingList) {
+    missingList.innerHTML = "";
+    data.missingSkills.forEach(skill => {
+      missingList.innerHTML += `<li class="skill-missing">✗ ${escapeHtml(skill)}</li>`;
+    });
+  }
+
+  if (tutorialPills && data.missingSkillsWithTutorials) {
+    tutorialPills.innerHTML = "";
+    if (detailCard) detailCard.style.display = "none";
+
+    data.missingSkillsWithTutorials.forEach((item, index) => {
+      const pill = document.createElement("button");
+      pill.className = "tutorial-pill";
+      pill.innerText = item.skill.toUpperCase();
+      pill.onclick = () => {
+        document.querySelectorAll(".tutorial-pill").forEach(p => p.classList.remove("active"));
+        pill.classList.add("active");
+        showTutorialDetail(item);
+      };
+      tutorialPills.appendChild(pill);
+    });
+
+    if (data.missingSkillsWithTutorials.length > 0) {
+      const firstPill = tutorialPills.firstChild;
+      if (firstPill) firstPill.click();
+    }
+  }
+
+  // Store data for download/share
+  window.currentResults = data;
+}
+
+function showTutorialDetail(item) {
+  const detailCard = document.getElementById("tutorialDetailCard");
+  if (!detailCard) return;
+
+  if (!item.description) {
+    detailCard.innerHTML = `
+      <div class="tutorial-card-header">
+        <div class="tutorial-card-title">Learn ${escapeHtml(item.skill)}</div>
+      </div>
+      <a href="${escapeHtml(item.tutorial)}" target="_blank" class="tutorial-link-btn">Go to tutorial ↗</a>
+    `;
+    detailCard.style.display = "block";
+    return;
+  }
+
+  const reviewsHtml = item.reviews ? item.reviews.map(r => `
+    <div class="review-item">
+      <strong>${escapeHtml(r.reviewer)}: ${r.rating}/5</strong> - ${escapeHtml(r.comment)}
+    </div>
+  `).join('') : '';
+
+  const prerequisitesHtml = item.prerequisites ? item.prerequisites.map(p => `
+    <div class="prereq-item">${escapeHtml(p)}</div>
+  `).join('') : '';
+
+  const learningPathHtml = item.learningPath ? item.learningPath.map(p => `
+    <div class="path-item">${escapeHtml(p)}</div>
+  `).join('') : '';
+
+  detailCard.innerHTML = `
+    <div class="tutorial-card-header">
+      <div class="tutorial-card-title">Learn ${escapeHtml(item.skill)} <span class="tutorial-rating">⭐ ${item.reviews ? item.reviews[0]?.rating || 4.5 : 4.5}</span></div>
+    </div>
+    <p class="tutorial-desc">${escapeHtml(item.description)}</p>
+    <div class="tutorial-badges">
+      <span class="badge-time">⏱ ${escapeHtml(item.averageCompletionTime)}</span>
+      <span class="badge-diff">🎓 ${escapeHtml(item.difficulty)}</span>
+      ${item.reviews ? `<span class="badge-reviews">💬 ${item.reviews.length} reviews</span>` : ''}
+    </div>
+    
+    <div class="tutorial-grid">
+      <div class="tutorial-box">
+        <div class="box-title">PREREQUISITES</div>
+        <div class="box-content">${prerequisitesHtml}</div>
+      </div>
+      <div class="tutorial-box">
+        <div class="box-title">LEARNING PATH</div>
+        <div class="box-content">${learningPathHtml}</div>
+      </div>
+    </div>
+    
+    ${reviewsHtml ? `
+      <div class="tutorial-box review-box">
+        <div class="box-title">TOP REVIEWS</div>
+        <div class="box-content">${reviewsHtml}</div>
+      </div>
+    ` : ''}
+    
+    <a href="${escapeHtml(item.tutorial)}" target="_blank" class="tutorial-link-btn" style="display:inline-block; margin-top:12px; padding:8px 16px; background:var(--purple-700); color:white; border-radius:8px; text-decoration:none; font-size:12px;">Start Learning ↗</a>
+  `;
+  
+  detailCard.style.display = "block";
+
+  // Store data for download/share
+  window.currentResults = data;
 }
 
 function downloadResults() {
@@ -273,7 +350,6 @@ function downloadResults() {
   }
 
   const data = window.currentResults;
-  
   const report = `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
                         SKILL GAP ANALYSIS REPORT
@@ -326,8 +402,6 @@ NEXT STEPS:
   document.body.appendChild(element);
   element.click();
   document.body.removeChild(element);
-  
-  console.log('✅ Report downloaded successfully');
 }
 
 function shareResults() {
@@ -346,7 +420,6 @@ function shareResults() {
       url: window.location.href
     }).catch(err => console.log('Error sharing:', err));
   } else {
-    // Fallback: Copy to clipboard
     navigator.clipboard.writeText(shareText).then(() => {
       alert('✅ Results copied to clipboard!');
     }).catch(err => {

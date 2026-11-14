@@ -1,74 +1,270 @@
-const Role = require("../models/Role"); 
-const User = require("../models/User"); // Import your User Mongoose model
+const Profile = require("../models/Profile");
+const Role = require("../models/roleData.schema");
+
+const { analyzeProjectQuality } = require("./services/projectQualityService");
+const { generateRealityGap } = require("./services/realityGapService");
+const { generateImprovementPriorities } = require("./services/improvementPriorityService");
+const { generateRoadmap } = require("./services/roadmapService");
+
+const normalizeSkill = (skill = "") => {
+  return skill
+    .toLowerCase()
+    .replace(/\./g, "")
+    .replace(/\s+/g, "")
+    .replace(/-/g, "")
+    .trim();
+};
+
+const getScoreLevel = (score) => {
+  if (score >= 85) return "Excellent";
+  if (score >= 70) return "Strong";
+  if (score >= 50) return "Intermediate";
+  if (score >= 30) return "Basic";
+  return "Weak";
+};
 
 const score = async (req, res) => {
-    try {
-        const userId = req.params.userId;
-        const { role } = req.body;
+  try {
+    const userId = req.params.userId;
+    const { role } = req.body;
 
-        // 1. Basic Validation
-        if (!userId || !role) {
-            return res.status(400).json({ message: "userId and role are required" });
-        }
-
-        if (userId === "guest") {
-            return res.status(401).json({ message: "User not authenticated. Please login first." });
-        }
-
-        // 2. DATABASE CHANGE: Fetch user profile from MongoDB
-        // We use findById to fetch the specific user document
-        const user = await User.findById(userId);
-
-        if (!user) {
-            return res.status(404).json({ message: "User profile not found" });
-        }
-
-        // 3. Find the role within the user's document
-        const userRole = user.roles.find(r => r.role === role);
-        if (!userRole) {
-            return res.status(404).json({ message: "Role not found in user profile" });
-        }
-
-        if (!userRole.technicalSkills || userRole.technicalSkills.length === 0) {
-            return res.status(400).json({ message: "No technical skills found for this role" });
-        }
-
-        // 4. Fetch the specific role definition from MongoDB
-        const matchedRole = await Role.findOne({ role: role });
-        
-        if (!matchedRole) {
-            return res.status(404).json({ message: "Role definition not found in database" });
-        }
-
-        // 5. Calculate Score
-        let earnedScore = 0;
-        let totalWeight = 0;
-
-        matchedRole.skills.forEach(roleSkill => {
-            totalWeight += roleSkill.weight;
-            
-            // Matches user skills against the role definition
-            const userSkill = userRole.technicalSkills.find(
-                skill => skill.skill.toLowerCase() === roleSkill.name.toLowerCase()
-            );
-
-            if (userSkill) {
-                const skillPercentage = Math.min(userSkill.level / roleSkill.requiredLevel, 1);
-                earnedScore += skillPercentage * roleSkill.weight;
-            }
-        });
-
-        const finalScore = totalWeight ? Math.min((earnedScore / totalWeight) * 100, 100) : 0;
-
-        res.status(200).json({ 
-            message: "success", 
-            finalScore: Math.round(finalScore * 100) / 100 
-        });
-
-    } catch (error) {
-        console.error("Scoring error:", error);
-        res.status(500).json({ message: "Internal server error", error: error.message });
+    if (!userId || !role) {
+      return res.status(400).json({
+        message: "userId and role are required"
+      });
     }
+
+    // USER PROFILE
+    const userProfile = await Profile.findOne({ userId });
+
+    if (!userProfile) {
+      return res.status(404).json({
+        message: "User profile not found"
+      });
+    }
+
+    // USER ROLE
+    const userRole = userProfile.roles.find(
+      (r) => r.role.toLowerCase().trim() === role.toLowerCase().trim()
+    );
+
+    if (!userRole) {
+      return res.status(404).json({
+        message: "Role not found in user profile"
+      });
+    }
+
+    // ROLE DEFINITION
+    const roleDefinition = await Role.findOne({
+      role: { $regex: `^${role}$`, $options: "i" }
+    });
+
+    if (!roleDefinition) {
+      return res.status(404).json({
+        message: "Role definition not found"
+      });
+    }
+
+    // STACK
+    if (!userRole.selectedStack) {
+      return res.status(400).json({
+        message: "User has not selected a stack for this role"
+      });
+    }
+
+    const selectedStack = roleDefinition.stacks.find(
+      (stack) =>
+        stack.stackName.toLowerCase().trim() ===
+        userRole.selectedStack.toLowerCase().trim()
+    );
+
+    if (!selectedStack) {
+      console.error(`Stack not found. Available stacks:`, roleDefinition.stacks?.map(s => s.stackName));
+      return res.status(404).json({
+        message: `Stack "${userRole.selectedStack}" not found in role definition`
+      });
+    }
+
+    const requiredSkills = selectedStack.skills;
+
+    let earnedScore = 0;
+    let totalWeight = 0;
+
+    const matchedSkills = [];
+    const missingSkills = [];
+    const skillBreakdown = [];
+
+    // SCORE CALCULATION
+    requiredSkills.forEach((roleSkill) => {
+      const skillWeight = Number(roleSkill.weight) || 0;
+      const requiredLevel = Number(roleSkill.requiredLevel) || 1;
+
+      totalWeight += skillWeight;
+
+      const userSkill = userRole.technicalSkills.find(
+        (skill) =>
+          normalizeSkill(skill.skill) ===
+          normalizeSkill(roleSkill.name)
+      );
+
+      if (userSkill) {
+        const userLevel = Number(userSkill.level) || 0;
+
+        const ratio = Math.min(userLevel / requiredLevel, 1);
+
+        const skillEarnedScore = ratio * skillWeight;
+
+        earnedScore += skillEarnedScore;
+
+        matchedSkills.push(roleSkill.name);
+
+        skillBreakdown.push({
+          skill: roleSkill.name,
+
+          status:
+            ratio >= 1
+              ? "matched"
+              : "needs_improvement",
+
+          userLevel,
+          requiredLevel,
+
+          weight: skillWeight,
+
+          earned:
+            Math.round(skillEarnedScore * 10) / 10,
+
+          max: skillWeight,
+
+          practiceTask: roleSkill.practiceTask || "",
+
+          dependencyChain:
+            roleSkill.dependencyChain || [],
+
+          miniProjects:
+            roleSkill.miniProjects || []
+        });
+      } else {
+        missingSkills.push(roleSkill.name);
+
+        skillBreakdown.push({
+          skill: roleSkill.name,
+
+          status: "missing",
+
+          userLevel: 0,
+
+          requiredLevel,
+
+          weight: skillWeight,
+
+          earned: 0,
+
+          max: skillWeight,
+
+          practiceTask: roleSkill.practiceTask || "",
+
+          dependencyChain:
+            roleSkill.dependencyChain || [],
+
+          miniProjects:
+            roleSkill.miniProjects || []
+        });
+      }
+    });
+
+    const finalScore =
+      totalWeight > 0
+        ? (earnedScore / totalWeight) * 100
+        : 0;
+
+    const roundedScore =
+      Math.round(finalScore * 10) / 10;
+
+    const level = getScoreLevel(roundedScore);
+
+    // SERVICES
+    const projectQuality = analyzeProjectQuality(
+      userRole.projects || [],
+      roleDefinition.role,
+      selectedStack
+    );
+
+    const realityGap = generateRealityGap(
+      userRole,
+      skillBreakdown,
+      projectQuality
+    );
+
+    const improvementPriorities =
+      generateImprovementPriorities(
+        roleDefinition.role,
+        skillBreakdown,
+        projectQuality,
+        realityGap
+      );
+
+    const roadmap = generateRoadmap(
+      roleDefinition.role,
+      skillBreakdown,
+      projectQuality,
+      realityGap,
+      improvementPriorities
+    );
+
+    return res.status(200).json({
+      message: "success",
+
+      role: roleDefinition.role,
+
+      selectedStack:
+        selectedStack.stackName,
+
+      finalScore: roundedScore,
+
+      level,
+
+      scoreSummary: {
+        earnedScore:
+          Math.round(earnedScore * 10) / 10,
+
+        totalWeight,
+
+        matchedSkillsCount:
+          matchedSkills.length,
+
+        missingSkillsCount:
+          missingSkills.length,
+
+        totalRequiredSkills:
+          requiredSkills.length
+      },
+
+      matchedSkills,
+
+      missingSkills,
+
+      skillBreakdown,
+
+      projectQuality,
+
+      realityGap,
+
+      improvementPriorities,
+
+      roadmap
+    });
+
+  } catch (error) {
+    console.error("Error in score controller:", error);
+    console.error("Error stack:", error.stack);
+
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+  }
 };
 
 module.exports = { score };

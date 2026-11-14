@@ -531,3 +531,19 @@ body {
   .auth-form { padding: 24px 20px 28px; }
   .brand-panel { padding: 28px 20px; }
 }
+/* ── OAuth divider ── */
+.oauth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+  color: rgba(255,255,255,0.35);
+  font-size: 0.8rem;
+}
+.oauth-divider::before,
+.oauth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.12);
+}
